@@ -1,0 +1,46 @@
+<?php
+
+/**
+ * @file
+ * Contains commerce_recruitment.module.
+ */
+
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
+
+/**
+ * Implements hook_theme().
+ */
+function commerce_recruitment_theme() {
+  $theme = [];
+  $theme['sharing_link'] = [
+    'render element' => 'children',
+  ];
+  $theme['recruiting'] = [
+    'render element' => 'elements',
+    'file' => 'commerce_recruitment.page.inc',
+    'template' => 'recruiting',
+  ];
+  $theme['recruiting_content_add_list'] = [
+    'render element' => 'content',
+    'variables' => ['content' => NULL],
+    'file' => 'commerce_recruitment.page.inc',
+  ];
+  return $theme;
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK().
+ */
+function commerce_recruitment_theme_suggestions_recruiting(array $variables) {
+  $suggestions = [];
+  $entity = $variables['elements']['#recruiting'];
+  $sanitized_view_mode = strtr($variables['elements']['#view_mode'], '.', '_');
+
+  $suggestions[] = 'recruiting__' . $sanitized_view_mode;
+  $suggestions[] = 'recruiting__' . $entity->bundle();
+  $suggestions[] = 'recruiting__' . $entity->bundle() . '__' . $sanitized_view_mode;
+  $suggestions[] = 'recruiting__' . $entity->id();
+  $suggestions[] = 'recruiting__' . $entity->id() . '__' . $sanitized_view_mode;
+  return $suggestions;
+}

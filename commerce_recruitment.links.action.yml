@@ -1,0 +1,10 @@
+entity.recruiting.add_form:
+  route_name: entity.recruiting.add_page
+  title: 'Add Recruiting entity'
+  appears_on:
+    - entity.recruiting.collection
+entity.recruiting_type.add_form:
+  route_name: entity.recruiting_type.add_form
+  title: 'Add Recruiting entity type'
+  appears_on:
+    - entity.recruiting_type.collection

@@ -1,0 +1,19 @@
+add recruiting entity entities:
+  title: 'Create new Recruiting entity entities'
+
+administer recruiting entity entities:
+  title: 'Administer Recruiting entity entities'
+  description: 'Allow to access the administration form to configure Recruiting entity entities.'
+  restrict access: true
+
+delete recruiting entity entities:
+  title: 'Delete Recruiting entity entities'
+
+edit recruiting entity entities:
+  title: 'Edit Recruiting entity entities'
+
+view published recruiting entity entities:
+  title: 'View published Recruiting entity entities'
+
+view unpublished recruiting entity entities:
+  title: 'View unpublished Recruiting entity entities'

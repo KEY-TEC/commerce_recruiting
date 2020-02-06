@@ -1,0 +1,8 @@
+name: Commerce Recruitmnt
+type: module
+description: Recruitment marketing for commerce.
+core: 8.x
+package: Commerce
+dependencies:
+  - commerce_product
+  - commerce_promotion

@@ -1,0 +1,11 @@
+services:
+  logger.channel.common_recruit_a_friend:
+    parent: logger.channel_base
+    arguments: ['commerce_recruitment']
+  commerce_recruitment.recruiting:
+    class: Drupal\commerce_recruitment\RecruitingService
+  commerce_recruitment.recruiting.checkout:
+    class: Drupal\commerce_recruitment\EventSubscriber\RecruitingCheckoutSubscriber
+    arguments: ['@current_user', '@messenger', '@session']
+    tags:
+      - { name: event_subscriber }

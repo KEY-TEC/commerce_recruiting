@@ -1,0 +1,17 @@
+
+# Recruiting entity menu items definition
+entity.recruiting.collection:
+  title: 'Recruiting entity list'
+  route_name: entity.recruiting.collection
+  description: 'List Recruiting entity entities'
+  parent: system.admin_structure
+  weight: 100
+
+
+# Recruiting entity type menu items definition
+entity.recruiting_type.collection:
+  title: 'Recruiting entity type'
+  route_name: entity.recruiting_type.collection
+  description: 'List Recruiting entity type (bundles)'
+  parent: system.admin_structure
+  weight: 99

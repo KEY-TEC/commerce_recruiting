@@ -1,0 +1,12 @@
+{#
+/**
+* @file
+* Default theme implementation to display a block.
+*
+* @see template_preprocess_block()
+*
+* @ingroup themeable
+*/
+#}
+{{ attach_library('base_theme/sharing-link') }}
+{% include '@organisms/sharing-link/sharing-link.twig' with {'sharing_url': children.recruiting} %}
