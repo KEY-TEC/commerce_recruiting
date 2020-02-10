@@ -11,13 +11,13 @@ use Drupal\Core\Link;
  *
  * @ingroup commerce_recruitment
  */
-class RecruitingEntityListBuilder extends EntityListBuilder {
+class RecruitingConfigListBuilder extends EntityListBuilder {
 
   /**
    * {@inheritdoc}
    */
   public function buildHeader() {
-    $header['id'] = $this->t('Recruiting entity ID');
+    $header['id'] = $this->t('Recruiting config ID');
     $header['name'] = $this->t('Name');
     return $header + parent::buildHeader();
   }
@@ -30,7 +30,7 @@ class RecruitingEntityListBuilder extends EntityListBuilder {
     $row['id'] = $entity->id();
     $row['name'] = Link::createFromRoute(
       $entity->label(),
-      'entity.commerce_recruiting.edit_form',
+      'entity.commerce_recruiting_config.edit_form',
       ['recruiting' => $entity->id()]
     );
     return $row + parent::buildRow($entity);

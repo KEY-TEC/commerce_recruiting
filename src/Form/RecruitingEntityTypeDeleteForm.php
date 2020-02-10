@@ -22,7 +22,7 @@ class RecruitingEntityTypeDeleteForm extends EntityConfirmFormBase {
    * {@inheritdoc}
    */
   public function getCancelUrl() {
-    return new Url('entity.recruiting_type.collection');
+    return new Url('entity.commerce_recruiting_type.collection');
   }
 
   /**

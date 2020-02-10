@@ -1,13 +1,13 @@
 <?php
 
-namespace Drupal\commerce_recruitment\Entity;
+namespace Drupal\commerce_recruitment;
 
 use Drupal\views\EntityViewsData;
 
 /**
  * Provides Views data for Recruiting entity entities.
  */
-class RecruitingEntityViewsData extends EntityViewsData {
+class RecruitingConfigViewsData extends EntityViewsData {
 
   /**
    * {@inheritdoc}

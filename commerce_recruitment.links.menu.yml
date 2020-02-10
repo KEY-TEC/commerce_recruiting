@@ -1,17 +1,36 @@
-
-# Recruiting entity menu items definition
-entity.recruiting.collection:
-  title: 'Recruiting entity list'
-  route_name: entity.recruiting.collection
-  description: 'List Recruiting entity entities'
-  parent: system.admin_structure
-  weight: 100
-
+commerce_recruitment.configuration:
+  title: 'Recruiting'
+  route_name: 'commerce_recruitment.configuration'
+  parent: 'commerce.configuration'
+  weight: 0
 
 # Recruiting entity type menu items definition
-entity.recruiting_type.collection:
+entity.commerce_recruiting_type.collection:
   title: 'Recruiting entity type'
-  route_name: entity.recruiting_type.collection
-  description: 'List Recruiting entity type (bundles)'
-  parent: system.admin_structure
+  route_name: entity.commerce_recruiting_type.collection
+  description: 'List recruiting entity type (bundles)'
+  parent: 'commerce_recruitment.configuration'
+  weight: 99
+
+commerce_recruitment.collections:
+  title: 'Recruiting'
+  route_name: 'commerce_recruitment.collections'
+  description: 'Manage recruitment.'
+  parent: 'commerce.admin_commerce'
+  weight: 0
+
+# Recruiting entity menu items definition
+entity.commerce_recruiting.collection:
+  title: 'Recruiting entity list'
+  route_name: entity.commerce_recruiting.collection
+  description: 'List of recruiting entities'
+  parent: 'commerce_recruitment.collections'
+  weight: 100
+
+# Recruiting entity type menu items definition
+entity.commerce_recruiting_config.collection:
+  title: 'Recruiting configs'
+  route_name: entity.commerce_recruiting_config.collection
+  description: 'List of recruiting configurations'
+  parent: 'commerce_recruitment.collections'
   weight: 99

@@ -1,19 +1,39 @@
 add recruiting entity entities:
-  title: 'Create new Recruiting entity entities'
+  title: 'Create new recruiting entity entities'
 
 administer recruiting entity entities:
-  title: 'Administer Recruiting entity entities'
-  description: 'Allow to access the administration form to configure Recruiting entity entities.'
+  title: 'Administer recruiting entity entities'
+  description: 'Allow to access the administration form to configure recruiting entity entities.'
   restrict access: true
 
 delete recruiting entity entities:
-  title: 'Delete Recruiting entity entities'
+  title: 'Delete recruiting entity entities'
 
 edit recruiting entity entities:
-  title: 'Edit Recruiting entity entities'
+  title: 'Edit recruiting entity entities'
 
 view published recruiting entity entities:
-  title: 'View published Recruiting entity entities'
+  title: 'View published recruiting entity entities'
 
 view unpublished recruiting entity entities:
-  title: 'View unpublished Recruiting entity entities'
+  title: 'View unpublished recruiting entity entities'
+
+add recruiting config entities:
+  title: 'Create new recruiting config entities'
+
+administer recruiting config entities:
+  title: 'Administer recruiting config entities'
+  description: 'Allow to access the administration form to configure recruiting config entities.'
+  restrict access: true
+
+delete recruiting config entities:
+  title: 'Delete recruiting config entities'
+
+edit recruiting config entities:
+  title: 'Edit recruiting config entities'
+
+view published recruiting config entities:
+  title: 'View published recruiting config entities'
+
+view unpublished recruiting config entities:
+  title: 'View unpublished recruiting config entities'

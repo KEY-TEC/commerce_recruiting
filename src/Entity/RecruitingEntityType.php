@@ -8,7 +8,7 @@ use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
  * Defines the recruiting entity type entity.
  *
  * @ConfigEntityType(
- *   id = "recruiting_type",
+ *   id = "commerce_recruiting_type",
  *   label = @Translation("Recruitings"),
  *   handlers = {
  *     "view_builder" = "Drupal\Core\Entity\EntityViewBuilder",
@@ -22,20 +22,20 @@ use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
  *       "html" = "Drupal\commerce_recruitment\RecruitingEntityTypeHtmlRouteProvider",
  *     },
  *   },
- *   config_prefix = "recruiting_type",
+ *   config_prefix = "commerce_recruiting_type",
  *   admin_permission = "administer site configuration",
- *   bundle_of = "recruiting",
+ *   bundle_of = "commerce_recruiting",
  *   entity_keys = {
  *     "id" = "id",
  *     "label" = "label",
  *     "uuid" = "uuid"
  *   },
  *   links = {
- *     "canonical" = "/admin/structure/recruiting_type/{recruiting_type}",
- *     "add-form" = "/admin/structure/recruiting_type/add",
- *     "edit-form" = "/admin/structure/recruiting_type/{recruiting_type}/edit",
- *     "delete-form" = "/admin/structure/recruiting_type/{recruiting_type}/delete",
- *     "collection" = "/admin/structure/recruiting_type"
+ *     "canonical" = "/admin/commerce/config/commerce_recruiting_type/{commerce_recruiting_type}",
+ *     "add-form" = "/admin/commerce/config/commerce_recruiting_type/add",
+ *     "edit-form" = "/admin/commerce/config/commerce_recruiting_type/{commerce_recruiting_type}/edit",
+ *     "delete-form" = "/admin/commerce/config/commerce_recruiting_type/{commerce_recruiting_type}/delete",
+ *     "collection" = "/admin/commerce/config/commerce_recruiting_type"
  *   }
  * )
  */

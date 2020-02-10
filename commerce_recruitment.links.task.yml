@@ -1,17 +1,17 @@
 # Recruiting entity routing definition
 
-entity.recruiting.canonical:
-  route_name: entity.recruiting.canonical
-  base_route: entity.recruiting.canonical
+entity.commerce_recruiting.canonical:
+  route_name: entity.commerce_recruiting.canonical
+  base_route: entity.commerce_recruiting.canonical
   title: 'View'
 
-entity.recruiting.edit_form:
-  route_name: entity.recruiting.edit_form
-  base_route: entity.recruiting.canonical
+entity.commerce_recruiting.edit_form:
+  route_name: entity.commerce_recruiting.edit_form
+  base_route: entity.commerce_recruiting.canonical
   title: 'Edit'
 
-entity.recruiting.delete_form:
-  route_name:  entity.recruiting.delete_form
-  base_route:  entity.recruiting.canonical
+entity.commerce_recruiting.delete_form:
+  route_name:  entity.commerce_recruiting.delete_form
+  base_route:  entity.commerce_recruiting.canonical
   title: Delete
   weight: 10

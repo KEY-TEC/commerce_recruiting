@@ -1,3 +1,19 @@
+commerce_recruitment.configuration:
+  path: '/admin/commerce/config/recruitment'
+  defaults:
+    _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
+    _title: 'Recruitment'
+  requirements:
+    _permission: 'administer recruiting entity entities'
+
+commerce_recruitment.collections:
+  path: '/admin/commerce/recruitment'
+  defaults:
+    _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
+    _title: 'Recruitment'
+  requirements:
+    _permission: 'administer recruiting entity entities'
+
 commerce_recruitment.recruiting_url:
   path: '/friend/{recruiting_code}'
   defaults:

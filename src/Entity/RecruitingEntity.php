@@ -19,14 +19,15 @@ use Drupal\user\UserInterface;
  * @ingroup commerce_recruitment
  *
  * @ContentEntityType(
- *   id = "recruiting",
+ *   id = "commerce_recruiting",
  *   label = @Translation("Recruiting"),
  *   bundle_label = @Translation("Recruitings"),
  *   handlers = {
  *     "view_builder" = "Drupal\Core\Entity\EntityViewBuilder",
  *     "list_builder" = "Drupal\commerce_recruitment\RecruitingEntityListBuilder",
- *     "views_data" = "Drupal\commerce_recruitment\Entity\RecruitingEntityViewsData",
+ *     "views_data" = "Drupal\commerce_recruitment\RecruitingEntityViewsData",
  *     "translation" = "Drupal\commerce_recruitment\RecruitingEntityTranslationHandler",
+ *     "access" = "Drupal\commerce_recruitment\RecruitingEntityAccessControlHandler",
  *
  *     "form" = {
  *       "default" = "Drupal\commerce_recruitment\Form\RecruitingEntityForm",
@@ -37,10 +38,9 @@ use Drupal\user\UserInterface;
  *     "route_provider" = {
  *       "html" = "Drupal\commerce_recruitment\RecruitingEntityHtmlRouteProvider",
  *     },
- *     "access" = "Drupal\commerce_recruitment\RecruitingEntityAccessControlHandler",
  *   },
- *   base_table = "recruiting",
- *   data_table = "recruiting_field_data",
+ *   base_table = "commerce_recruitment",
+ *   data_table = "commerce_recruitment_field_data",
  *   translatable = TRUE,
  *   admin_permission = "administer recruiting entity entities",
  *   entity_keys = {
@@ -53,15 +53,15 @@ use Drupal\user\UserInterface;
  *     "published" = "status",
  *   },
  *   links = {
- *     "canonical" = "/admin/structure/recruiting/{recruiting}",
- *     "add-page" = "/admin/structure/recruiting/add",
- *     "add-form" = "/admin/structure/recruiting/add/{recruiting_type}",
- *     "edit-form" = "/admin/structure/recruiting/{recruiting}/edit",
- *     "delete-form" = "/admin/structure/recruiting/{recruiting}/delete",
- *     "collection" = "/admin/structure/recruiting",
+ *     "canonical" = "/admin/commerce/recruitment/recruiting/{commerce_recruiting}",
+ *     "add-page" = "/admin/commerce/recruitment/recruiting/add",
+ *     "add-form" = "/admin/commerce/recruitment/recruiting/add/{commerce_recruiting_type}",
+ *     "edit-form" = "/admin/commerce/recruitment/recruiting/{commerce_recruiting}/edit",
+ *     "delete-form" = "/admin/commerce/recruitment/recruiting/{commerce_recruiting}/delete",
+ *     "collection" = "/admin/commerce/recruitment/recruiting",
  *   },
- *   bundle_entity_type = "recruiting_type",
- *   field_ui_base_route = "entity.recruiting_type.edit_form"
+ *   bundle_entity_type = "commerce_recruiting_type",
+ *   field_ui_base_route = "entity.commerce_recruiting_type.edit_form"
  * )
  */
 class RecruitingEntity extends ContentEntityBase implements RecruitingEntityInterface {
@@ -185,6 +185,7 @@ class RecruitingEntity extends ContentEntityBase implements RecruitingEntityInte
     $fields[$entity_type->getKey('owner')] = BaseFieldDefinition::create('entity_reference')
       ->setLabel(t('Recruiter'))
       ->setDescription(t('The recruiter (owner).'))
+      ->setSetting('target_type', 'user')
       ->setSetting('handler', 'default')
       ->setDisplayOptions('view', [
         'label' => 'hidden',
@@ -206,7 +207,7 @@ class RecruitingEntity extends ContentEntityBase implements RecruitingEntityInte
 
     $fields['name'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Name'))
-      ->setDescription(t('The name of the Recruiting entity entity.'))
+      ->setDescription(t('The name of the recruiting entity.'))
       ->setSettings([
         'max_length' => 50,
         'text_processing' => 0,
