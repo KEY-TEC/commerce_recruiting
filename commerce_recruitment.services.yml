@@ -9,3 +9,12 @@ services:
     arguments: ['@current_user', '@messenger', '@session']
     tags:
       - { name: event_subscriber }
+  commerce_recruitment.chain_recruiting_config_resolver:
+    class: Drupal\commerce_recruitment\Resolver\ChainRecruitingConfigResolver
+    tags:
+      - { name: service_collector, call: addResolver, tag: commerce_recruitment.recruiting_config_resolver }
+  commerce_recruitment.default_recruiting_config_resolver:
+    class: Drupal\commerce_recruitment\Resolver\DefaultRecruitingConfigResolver
+    arguments: ['@entity_type.manager']
+    tags:
+      - { name: commerce_recruitment.recruiting_config_resolver, priority: -100 }

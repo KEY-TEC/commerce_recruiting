@@ -8,5 +8,19 @@
 * @ingroup themeable
 */
 #}
-{{ attach_library('base_theme/sharing-link') }}
-{% include '@organisms/sharing-link/sharing-link.twig' with {'sharing_url': children.recruiting} %}
+{{ attach_library('commerce_recruitment/sharing-link') }}
+
+<div class="sharing-link">
+  <h2 class="sharing-link__headline">{{ "Recommend this product and get great rewards!"|t }}</h2>
+    <div class="sharing-link__input-wrapper">
+      <input class="sharing-link__input" type="text" value="{{ children.recruiting }}">
+      <div class="sharing-link__copied-message">
+        {{ "Copied"|t }}
+      </div>
+    </div>
+    <button class="js-sharing-link-copy-button" onclick="'copyRecruitAFriendLink()'">
+      {{ "Copy Link"|t }}
+    </button>
+  </div>
+  <p class="sharing-link__description">{{ "Copy your personal referral link and send it to a friend. We'll give you a great bonus for every purchase you make."|t }}</p>
+</div>

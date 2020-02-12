@@ -1,0 +1,24 @@
+.sharing-link__input-wrapper {
+  display: inline-block;
+  position: relative;
+}
+
+.sharing-link__copied-message {
+  font-weight: bold;
+  position: absolute;
+  padding: 0.1rem 0.5rem;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  background-color: white;
+  box-shadow: 0 0 0.2rem black;
+  opacity: 0;
+  z-index: -1;
+  transition: opacity ease-in 250ms, z-index linear 1s;
+}
+
+.sharing-link__copied-message.visible {
+  opacity: 1;
+  z-index: 1;
+  transition: z-index linear 0s;
+}

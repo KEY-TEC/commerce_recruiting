@@ -19,17 +19,22 @@
   "require-dev": {
     "composer/installers": "^1.2",
     "cweagans/composer-patches": "~1.4",
-    "drush/drush": "~9",
     "drupal-composer/drupal-scaffold": "^2.2",
-    "drupal/commerce": "^2.16",
+    "drupal/admin_toolbar": "^2.0",
     "drupal/coffee": "~1",
+    "drupal/commerce": "^2.16",
+    "drupal/commerce_product_bundle": "1.x-dev",
     "drupal/config_devel": "~1",
     "drupal/config_installer": "~1",
     "drupal/console": "~1",
+    "drupal/ctools": "^3.2",
     "drupal/devel_entity_updates": "^1.0@RC",
-    "phpro/grumphp": "~0.14",
+    "drupal/dynamic_entity_reference": "^1.8",
+    "drupal/twig_tweak": "^2.4",
+    "drush/drush": "~9",
     "openeuropa/drupal-core-require-dev": "~8",
-    "openeuropa/task-runner": "~1.0-beta6"
+    "openeuropa/task-runner": "~1.0-beta6",
+    "phpro/grumphp": "~0.14"
   },
   "repositories": [
     {

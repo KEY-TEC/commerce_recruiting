@@ -4,16 +4,19 @@ namespace Drupal\commerce_recruitment\Plugin\Block;
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\commerce_recruitment\Encryption;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a 'Sharing Link' block.
  *
  * @Block(
- *  id = "sharing_link",
- *  admin_label = @Translation("Sharing link"),
+ *  id = "commerce_recruitment_link_sharing_block",
+ *  admin_label = @Translation("Product link sharing block"),
  *  context = {
  *    "product" = @ContextDefinition("entity:commerce_product", required = FALSE),
  *    "product_bundle" = @ContextDefinition("entity:commerce_product_bundle", required = FALSE),
@@ -21,7 +24,43 @@ use Drupal\commerce_recruitment\Encryption;
  *  }
  * )
  */
-class SharingLink extends BlockBase {
+class SharingLink extends BlockBase implements ContainerFactoryPluginInterface {
+
+  /**
+   * The language manager.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
+
+  /**
+   * Constructs a new CartBlock.
+   *
+   * @param array $configuration
+   *   A configuration array containing information about the plugin instance.
+   * @param string $plugin_id
+   *   The plugin ID for the plugin instance.
+   * @param mixed $plugin_definition
+   *   The plugin implementation definition.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   The language manager.
+   */
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, LanguageManagerInterface $language_manager) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
+    $this->languageManager = $language_manager;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    return new static(
+      $configuration,
+      $plugin_id,
+      $plugin_definition,
+      $container->get('language_manager')
+    );
+  }
 
   /**
    * Returns the block build array with a encrypted recruiting code.
@@ -48,20 +87,11 @@ class SharingLink extends BlockBase {
     /** @var \Drupal\user\UserInterface $user */
     $user = $this->getContextValue('user');
     if (!empty($parent) && !empty($user)) {
-      $language = \Drupal::languageManager()->getCurrentLanguage();
+      $language = $this->languageManager->getCurrentLanguage();
       $uid = $user->id();
       $pid = $parent->id();
       $entity_type = $parent->getEntityType()->id();
-      if ($entity_type == 'commerce_product') {
-        $type = 'p';
-      }
-      elseif ($entity_type == 'commerce_product_bundle') {
-        $type = 'pb';
-      }
-      else {
-        $type = NULL;
-      }
-      $values = [$uid, $pid, $type];
+      $values = [$uid, $pid, $entity_type];
       $code = Encryption::encrypt(implode(';', $values));
       if (!empty($code)) {
         $build['recruiting']['#markup'] = Url::fromRoute('commerce_recruitment.recruiting_url', ['recruiting_code' => $code], ['absolute' => TRUE, 'language' => $language])->toString();

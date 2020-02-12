@@ -1,4 +1,4 @@
-name: Commerce Recruitmnt
+name: Commerce Recruitment
 type: module
 description: Recruitment marketing for commerce.
 core: 8.x
@@ -6,3 +6,5 @@ package: Commerce
 dependencies:
   - commerce_product
   - commerce_promotion
+  - dynamic_entity_reference
+

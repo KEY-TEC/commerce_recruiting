@@ -21,15 +21,4 @@ interface RecruitingServiceInterface {
    */
   public function getTotalBonusPerUser($uid, $include_paid_out = FALSE, $recruitment_type = NULL);
 
-  /**
-   * Gets commerce entity bundle from short key.
-   *
-   * @param $type_key
-   *   Short key of entity bundle e.g. "p".
-   *
-   * @return string
-   *   Commerce entity bundle e.g. "commerce_product".
-   */
-  public function getCommerceEntityBundle($type_key);
-
 }

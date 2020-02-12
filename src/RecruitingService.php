@@ -2,10 +2,6 @@
 
 namespace Drupal\commerce_recruitment;
 
-use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Language\LanguageManagerInterface;
-use Drupal\Core\Session\AccountProxy;
-use Drupal\language\ConfigurableLanguageManagerInterface;
 use Drupal\commerce_recruitment\Entity\RecruitingEntity;
 
 /**
@@ -35,18 +31,6 @@ class RecruitingService implements RecruitingServiceInterface {
       }
     }
     return $total_price;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public function getCommerceEntityBundle($type_key) {
-    $bundles = [
-      'p' => 'commerce_product',
-      'pb' => 'commerce_product_bundle'
-    ];
-    $type = $bundles[$type_key];
-    return !empty($type) ? $type : NULL;
   }
 
 }
