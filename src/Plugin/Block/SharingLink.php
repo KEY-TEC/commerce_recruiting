@@ -2,6 +2,7 @@
 
 namespace Drupal\commerce_recruitment\Plugin\Block;
 
+use Drupal\commerce_recruitment\Resolver\ChainRecruitingConfigResolverInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Language\LanguageManagerInterface;
@@ -18,8 +19,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *  id = "commerce_recruitment_link_sharing_block",
  *  admin_label = @Translation("Product link sharing block"),
  *  context = {
- *    "product" = @ContextDefinition("entity:commerce_product", required = FALSE),
- *    "product_bundle" = @ContextDefinition("entity:commerce_product_bundle", required = FALSE),
  *    "user" = @ContextDefinition("entity:user", required = FALSE)
  *  }
  * )
@@ -34,6 +33,12 @@ class SharingLink extends BlockBase implements ContainerFactoryPluginInterface {
   protected $languageManager;
 
   /**
+   * The recruiting config chain resolver.
+   * @var
+   */
+  protected $chainRecruitingConfigResolver;
+
+  /**
    * Constructs a new CartBlock.
    *
    * @param array $configuration
@@ -44,10 +49,13 @@ class SharingLink extends BlockBase implements ContainerFactoryPluginInterface {
    *   The plugin implementation definition.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The language manager.
+   * @param \Drupal\commerce_recruitment\Resolver\ChainRecruitingConfigResolverInterface $chain_resolver
+   *   The recruiting config chain resolver.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, LanguageManagerInterface $language_manager) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, LanguageManagerInterface $language_manager, ChainRecruitingConfigResolverInterface $chain_resolver) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->languageManager = $language_manager;
+    $this->chainRecruitingConfigResolver = $chain_resolver;
   }
 
   /**
@@ -58,17 +66,13 @@ class SharingLink extends BlockBase implements ContainerFactoryPluginInterface {
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('language_manager')
+      $container->get('language_manager'),
+      $container->get('commerce_recruitment.chain_recruiting_config_resolver')
     );
   }
 
   /**
    * Returns the block build array with a encrypted recruiting code.
-   *
-   * Recruiting code containing:
-   *  - current uid
-   *  - current entity id
-   *  - current entity type (product or product bundle).
    *
    * @return array
    *   The build array.
@@ -76,14 +80,11 @@ class SharingLink extends BlockBase implements ContainerFactoryPluginInterface {
    * @throws \Drupal\Component\Plugin\Exception\PluginException
    */
   public function build() {
+    $result = $this->chainRecruitingConfigResolver->resolve();
+
     $build = [];
     $build['#theme'] = 'sharing_link';
-    /** @var \Drupal\commerce_product\Entity\ProductInterface $parent */
-    $parent = $this->getContextValue('product');
-    if ($parent === NULL) {
-      /** @var \Drupal\commerce_product_bundle\Entity\BundleInterface $parent */
-      $parent = $this->getContextValue('product_bundle');
-    }
+
     /** @var \Drupal\user\UserInterface $user */
     $user = $this->getContextValue('user');
     if (!empty($parent) && !empty($user)) {

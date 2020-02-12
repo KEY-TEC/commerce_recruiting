@@ -1,0 +1,116 @@
+<?php
+
+/**
+ * @file
+ * Creates some dummy entities to test with.
+ */
+
+use Drupal\commerce_price\Price;
+use Drupal\commerce_product\Entity\Product;
+use Drupal\commerce_product_bundle\Entity\ProductBundle;
+use Drupal\commerce_product_bundle\Entity\ProductBundleItem;
+use Drupal\commerce_product\Entity\ProductVariation;
+use Drupal\commerce_recruitment\Entity\RecruitingConfig;
+use Drupal\commerce_store\Entity\Store;
+use Drupal\user\Entity\User;
+
+/**
+ * Implements hook_install().
+ */
+function commerce_recruitment_test_install() {
+  // Create test user...
+  $user = User::create(['name' => 'Test user', 'mail' => 'test@test.com']);
+  $user->save();
+
+  // Add currency...
+  $currency = 'EUR';
+  $currency_importer = Drupal::service('commerce_price.currency_importer');
+  $currency_importer->import($currency);
+
+  // Create a store...
+  $store = Store::create([
+    'name' => 'store',
+    'type' => 'online',
+    'mail' => 'store@test.com',
+    'default_currency' => 'EUR',
+    'timezone' => 'UTC',
+    'is_default' => TRUE,
+    'address' => [
+      'country_code' => 'DE',
+      'locality' => 'city',
+      'postal_code' => '12345',
+      'address_line1' => 'street',
+    ]
+  ]);
+  $store->save();
+
+  // Create some products...
+  $create_products = 3;
+  $create_variations = 2;
+  $products = [];
+  for ($p = 1; $p <= $create_products; $p++) {
+    $variations = [];
+
+    for ($v = 0; $v < $create_variations; $v++) {
+      /** @var \Drupal\commerce_product\Entity\ProductVariationInterface $variation */
+      $variation = ProductVariation::create([
+        'type' => 'default',
+        'sku' => 'pv' . $p . $v,
+        'price' => new Price($p . $v, $currency),
+      ]);
+      $variation->save();
+      $variations[] = $variation;
+    }
+    $product = Product::create([
+      'type' => 'default',
+      'title' => 'product '. $p,
+      'variations' => $variations,
+      'stores' => [$store]
+    ]);
+    $product->save();
+    $products[] = $product;
+  }
+
+  // Create a product bundle with a subset of products...
+  $create_bundles = 1;
+  $create_bundle_items = 2;
+  $bundles = [];
+  for ($b = 1; $b <= $create_bundles; $b++) {
+    $bundle_items = [];
+    for ($bi = 0; $bi < $create_bundle_items; $bi++) {
+      if (isset($products[$bi + $b])) {
+        $bundle_item = ProductBundleItem::create([
+          'type' => 'default',
+          'title' => 'bundle item '. $bi,
+          'product' => $products[$bi + $b],
+        ]);
+
+        $bundle_item->save();
+        $bundle_items[] = $bundle_item;
+      }
+    }
+    $bundle = ProductBundle::create([
+      'type' => 'default',
+      'title' => 'bundle ',
+      'bundle_price' => new Price($b . $bi, $currency),
+      'bundle_items' => $bundle_items,
+    ]);
+    $bundle->save();
+    $bundles[] = $bundle;
+  }
+
+  // Create a general recruitment config...
+  $recruiting_config = RecruitingConfig::create([
+    'name' => 'general',
+    'bonus' => 10,
+  ]);
+  $recruiting_config->save();
+
+  // Create a user specific recruitment config...
+  $recruiting_config = RecruitingConfig::create([
+    'name' => 'user',
+    'bonus' => 10,
+    'recruiter' => $user,
+  ]);
+  $recruiting_config->save();
+}

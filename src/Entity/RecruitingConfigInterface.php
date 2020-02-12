@@ -3,10 +3,12 @@
 namespace Drupal\commerce_recruitment\Entity;
 
 use Drupal\commerce_price\Price;
+use Drupal\commerce_promotion\Entity\PromotionInterface;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityChangedInterface;
 use Drupal\user\EntityOwnerInterface;
+use Drupal\user\UserInterface;
 
 /**
  * Provides an interface for defining recruiting entity entities.
@@ -73,6 +75,42 @@ interface RecruitingConfigInterface extends ContentEntityInterface, EntityChange
    * @return $this
    */
   public function setDescription($description);
+
+  /**
+   * Returns the recruiter user entity.
+   *
+   * @return \Drupal\user\UserInterface
+   *   The recruiter entity.
+   */
+  public function getRecruiter();
+
+  /**
+   * Sets the recruiter user entity.
+   *
+   * @param \Drupal\user\UserInterface $account
+   *   The recruiter user entity.
+   *
+   * @return $this
+   */
+  public function setRecruiter(UserInterface $account);
+
+  /**
+   * Returns the promotion entity.
+   *
+   * @return \Drupal\commerce_promotion\Entity\PromotionInterface
+   *   The promotion entity.
+   */
+  public function getPromotion();
+
+  /**
+   * Sets the promotion entity.
+   *
+   * @param \Drupal\commerce_promotion\Entity\PromotionInterface $promotion
+   *   The promotion entity.
+   *
+   * @return $this
+   */
+  public function setPromotion(PromotionInterface $promotion);
 
   /**
    * Gets the recruitment start date/time.

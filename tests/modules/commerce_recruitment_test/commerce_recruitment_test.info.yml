@@ -1,0 +1,7 @@
+name: Commerce Recruitment Test
+type: module
+description: Testing installation for commerce_recruitment.
+core: 8.x
+package: Commerce
+dependencies:
+  - commerce_recruitment

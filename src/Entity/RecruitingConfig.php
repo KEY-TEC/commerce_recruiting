@@ -4,6 +4,7 @@ namespace Drupal\commerce_recruitment\Entity;
 
 use Drupal\commerce\Entity\CommerceContentEntityBase;
 use Drupal\commerce_price\Price;
+use Drupal\commerce_promotion\Entity\PromotionInterface;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Entity\EntityChangedTrait;
 use Drupal\Core\Entity\EntityTypeInterface;
@@ -12,6 +13,7 @@ use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
 use Drupal\user\EntityOwnerTrait;
+use Drupal\user\UserInterface;
 
 /**
  * Defines the recruitment config entity class.
@@ -56,8 +58,8 @@ use Drupal\user\EntityOwnerTrait;
  *     "label" = "name",
  *     "langcode" = "langcode",
  *     "uuid" = "uuid",
- *     "owner" = "recruiter",
  *     "status" = "status",
+ *     "owner" = "owner",
  *   },
  *   links = {
  *     "canonical" = "/admin/commerce/recruitment/config/{commerce_recruiting_config}",
@@ -116,6 +118,36 @@ class RecruitingConfig extends CommerceContentEntityBase implements RecruitingCo
    */
   public function setDescription($description) {
     $this->set('description', $description);
+    return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getRecruiter() {
+    return $this->get('recruiter')->entity;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setRecruiter(UserInterface $account) {
+    $this->set('recruiter', $account);
+    return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getPromotion() {
+    return $this->get('promotion')->entity;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setPromotion(PromotionInterface $promotion) {
+    $this->set('promotion', $promotion);
     return $this;
   }
 
@@ -189,42 +221,6 @@ class RecruitingConfig extends CommerceContentEntityBase implements RecruitingCo
     $fields = parent::baseFieldDefinitions($entity_type);
     $fields += static::ownerBaseFieldDefinitions($entity_type);
 
-    $fields[$entity_type->getKey('owner')]
-      ->setLabel(new TranslatableMarkup('Recruiter'))
-      ->setDescription(new TranslatableMarkup('The recruiter (owner).'))
-      ->setDisplayOptions('view', [
-        'label' => 'hidden',
-        'type' => 'author',
-        'weight' => 0,
-      ])
-      ->setDisplayOptions('form', [
-        'type' => 'entity_reference_autocomplete',
-        'weight' => 3,
-        'settings' => [
-          'match_operator' => 'CONTAINS',
-          'size' => '60',
-          'autocomplete_type' => 'tags',
-          'placeholder' => '',
-        ],
-      ])
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', TRUE);
-
-    $fields['description'] = BaseFieldDefinition::create('string_long')
-      ->setLabel(new TranslatableMarkup('Description'))
-      ->setDescription(new TranslatableMarkup('Additional information about the recruitment.'))
-      ->setTranslatable(TRUE)
-      ->setDefaultValue('')
-      ->setDisplayOptions('form', [
-        'type' => 'string_textarea',
-        'weight' => 1,
-        'settings' => [
-          'rows' => 3,
-        ],
-      ])
-      ->setDisplayConfigurable('view', TRUE)
-      ->setDisplayConfigurable('form', TRUE);
-
     $fields['name'] = BaseFieldDefinition::create('string')
       ->setLabel(new TranslatableMarkup('Name'))
       ->setDescription(new TranslatableMarkup('The recruiting config name.'))
@@ -236,31 +232,24 @@ class RecruitingConfig extends CommerceContentEntityBase implements RecruitingCo
       ])
       ->setDisplayOptions('form', [
         'type' => 'string_textfield',
-        'weight' => 0,
+        'weight' => 1,
       ])
       ->setDisplayConfigurable('view', TRUE)
       ->setDisplayConfigurable('form', TRUE);
 
-    $fields['start_date'] = BaseFieldDefinition::create('datetime')
-      ->setLabel(new TranslatableMarkup('Start date'))
-      ->setDescription(new TranslatableMarkup('The date the recruitment becomes available.'))
-      ->setSetting('datetime_type', 'datetime')
-      ->setDefaultValueCallback('Drupal\commerce_recruitment\Entity\RecruitingConfig::getDefaultStartDate')
+    $fields['description'] = BaseFieldDefinition::create('string_long')
+      ->setLabel(new TranslatableMarkup('Description'))
+      ->setDescription(new TranslatableMarkup('Additional information about the recruitment.'))
+      ->setTranslatable(TRUE)
       ->setDisplayOptions('form', [
-        'type' => 'commerce_store_datetime',
-        'weight' => 4,
-      ]);
-
-    $fields['end_date'] = BaseFieldDefinition::create('datetime')
-      ->setLabel(new TranslatableMarkup('End date'))
-      ->setDescription(new TranslatableMarkup('The date after which the recruitment is unavailable.'))
-      ->setRequired(FALSE)
-      ->setSetting('datetime_type', 'datetime')
-      ->setSetting('datetime_optional_label', t('Provide an end date'))
-      ->setDisplayOptions('form', [
-        'type' => 'commerce_store_datetime',
-        'weight' => 5,
-      ]);
+        'type' => 'string_textarea',
+        'weight' => 1,
+        'settings' => [
+          'rows' => 1,
+        ],
+      ])
+      ->setDisplayConfigurable('view', TRUE)
+      ->setDisplayConfigurable('form', TRUE);
 
     $fields['bonus'] = BaseFieldDefinition::create('commerce_price')
       ->setLabel(new TranslatableMarkup('Bonus'))
@@ -273,17 +262,61 @@ class RecruitingConfig extends CommerceContentEntityBase implements RecruitingCo
       ])
       ->setDisplayOptions('form', [
         'type' => 'commerce_price_default',
-        'weight' => 5,
+        'weight' => 2,
         'settings' => [],
       ])
       ->setDisplayConfigurable('view', TRUE)
       ->setDisplayConfigurable('form', TRUE);
+
+    $fields['start_date'] = BaseFieldDefinition::create('datetime')
+      ->setLabel(new TranslatableMarkup('Start date'))
+      ->setDescription(new TranslatableMarkup('The date the recruitment becomes available.'))
+      ->setSetting('datetime_type', 'datetime')
+      ->setDefaultValueCallback('Drupal\commerce_recruitment\Entity\RecruitingConfig::getDefaultStartDate')
+      ->setDisplayOptions('form', [
+        'type' => 'commerce_store_datetime',
+        'weight' => 3,
+      ]);
+
+    $fields['end_date'] = BaseFieldDefinition::create('datetime')
+      ->setLabel(new TranslatableMarkup('End date'))
+      ->setDescription(new TranslatableMarkup('The date after which the recruitment is unavailable.'))
+      ->setRequired(FALSE)
+      ->setSetting('datetime_type', 'datetime')
+      ->setSetting('datetime_optional_label', t('Provide an end date'))
+      ->setDisplayOptions('form', [
+        'type' => 'commerce_store_datetime',
+        'weight' => 3,
+      ]);
 
     $fields['status'] = BaseFieldDefinition::create('boolean')
       ->setLabel(new TranslatableMarkup('Status'))
       ->setDescription(new TranslatableMarkup('Whether the recruiting config is enabled.'))
       ->setDefaultValue(TRUE)
       ->setRequired(TRUE);
+
+    $fields['recruiter'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(new TranslatableMarkup('Recruiter'))
+      ->setDescription(new TranslatableMarkup('The recruiter.'))
+      ->setSetting('target_type', 'user')
+      ->setTranslatable($entity_type->isTranslatable())
+      ->setDisplayOptions('view', [
+        'label' => 'hidden',
+        'type' => 'author',
+        'weight' => 0,
+      ])
+      ->setDisplayOptions('form', [
+        'type' => 'entity_reference_autocomplete',
+        'weight' => 4,
+        'settings' => [
+          'match_operator' => 'CONTAINS',
+          'size' => '60',
+          'autocomplete_type' => 'tags',
+          'placeholder' => '',
+        ],
+      ])
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
 
     $fields['products'] = BaseFieldDefinition::create('dynamic_entity_reference')
       ->setLabel(new TranslatableMarkup('Products'))
@@ -346,10 +379,6 @@ class RecruitingConfig extends CommerceContentEntityBase implements RecruitingCo
         ->setLabel(new TranslatableMarkup('Created'))
         ->setDescription(new TranslatableMarkup('The time that this entity was created.'));
 
-    /* @todo: fields to add:
-     * - promotion (optional)
-     *    This recruitment uses the codes of the specified promotion.
-    */
     return $fields;
   }
 
