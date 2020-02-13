@@ -4,12 +4,13 @@ namespace Drupal\commerce_recruitment\Entity;
 
 use Drupal\commerce\Entity\CommerceContentEntityBase;
 use Drupal\commerce_price\Price;
+use Drupal\commerce_product\Entity\ProductInterface;
+use Drupal\commerce_product_bundle\Entity\BundleInterface;
 use Drupal\commerce_promotion\Entity\PromotionInterface;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Entity\EntityChangedTrait;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
-use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
 use Drupal\user\EntityOwnerTrait;
@@ -75,6 +76,10 @@ class RecruitingConfig extends CommerceContentEntityBase implements RecruitingCo
 
   use EntityChangedTrait;
   use EntityOwnerTrait;
+
+  const RECRUIT_BONUS_METHOD_FIX = 'fix';
+  const RECRUIT_BONUS_METHOD_PERCENT = 'percent';
+  const RECRUIT_BONUS_METHOD_PERCENT_CART = 'percent_cart';
 
   /**
    * {@inheritdoc}
@@ -150,6 +155,27 @@ class RecruitingConfig extends CommerceContentEntityBase implements RecruitingCo
     $this->set('promotion', $promotion);
     return $this;
   }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getProductorBundle() {
+    return $this->get('product')->entity;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setProduct(ProductInterface $product) {
+    $this->set('product', $product);
+    return $this;  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setBundle(BundleInterface $bundle) {
+    $this->set('product', $bundle);
+    return $this;  }
 
   /**
    * {@inheritdoc}
@@ -253,8 +279,7 @@ class RecruitingConfig extends CommerceContentEntityBase implements RecruitingCo
 
     $fields['bonus'] = BaseFieldDefinition::create('commerce_price')
       ->setLabel(new TranslatableMarkup('Bonus'))
-      ->setDescription(new TranslatableMarkup('The bonus for the recruiter.'))
-      ->setRequired(TRUE)
+      ->setDescription(new TranslatableMarkup('A fix bonus value for the recruiter if fix bonus method is selected.'))
       ->setDisplayOptions('view', [
         'label' => 'above',
         'type' => 'commerce_price_default',
@@ -262,6 +287,48 @@ class RecruitingConfig extends CommerceContentEntityBase implements RecruitingCo
       ])
       ->setDisplayOptions('form', [
         'type' => 'commerce_price_default',
+        'weight' => 2,
+        'settings' => [],
+      ])
+      ->setDisplayConfigurable('view', TRUE)
+      ->setDisplayConfigurable('form', TRUE);
+
+    $fields['bonus_percent'] = BaseFieldDefinition::create('integer')
+      ->setLabel(new TranslatableMarkup('Bonus (%)'))
+      ->setDescription(new TranslatableMarkup('Percentage bonus value of the product price for the recruiter if percentage bonus method is selected.'))
+      ->setSettings([
+        'min' => 0,
+        'suffix' => '%',
+      ])
+      ->setDisplayOptions('view', [
+        'label' => 'above',
+        'type' => 'number_integer',
+        'weight' => 0,
+      ])
+      ->setDisplayOptions('form', [
+        'type' => 'number',
+        'weight' => 2,
+        'settings' => [],
+      ])
+      ->setDisplayConfigurable('view', TRUE)
+      ->setDisplayConfigurable('form', TRUE);
+
+    $fields['bonus_method'] = BaseFieldDefinition::create('list_string')
+      ->setLabel(new TranslatableMarkup('Bonus Method'))
+      ->setDescription(new TranslatableMarkup('Percentage bonus value of the product price for the recruiter.'))
+      ->setSetting('allowed_values', [
+        self::RECRUIT_BONUS_METHOD_FIX => 'Fix bonus',
+        self::RECRUIT_BONUS_METHOD_PERCENT => 'Percentage bonus of product',
+        self::RECRUIT_BONUS_METHOD_PERCENT_CART => 'Percentage bonus of cart (test)',
+      ])
+      ->setRequired(TRUE)
+      ->setDisplayOptions('view', [
+        'label' => 'above',
+        'type' => 'list_default',
+        'weight' => 0,
+      ])
+      ->setDisplayOptions('form', [
+        'type' => 'options_select',
         'weight' => 2,
         'settings' => [],
       ])
@@ -318,10 +385,9 @@ class RecruitingConfig extends CommerceContentEntityBase implements RecruitingCo
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 
-    $fields['products'] = BaseFieldDefinition::create('dynamic_entity_reference')
-      ->setLabel(new TranslatableMarkup('Products'))
-      ->setDescription(new TranslatableMarkup('Products that can apply for this recruitment.'))
-      ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
+    $fields['product'] = BaseFieldDefinition::create('dynamic_entity_reference')
+      ->setLabel(new TranslatableMarkup('Product'))
+      ->setDescription(new TranslatableMarkup('The product or bundle for which someone will get the bonus after checkout.'))
       ->setSettings([
         'exclude_entity_types' => FALSE,
         'entity_type_ids' => [

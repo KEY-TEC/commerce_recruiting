@@ -100,17 +100,34 @@ function commerce_recruitment_test_install() {
   }
 
   // Create a general recruitment config...
+  // Applies for any product ("recruit a friend")
   $recruiting_config = RecruitingConfig::create([
     'name' => 'general',
-    'bonus' => 10,
+    'bonus' => new Price(1, $currency),
   ]);
   $recruiting_config->save();
 
+  // Create a product specific recruitment config...
+  $recruiting_config = RecruitingConfig::create([
+    'name' => 'product',
+    'bonus' => new Price(2, $currency),
+    'product' => $products[0],
+  ]);
+
   // Create a user specific recruitment config...
+  // Applies for any product but will benefit this user.
   $recruiting_config = RecruitingConfig::create([
     'name' => 'user',
-    'bonus' => 10,
+    'bonus' => new Price(3, $currency),
     'recruiter' => $user,
+  ]);
+
+  // Create a product-user specific recruitment config...
+  $recruiting_config = RecruitingConfig::create([
+    'name' => 'product_user',
+    'bonus' => new Price(4, $currency),
+    'product' => $products[1],
+    'recruiter' => $user
   ]);
   $recruiting_config->save();
 }

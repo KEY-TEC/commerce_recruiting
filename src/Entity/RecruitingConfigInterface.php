@@ -3,6 +3,8 @@
 namespace Drupal\commerce_recruitment\Entity;
 
 use Drupal\commerce_price\Price;
+use Drupal\commerce_product\Entity\ProductInterface;
+use Drupal\commerce_product_bundle\Entity\BundleInterface;
 use Drupal\commerce_promotion\Entity\PromotionInterface;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Entity\ContentEntityInterface;
@@ -93,6 +95,34 @@ interface RecruitingConfigInterface extends ContentEntityInterface, EntityChange
    * @return $this
    */
   public function setRecruiter(UserInterface $account);
+
+  /**
+   * Returns the product or product bundle.
+   *
+   * @return \Drupal\commerce_product\Entity\ProductInterface|\Drupal\commerce_product_bundle\Entity\BundleInterface
+   *   The product or product bundle entity.
+   */
+  public function getProductorBundle();
+
+  /**
+   * Sets the product entity.
+   *
+   * @param \Drupal\commerce_product\Entity\ProductInterface $product
+   *   The product entity.
+   *
+   * @return $this
+   */
+  public function setProduct(ProductInterface $product);
+
+  /**
+   * Sets the bundle entity.
+   *
+   * @param \Drupal\commerce_product_bundle\Entity\BundleInterface $bundle
+   *   The bundle entity.
+   *
+   * @return $this
+   */
+  public function setBundle(BundleInterface $bundle);
 
   /**
    * Returns the promotion entity.
