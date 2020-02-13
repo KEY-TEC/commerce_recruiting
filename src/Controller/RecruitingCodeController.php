@@ -5,7 +5,7 @@ namespace Drupal\commerce_recruitment\Controller;
 use Drupal\Component\Plugin\Exception\PluginException;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\commerce_recruitment\Encryption;
-use Drupal\commerce_recruitment\RecruitingServiceInterface;
+use Drupal\commerce_recruitment\RecruitingManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Session\AccountProxyInterface;
@@ -33,9 +33,9 @@ class RecruitingCodeController extends ControllerBase {
   /**
    * The recruiting service.
    *
-   * @var \Drupal\commerce_recruitment\RecruitingServiceInterface
+   * @var \Drupal\commerce_recruitment\RecruitingManagerInterface
    */
-  protected $recruitingService;
+  protected $recruitingManager;
 
   /**
    * The current session.
@@ -51,15 +51,15 @@ class RecruitingCodeController extends ControllerBase {
    *   The entity type manager.
    * @param \Drupal\Core\Session\AccountProxyInterface $current_user
    *   The current user.
-   * @param \Drupal\commerce_recruitment\RecruitingServiceInterface $recruiting_service
+   * @param \Drupal\commerce_recruitment\RecruitingManagerInterface $recruiting_manager
    *   The recruiting service.
    * @param \Symfony\Component\HttpFoundation\Session\Session $session
    *   The current session.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, AccountProxyInterface $current_user, RecruitingServiceInterface $recruiting_service, Session $session) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, AccountProxyInterface $current_user, RecruitingManagerInterface $recruiting_manager, Session $session) {
     $this->entityTypeManager = $entity_type_manager;
     $this->currentUser = $current_user;
-    $this->recruitingService = $recruiting_service;
+    $this->recruitingManager = $recruiting_manager;
     $this->session = $session;
   }
 

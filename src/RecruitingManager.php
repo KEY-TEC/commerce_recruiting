@@ -5,9 +5,9 @@ namespace Drupal\commerce_recruitment;
 use Drupal\commerce_recruitment\Entity\RecruitingEntity;
 
 /**
- * Class RecruitingService.
+ * Class RecruitingManager.
  */
-class RecruitingService implements RecruitingServiceInterface {
+class RecruitingManager implements RecruitingManagerInterface {
 
   /**
    * {@inheritDoc}

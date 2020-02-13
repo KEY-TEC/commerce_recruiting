@@ -4,7 +4,9 @@
 ##
 ## Tests:
 ## - fin run_tests --filter 'MyTest'
-
+##
+## Test calls:
+## - fin run_tests --filter 'EventSubscriber\\RecruitingCheckoutSubscriberTest'
 set -e
 
 fin exec /var/www/vendor/bin/phpunit $*

@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\commerce_recruitment\Traits;
 
+use Drupal\commerce_price\Price;
 use Drupal\commerce_recruitment\Entity\RecruitingConfig;
 use Drupal\commerce_recruitment\Entity\RecruitingEntity;
 use Drupal\commerce_recruitment\Entity\RecruitingEntityType;
@@ -41,7 +42,10 @@ trait RecruitingEntityCreationTrait {
    * @return \Drupal\commerce_recruitment\Entity\RecruitingEntityInterface
    *   The recruiting entity.
    */
-  protected function createRecruitmentEntity(array $options = ['type' => 'default', 'name' => 'test']) {
+  protected function createRecruitmentEntity(array $options = [
+    'type' => 'default',
+    'name' => 'test',
+  ]) {
     $recruitment = RecruitingEntity::create($options);
     return $recruitment;
   }
@@ -52,9 +56,30 @@ trait RecruitingEntityCreationTrait {
    * @return \Drupal\commerce_recruitment\Entity\RecruitingConfig
    *   The recruiting entity.
    */
-  protected function createRecruitmentConfig(array $options = ['type' => 'default', 'name' => 'test']) {
+  protected function createRecruitmentConfig(array $options = [
+    'type' => 'default',
+    'name' => 'test',
+  ]) {
     $recruitment = RecruitingConfig::create($options);
     return $recruitment;
+  }
+
+  /**
+   * Setup recruitment config.
+   *
+   * @return \Drupal\commerce_recruitment\Entity\RecruitingConfig
+   *   The recruitment config.
+   */
+  protected function recruitmentSetup() {
+    $products = $this->shopSetup();
+    $product_1 = $products[0];
+    $recruter = $this->drupalCreateUser();
+    $recruiting_config = RecruitingConfig::create([
+      'name' => 'test_1',
+      'bonus' => new Price('10', 'USD'),
+      'recruiter' => ['target_id' => $recruter->id()],
+    ]);
+    return $recruiting_config;
   }
 
 }

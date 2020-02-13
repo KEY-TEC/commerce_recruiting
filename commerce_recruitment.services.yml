@@ -3,7 +3,7 @@ services:
     parent: logger.channel_base
     arguments: ['commerce_recruitment']
   commerce_recruitment.recruiting:
-    class: Drupal\commerce_recruitment\RecruitingService
+    class: Drupal\commerce_recruitment\RecruitingManager
   commerce_recruitment.recruiting.checkout:
     class: Drupal\commerce_recruitment\EventSubscriber\RecruitingCheckoutSubscriber
     arguments: ['@current_user', '@messenger', '@session']
@@ -18,3 +18,6 @@ services:
     arguments: ['@entity_type.manager']
     tags:
       - { name: commerce_recruitment.recruiting_config_resolver, priority: -100 }
+  commerce_recruitment.recruting_session:
+    class: Drupal\commerce_recruitment\RecrutingSession
+    arguments: ['@session']

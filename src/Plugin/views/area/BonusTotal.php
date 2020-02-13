@@ -3,7 +3,7 @@
 namespace Drupal\commerce_recruitment\Plugin\views\area;
 
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\commerce_recruitment\RecruitingServiceInterface;
+use Drupal\commerce_recruitment\RecruitingManagerInterface;
 use Drupal\views\Plugin\views\area\AreaPluginBase;
 use Drupal\views\Plugin\views\argument\NumericArgument;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -23,9 +23,9 @@ class BonusTotal extends AreaPluginBase {
   /**
    * The recruiting service.
    *
-   * @var \Drupal\commerce_recruitment\RecruitingServiceInterface
+   * @var \Drupal\commerce_recruitment\RecruitingManagerInterface
    */
-  protected $recruitingService;
+  protected $recruitingManager;
 
   /**
    * Constructs a new BonusTotal instance.
@@ -36,13 +36,13 @@ class BonusTotal extends AreaPluginBase {
    *   The plugin_id for the plugin instance.
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
-   * @param \Drupal\commerce_recruitment\RecruitingServiceInterface $recruiting_service
+   * @param \Drupal\commerce_recruitment\RecruitingManagerInterface $recruiting_manager
    *   The entity type manager.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, RecruitingServiceInterface $recruiting_service) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, RecruitingManagerInterface $recruiting_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
-    $this->recruitingService = $recruiting_service;
+    $this->recruitingManager = $recruiting_manager;
   }
 
   /**
@@ -63,7 +63,7 @@ class BonusTotal extends AreaPluginBase {
   public function buildOptionsForm(&$form, FormStateInterface $form_state) {
     parent::buildOptionsForm($form, $form_state);
 
-    $form['empty']['#description'] = $this->t('Even if selected, this area handler will never render if a valid order cannot be found in the View\'s arguments.');
+    $form['empty']['#description'] = $this->t("Even if selected, this area handler will never render if a valid order cannot be found in the View's arguments.");
   }
 
   /**
@@ -77,12 +77,12 @@ class BonusTotal extends AreaPluginBase {
           continue;
         }
         if ($name = 'user_id') {
-          $total_bonus = $this->recruitingService->getTotalBonusPerUser($argument->getValue());
+          $total_bonus = $this->recruitingManager->getTotalBonusPerUser($argument->getValue());
           if ($total_bonus !== NULL) {
             $output = [
               '#type' => 'price',
               '#label' => 'hidden',
-              '#markup' => $total_bonus
+              '#markup' => $total_bonus,
             ];
             return $output;
           }

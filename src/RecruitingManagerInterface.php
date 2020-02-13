@@ -3,9 +3,9 @@
 namespace Drupal\commerce_recruitment;
 
 /**
- * Interface RecruitingServiceInterface.
+ * Interface RecruitingManagerInterface.
  */
-interface RecruitingServiceInterface {
+interface RecruitingManagerInterface {
 
   /**
    * Calculates the sum of all recruiting bonus of an user.
@@ -17,7 +17,8 @@ interface RecruitingServiceInterface {
    * @param string $recruitment_type
    *   Filter by recruitment type. Leave empty to include all types.
    *
-   * @return mixed
+   * @return int
+   *   The total bonus.
    */
   public function getTotalBonusPerUser($uid, $include_paid_out = FALSE, $recruitment_type = NULL);
 
