@@ -113,13 +113,11 @@ class RecruitingCodeController extends ControllerBase {
       return $redirect;
     }
 
-
-
-    if (true) {
+    if (TRUE) {
       $data = [
         "uid" => $uid,
         "pid" => $pid,
-        "type" => $entity_type
+        "type" => $entity_type,
       ];
       $this->session->set("recruiting_data", $data);
     }

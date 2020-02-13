@@ -2,8 +2,6 @@
 
 namespace Drupal\Tests\commerce_recruitment\Kernel;
 
-use Drupal\commerce_order\Entity\OrderType;
-use Drupal\commerce_recruitment\Entity\RecruitingEntityType;
 use Drupal\Tests\commerce\Kernel\CommerceKernelTestBase;
 use Drupal\Tests\commerce_cart\Traits\CartManagerTestTrait;
 use Drupal\Tests\commerce_recruitment\Traits\RecruitingEntityCreationTrait;
@@ -26,12 +24,16 @@ class CommerceRecruitingKernelTestBase extends CommerceKernelTestBase {
   public static $modules = [
     'commerce_order',
     'commerce_product',
+    'commerce_promotion',
     'entity_reference_revisions',
+    'dynamic_entity_reference',
     'profile',
     'state_machine',
   ];
 
   /**
+   * The Recruting service.
+   *
    * @var \Drupal\commerce_recruitment\RecruitingServiceInterface
    */
   protected $recruitingService;
@@ -48,7 +50,8 @@ class CommerceRecruitingKernelTestBase extends CommerceKernelTestBase {
     $this->installEntitySchema('commerce_order');
     $this->installEntitySchema('commerce_order_item');
     $this->installEntitySchema('commerce_product');
-    $this->installEntitySchema('recruiting');
+    $this->installEntitySchema('commerce_promotion');
+    $this->installEntitySchema('commerce_recruiting');
 
     $user = $this->createUser();
     $this->user = $this->reloadEntity($user);
@@ -57,7 +60,9 @@ class CommerceRecruitingKernelTestBase extends CommerceKernelTestBase {
     $this->recruitingService = $this->container->get('commerce_recruitment.recruiting');
 
     $this->installCommerceCart();
+    $this->installRecruitingConfig();
     $this->installRecruitingEntity();
+
   }
 
   /**
