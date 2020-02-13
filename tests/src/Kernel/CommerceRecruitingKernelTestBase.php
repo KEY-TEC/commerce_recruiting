@@ -32,11 +32,11 @@ class CommerceRecruitingKernelTestBase extends CommerceKernelTestBase {
   ];
 
   /**
-   * The Recruting service.
+   * The Recruting manager.
    *
    * @var \Drupal\commerce_recruitment\RecruitingManagerInterface
    */
-  protected $recruitingService;
+  protected $recruitingManager;
 
   /**
    * {@inheritdoc}
@@ -58,7 +58,7 @@ class CommerceRecruitingKernelTestBase extends CommerceKernelTestBase {
     $this->user = $this->reloadEntity($user);
     $this->container->get('current_user')->setAccount($user);
 
-    $this->recruitingService = $this->container->get('commerce_recruitment.recruiting');
+    $this->recruitingManager = $this->container->get('commerce_recruitment.manager');
 
     $this->installCommerceCart();
     $this->installRecruitingConfig();
