@@ -2,6 +2,7 @@
 
 namespace Drupal\commerce_recruitment\Plugin\Block;
 
+use Drupal\commerce_recruitment\RecruitingManagerInterface;
 use Drupal\commerce_recruitment\Resolver\ChainRecruitingConfigResolverInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Block\BlockBase;
@@ -33,10 +34,10 @@ class SharingLink extends BlockBase implements ContainerFactoryPluginInterface {
   protected $languageManager;
 
   /**
-   * The recruiting config chain resolver.
+   * The recruiting manager.
    * @var
    */
-  protected $chainRecruitingConfigResolver;
+  protected $recruitingManager;
 
   /**
    * Constructs a new CartBlock.
@@ -49,13 +50,13 @@ class SharingLink extends BlockBase implements ContainerFactoryPluginInterface {
    *   The plugin implementation definition.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The language manager.
-   * @param \Drupal\commerce_recruitment\Resolver\ChainRecruitingConfigResolverInterface $chain_resolver
-   *   The recruiting config chain resolver.
+   * @param \Drupal\commerce_recruitment\RecruitingManagerInterface $recruiting_manager
+   *   The recruiting manager.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, LanguageManagerInterface $language_manager, ChainRecruitingConfigResolverInterface $chain_resolver) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, LanguageManagerInterface $language_manager, RecruitingManagerInterface $recruiting_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->languageManager = $language_manager;
-    $this->chainRecruitingConfigResolver = $chain_resolver;
+    $this->recruitingManager = $recruiting_manager;
   }
 
   /**
@@ -67,7 +68,7 @@ class SharingLink extends BlockBase implements ContainerFactoryPluginInterface {
       $plugin_id,
       $plugin_definition,
       $container->get('language_manager'),
-      $container->get('commerce_recruitment.chain_recruiting_config_resolver')
+      $container->get('commerce_recruitment.manager')
     );
   }
 
@@ -80,8 +81,6 @@ class SharingLink extends BlockBase implements ContainerFactoryPluginInterface {
    * @throws \Drupal\Component\Plugin\Exception\PluginException
    */
   public function build() {
-    $result = $this->chainRecruitingConfigResolver->resolve();
-
     $build = [];
     $build['#theme'] = 'sharing_link';
 

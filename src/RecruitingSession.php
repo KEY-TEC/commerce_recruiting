@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 /**
  * Default implementation of the cart session.
  */
-class RecrutingSession implements RecrutingSessionInterface {
+class RecruitingSession implements RecruitingSessionInterface {
 
   /**
    * The session.
@@ -29,15 +29,15 @@ class RecrutingSession implements RecrutingSessionInterface {
   /**
    * {@inheritDoc}
    */
-  public function getRecruter() {
-    // TODO: Implement getRecruter() method.
+  public function getRecruiter() {
+    // TODO: Implement getRecruiter() method.
   }
 
   /**
    * {@inheritDoc}
    */
-  public function getRecrutingConfig() {
-    // TODO: Implement getRecrutingConfig() method.
+  public function getRecruitingConfig() {
+    // TODO: Implement getRecruitingConfig() method.
   }
 
 }
