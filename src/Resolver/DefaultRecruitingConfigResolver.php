@@ -24,7 +24,6 @@ class DefaultRecruitingConfigResolver implements RecruitingConfigResolverInterfa
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager) {
     $this->configStorage = $entity_type_manager->getStorage('commerce_recruiting_config');
-
   }
 
   /**
