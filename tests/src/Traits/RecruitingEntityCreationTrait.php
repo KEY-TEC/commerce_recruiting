@@ -257,6 +257,8 @@ trait RecruitingEntityCreationTrait {
       'recruiter' => $this->users[0],
     ]);
     $this->recruitingConfigs[] = $recruiting_config;
+    return $recruiting_config;
+
   }
 
 }

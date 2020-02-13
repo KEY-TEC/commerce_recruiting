@@ -3,9 +3,6 @@
 namespace Drupal\commerce_recruitment\Tests\Kernel\Controller;
 
 use Drupal\simpletest\WebTestBase;
-use Drupal\Core\Session\AccountProxyInterface;
-use Drupal\language\ConfigurableLanguageManagerInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 
 /**
  * Provides automated tests for the commerce_recruitment module.
@@ -33,7 +30,6 @@ class RecruitingCodeControllerTest extends WebTestBase {
    */
   protected $entityTypeManager;
 
-
   /**
    * {@inheritdoc}
    */
@@ -43,13 +39,6 @@ class RecruitingCodeControllerTest extends WebTestBase {
       'description' => 'Test Unit for module commerce_recruitment and controller RecruitingCodeController.',
       'group' => 'Other',
     ];
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function setUp() {
-    parent::setUp();
   }
 
   /**
