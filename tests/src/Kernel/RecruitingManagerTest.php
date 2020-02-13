@@ -17,33 +17,46 @@ class RecruitingManagerTest extends CommerceRecruitingKernelTestBase {
    * Test testGetRecruitingUrl.
    */
   public function testGetRecruitingUrl() {
-    $config = $this->recruitmentSetup();
+    $config = $this->createRecruitmentConfig($this->drupalCreateUser());
     /** @var \Drupal\commerce_recruitment\RecruitingManagerInterface $recruitment_serivce */
-    $recruitment_service = \Drupal::service('commerce_recruitment.recruiting');
-    $url = $recruitment_service->getRecruitingUrl($config);
+    $recruitment_manger = $this->recruitingManager;
+    $url = $recruitment_manger->getRecruitingUrl($config);
     $this->assertNotNull($url);
-    $this->assertEqual("http://localhost/friend/Mjsy", $url->toString());
   }
 
   /**
    * Test testGetRecruitingUrl.
    */
   public function testGetRecruitingCode() {
-    $config = $this->recruitmentSetup();
+    $config = $this->createRecruitmentConfig($this->drupalCreateUser());
     /** @var \Drupal\commerce_recruitment\RecruitingManagerInterface $recruitment_serivce */
-    $recruitment_service = \Drupal::service('commerce_recruitment.recruiting');
-    $code = $recruitment_service->getRecruitingCode($config);
+    $recruitment_manager = $this->recruitingManager;
+    $code = $recruitment_manager->getRecruitingCode($config);
     $this->assertNotNull($code);
-    $this->assertEqual("Mjsy", $code);
+  }
+
+  /**
+   * Test testGetConfigByProduct.
+   */
+  public function testGetConfigByProduct() {
+
+    $expected_product = $this->createProduct();
+    $expected_config = $this->createRecruitmentConfig(NULL, $expected_product);
+    $differnt_product = $this->createProduct();
+    $differnt_config = $this->createRecruitmentConfig(NULL, $differnt_product);
+    $assigned_recruiter_config = $this->createRecruitmentConfig($this->drupalCreateUser(), $differnt_product);
+    $configs = $this->recruitingManager->getConfigByProduct($expected_product, NULL);
+    $this->assertEqual(1, count($configs));
+    $this->assertEqual($expected_config->id(), $configs[0]->id());
   }
 
   /**
    * Test testGetRecruitingUrl.
    */
   public function testGetRecruitingInfoFromCode() {
-    $config = $this->recruitmentSetup();
+    $config = $this->createRecruitmentConfig($this->drupalCreateUser());
     /** @var \Drupal\commerce_recruitment\RecruitingManager $recruitment_manager */
-    $recruitment_manager = \Drupal::service('commerce_recruitment.recruiting');
+    $recruitment_manager = $this->recruitingManager;
     $code = $recruitment_manager->getRecruitingCode($config);
     $this->assertNotNull($code);
     $info = $recruitment_manager->getRecruitingInfoFromCode($code);

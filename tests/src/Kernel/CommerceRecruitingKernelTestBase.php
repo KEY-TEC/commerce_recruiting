@@ -2,9 +2,14 @@
 
 namespace Drupal\Tests\commerce_recruitment\Kernel;
 
+use Drupal\commerce_product\Entity\Product;
+use Drupal\commerce_recruitment\Entity\RecruitingConfig;
+use Drupal\commerce_recruitment\Entity\RecruitingEntity;
+use Drupal\commerce_recruitment\Entity\RecruitingEntityType;
 use Drupal\Tests\commerce\Kernel\CommerceKernelTestBase;
 use Drupal\Tests\commerce_cart\Traits\CartManagerTestTrait;
 use Drupal\Tests\commerce_recruitment\Traits\RecruitingEntityCreationTrait;
+use Drupal\user\Entity\User;
 
 /**
  * RentalPackageManager.
@@ -32,11 +37,76 @@ class CommerceRecruitingKernelTestBase extends CommerceKernelTestBase {
   ];
 
   /**
-   * The Recruting manager.
+   * The Recruiting manager.
    *
    * @var \Drupal\commerce_recruitment\RecruitingManagerInterface
    */
   protected $recruitingManager;
+
+  /**
+   * Setup commerce shop and products.
+   */
+  protected function createProduct() {
+
+    $store = $this->store;
+    // Add currency...
+    // Create some products...
+    $product = Product::create([
+      'type' => 'default',
+      'title' => 'product ',
+      'stores' => [$store],
+    ]);
+    $product->save();
+    return $product;
+  }
+
+  /**
+   * Install required product bundle / order type etc.
+   */
+  protected function installRecruitingEntityType() {
+    $recruiting_type = RecruitingEntityType::create([
+      'id' => 'default',
+    ]);
+    $recruiting_type->save();
+  }
+
+  /**
+   * Create an recruiting entity.
+   *
+   * @return \Drupal\commerce_recruitment\Entity\RecruitingEntityInterface
+   *   The recruiting entity.
+   */
+  protected function createRecruitmentEntity(array $options = [
+    'type' => 'default',
+    'name' => 'test',
+  ]) {
+    $recruitment = RecruitingEntity::create($options);
+    return $recruitment;
+  }
+
+  /**
+   * Create an recruiting entity.
+   *
+   * @return \Drupal\commerce_recruitment\Entity\RecruitingConfigInterface
+   *   The recruiting entity.
+   */
+  protected function createRecruitmentConfig(User $recruiter = NULL, Product $product = NULL) {
+    $options = [
+      'name' => 'test',
+    ];
+    if ($recruiter != NULL) {
+      $options['recruiter'] = ['target_id' => $recruiter->id()];
+    }
+    if ($product != NULL) {
+      $options['product'] = [
+        'target_type' => 'product',
+        'target_id' => $product->id(),
+      ];
+    }
+    $config = RecruitingConfig::create($options);
+    $config->save();
+    return $config;
+  }
 
   /**
    * {@inheritdoc}
@@ -61,9 +131,7 @@ class CommerceRecruitingKernelTestBase extends CommerceKernelTestBase {
     $this->recruitingManager = $this->container->get('commerce_recruitment.manager');
 
     $this->installCommerceCart();
-    $this->installRecruitingConfig();
-    $this->installRecruitingEntity();
-
+    $this->installRecruitingEntityType();
   }
 
   /**
