@@ -7,6 +7,9 @@
 ##
 ## Test calls:
 ## - fin run_tests --filter 'EventSubscriber\\RecruitingCheckoutSubscriberTest'
+## - fin run_tests --filter 'Kernel\\RecruitingManagerTest'
+## - fin run_tests --filter 'Unit\\EncryptionTest'
+
 set -e
 
 fin exec /var/www/vendor/bin/phpunit $*

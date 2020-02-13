@@ -10,13 +10,19 @@ use Drupal\Tests\token\Kernel\UnitTest;
  */
 class EncryptionTest extends UnitTest {
 
-  protected $testString = "testString";
+  /**
+   * Testvariable.
+   *
+   * @var string
+   */
+  protected $testString = "10;12";
 
   /**
    * Test encryption.
    */
   public function testEncryption() {
     $encrypted = Encryption::encrypt($this->testString);
+    $this->assertEqual("MTA7MTI!3D", $encrypted);
     $this->assertNotEqual($this->testString, $encrypted);
 
     $decrypted = Encryption::decrypt($encrypted);

@@ -79,6 +79,7 @@ trait RecruitingEntityCreationTrait {
       'bonus' => new Price('10', 'USD'),
       'recruiter' => ['target_id' => $recruter->id()],
     ]);
+    $recruiting_config->save();
     return $recruiting_config;
   }
 

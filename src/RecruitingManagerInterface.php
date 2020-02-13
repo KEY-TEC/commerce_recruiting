@@ -2,6 +2,9 @@
 
 namespace Drupal\commerce_recruitment;
 
+use Drupal\commerce_recruitment\Entity\RecruitingConfig;
+use Drupal\user\Entity\User;
+
 /**
  * Interface RecruitingManagerInterface.
  */
@@ -21,5 +24,44 @@ interface RecruitingManagerInterface {
    *   The total bonus.
    */
   public function getTotalBonusPerUser($uid, $include_paid_out = FALSE, $recruitment_type = NULL);
+
+  /**
+   * Returns recruiting info from code.
+   *
+   * @param string $code
+   *   The recruiting code.
+   *
+   * @return array
+   *   Keys:
+   *    - recruiter
+   *    - recruiting_config
+   */
+  public function getRecruitingInfoFromCode($code);
+
+  /**
+   * Returns the recruiting url.
+   *
+   * @param \Drupal\commerce_recruitment\Entity\RecruitingConfig $recruiting_config
+   *   The recruiting config.
+   * @param \Drupal\user\Entity\User $recruiter
+   *   The recruiter.
+   *
+   * @return \Drupal\Core\Url
+   *   The short url.
+   */
+  public function getRecruitingUrl(RecruitingConfig $recruiting_config, User $recruiter = NULL);
+
+  /**
+   * Returns the recruiting code.
+   *
+   * @param \Drupal\commerce_recruitment\Entity\RecruitingConfig $recruiting_config
+   *   The recruiting config.
+   * @param \Drupal\user\Entity\User $recruiter
+   *   The recruiter.
+   *
+   * @return string
+   *   The code.
+   */
+  public function getRecruitingCode(RecruitingConfig $recruiting_config, User $recruiter = NULL);
 
 }
