@@ -70,7 +70,7 @@ class RecruitingCodeController extends ControllerBase {
     return new static(
       $container->get('entity_type.manager'),
       $container->get('current_user'),
-      $container->get('commerce_recruitment.recruiting'),
+      $container->get('commerce_recruitment.manager'),
       $container->get('session')
     );
   }
