@@ -3,11 +3,13 @@
 namespace Drupal\Tests\commerce_recruitment\Kernel;
 
 /**
- * RentalPackageManager.
- *
- * @group sw_subscription
+ * RecruitingManagerTest.
  */
-class RecruitingServiceTest extends CommerceRecruitingKernelTestBase {
+class RecruitingManagerTest extends CommerceRecruitingKernelTestBase {
+
+  public function testGetPublicRecruitingLink() {
+
+  }
 
   /**
    * Test testGetTotalBonusPerUser.

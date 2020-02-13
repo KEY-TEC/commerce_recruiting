@@ -17,8 +17,7 @@ class RecruitingCheckoutSubscriberTest extends CommerceRecruitingKernelTestBase 
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
   public function testOnOrderPlace() {
-
-    $recruiting_config = $this->recruitmentSetup();
+    $recruiting_configs = $this->recruitmentSetup();
     /** @var \Drupal\commerce_recruitment\EventSubscriber\RecruitingCheckoutSubscriber $service */
     $checkout_subscriber = \Drupal::service('commerce_recruitment.recruiting.checkout');
     $checkout_user = $this->setUpCurrentUser();

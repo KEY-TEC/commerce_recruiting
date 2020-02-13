@@ -2,7 +2,6 @@
 
 namespace Drupal\Tests\commerce_recruitment\Kernel;
 
-use Drupal\commerce_product\Entity\Product;
 use Drupal\Tests\commerce\Kernel\CommerceKernelTestBase;
 use Drupal\Tests\commerce_cart\Traits\CartManagerTestTrait;
 use Drupal\Tests\commerce_recruitment\Traits\RecruitingEntityCreationTrait;
@@ -38,29 +37,6 @@ class CommerceRecruitingKernelTestBase extends CommerceKernelTestBase {
    * @var \Drupal\commerce_recruitment\RecruitingManagerInterface
    */
   protected $recruitingService;
-
-  /**
-   * Setup commerce shop and products.
-   */
-  protected function shopSetup() {
-
-    $store = $this->store;
-    // Add currency...
-    // Create some products...
-    $create_products = 3;
-    $create_variations = 2;
-    $products = [];
-    for ($p = 1; $p <= $create_products; $p++) {
-      $product = Product::create([
-        'type' => 'default',
-        'title' => 'product ' . $p,
-        'stores' => [$store],
-      ]);
-      $product->save();
-      $products[] = $product;
-    }
-    return $products;
-  }
 
   /**
    * {@inheritdoc}
