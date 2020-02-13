@@ -296,7 +296,10 @@ class RecruitingConfig extends CommerceContentEntityBase implements RecruitingCo
     $fields['bonus_percent'] = BaseFieldDefinition::create('integer')
       ->setLabel(new TranslatableMarkup('Bonus (%)'))
       ->setDescription(new TranslatableMarkup('Percentage bonus value of the product price for the recruiter if percentage bonus method is selected.'))
-      ->setRequired(TRUE)
+      ->setSettings([
+        'min' => 0,
+        'suffix' => '%',
+      ])
       ->setDisplayOptions('view', [
         'label' => 'above',
         'type' => 'number_integer',
@@ -313,7 +316,11 @@ class RecruitingConfig extends CommerceContentEntityBase implements RecruitingCo
     $fields['bonus_method'] = BaseFieldDefinition::create('list_string')
       ->setLabel(new TranslatableMarkup('Bonus Method'))
       ->setDescription(new TranslatableMarkup('Percentage bonus value of the product price for the recruiter.'))
-      ->setSetting('allowed_values', self::RECRUIT_BONUS_METHOD_FIX . '|Fix bonus\n' . self::RECRUIT_BONUS_METHOD_PERCENT . '|Percentage bonus of product\n' . self::RECRUIT_BONUS_METHOD_PERCENT_CART . '|Percentage bonus of cart (test)')
+      ->setSetting('allowed_values', [
+        self::RECRUIT_BONUS_METHOD_FIX => 'Fix bonus',
+        self::RECRUIT_BONUS_METHOD_PERCENT => 'Percentage bonus of product',
+        self::RECRUIT_BONUS_METHOD_PERCENT_CART => 'Percentage bonus of cart (test)',
+      ])
       ->setRequired(TRUE)
       ->setDisplayOptions('view', [
         'label' => 'above',
@@ -380,7 +387,7 @@ class RecruitingConfig extends CommerceContentEntityBase implements RecruitingCo
 
     $fields['product'] = BaseFieldDefinition::create('dynamic_entity_reference')
       ->setLabel(new TranslatableMarkup('Product'))
-      ->setDescription(new TranslatableMarkup('The product or bundle that someone will get the bonus for.'))
+      ->setDescription(new TranslatableMarkup('The product or bundle for which someone will get the bonus after checkout.'))
       ->setSettings([
         'exclude_entity_types' => FALSE,
         'entity_type_ids' => [
