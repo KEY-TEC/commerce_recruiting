@@ -83,20 +83,8 @@ class SharingLink extends BlockBase implements ContainerFactoryPluginInterface {
   public function build() {
     $build = [];
     $build['#theme'] = 'sharing_link';
-
-    /** @var \Drupal\user\UserInterface $user */
-    $user = $this->getContextValue('user');
-    if (!empty($parent) && !empty($user)) {
-      $language = $this->languageManager->getCurrentLanguage();
-      $uid = $user->id();
-      $pid = $parent->id();
-      $entity_type = $parent->getEntityType()->id();
-      $values = [$uid, $pid, $entity_type];
-      $code = Encryption::encrypt(implode(';', $values));
-      if (!empty($code)) {
-        $build['recruiting']['#markup'] = Url::fromRoute('commerce_recruitment.recruiting_url', ['recruiting_code' => $code], ['absolute' => TRUE, 'language' => $language])->toString();
-      }
-    }
+    // @todo get product from current page
+    $build['recruiting']['#markup'] = $this->recruitingManager->getProductRecruitingLink();
     return $build;
   }
 
