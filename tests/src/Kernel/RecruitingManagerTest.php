@@ -5,9 +5,9 @@ namespace Drupal\Tests\commerce_recruitment\Kernel;
 use Drupal\Tests\commerce_recruitment\Traits\RecruitingEntityCreationTrait;
 
 /**
- * RentalPackageManager.
+ * RecruitingManager.
  *
- * @group sw_subscription
+ * @group commerce_recruitment
  */
 class RecruitingManagerTest extends CommerceRecruitingKernelTestBase {
 

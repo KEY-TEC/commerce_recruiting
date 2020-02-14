@@ -45,7 +45,6 @@ use Drupal\user\UserInterface;
  *   admin_permission = "administer recruiting entity entities",
  *   entity_keys = {
  *     "id" = "id",
- *     "bundle" = "type",
  *     "label" = "name",
  *     "uuid" = "uuid",
  *     "owner" = "recruiter",
@@ -60,8 +59,6 @@ use Drupal\user\UserInterface;
  *     "delete-form" = "/admin/commerce/recruitment/recruiting/{commerce_recruiting}/delete",
  *     "collection" = "/admin/commerce/recruitment/recruiting",
  *   },
- *   bundle_entity_type = "commerce_recruiting_type",
- *   field_ui_base_route = "entity.commerce_recruiting_type.edit_form"
  * )
  */
 class RecruitingEntity extends ContentEntityBase implements RecruitingEntityInterface {
@@ -159,21 +156,6 @@ class RecruitingEntity extends ContentEntityBase implements RecruitingEntityInte
   /**
    * {@inheritdoc}
    */
-  public function isPaidOut() {
-    return $this->get('is_paid_out')->value;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function setPaidOut($is_paid_out) {
-    return $this->set('is_paid_out', $is_paid_out);
-  }
-
-
-  /**
-   * {@inheritdoc}
-   */
   public static function baseFieldDefinitions(EntityTypeInterface $entity_type) {
     $fields = parent::baseFieldDefinitions($entity_type);
 
@@ -249,14 +231,52 @@ class RecruitingEntity extends ContentEntityBase implements RecruitingEntityInte
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 
-    $fields['product'] = BaseFieldDefinition::create('entity_reference')
-      ->setLabel(new TranslatableMarkup('Product'))
-      ->setDescription(t('The recommended product.'))
-      ->setSetting('target_type', 'commerce_product')
+    $fields['order_item'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(t('Order item'))
+      ->setDescription(t('The source order item.'))
+      ->setSetting('target_type', 'commerce_order_item')
       ->setSetting('handler', 'default')
+      ->setSetting('display_description', TRUE)
+      ->setDisplayOptions('form', [
+        'type' => 'entity_reference_autocomplete',
+        'weight' => 5,
+        'settings' => [
+          'match_operator' => 'CONTAINS',
+          'size' => '60',
+          'autocomplete_type' => 'tags',
+          'placeholder' => '',
+        ],
+      ])
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['state'] = BaseFieldDefinition::create('state')
+      ->setLabel(t('State'))
+      ->setDescription(t('The recruiting state.'))
+      ->setRequired(TRUE)
+      ->setSetting('max_length', 255)
+      ->setSetting('workflow', 'recruiting_default')
       ->setDisplayOptions('view', [
         'label' => 'hidden',
-        'type' => 'entity_reference_entity_view',
+        'type' => 'list_default',
+        'weight' => 0,
+      ])
+      ->setDisplayConfigurable('view', TRUE)
+      ->setDisplayConfigurable('form', TRUE);
+
+    $fields['product'] = BaseFieldDefinition::create('dynamic_entity_reference')
+      ->setLabel(new TranslatableMarkup('Product'))
+      ->setDescription(new TranslatableMarkup('The product or bundle for which someone will get the bonus after checkout.'))
+      ->setSettings([
+        'exclude_entity_types' => FALSE,
+        'entity_type_ids' => [
+          'commerce_product',
+          'commerce_product_bundle',
+        ],
+      ])
+      ->setDisplayOptions('view', [
+        'label' => 'hidden',
+        'type' => 'entity_reference_label',
         'weight' => 0,
       ])
       ->setDisplayOptions('form', [
@@ -289,12 +309,6 @@ class RecruitingEntity extends ContentEntityBase implements RecruitingEntityInte
       ->setDisplayConfigurable('view', TRUE)
       ->setDisplayConfigurable('form', TRUE);
 
-    //$fields['status']->setDescription(t('A boolean indicating whether the Recruiting entity is published.'))
-    //  ->setDisplayOptions('form', [
-    //    'type' => 'boolean_checkbox',
-    //    'weight' => -3,
-    //  ]);
-
     $fields['created'] = BaseFieldDefinition::create('created')
       ->setLabel(t('Created'))
       ->setDescription(t('The time that the entity was created.'));
@@ -303,17 +317,41 @@ class RecruitingEntity extends ContentEntityBase implements RecruitingEntityInte
       ->setLabel(t('Changed'))
       ->setDescription(t('The time that the entity was last edited.'));
 
-    $fields['is_paid_out'] = BaseFieldDefinition::create('boolean')
-      ->setLabel(t('Paid out'))
-      ->setDescription(t('A boolean indicating if the bonus has been paid out to the recruiter.'))
-      ->setDisplayOptions('form', [
-        'type' => 'boolean_checkbox',
-        'weight' => -3,
-      ])
-      ->setDisplayConfigurable('view', TRUE)
-      ->setDisplayConfigurable('form', TRUE);
-
     return $fields;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getOrderItem() {
+    return $this->get('order_item')->entity;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getOrder() {
+    /** @var \Drupal\commerce_order\Entity\OrderItem $order_item */
+    $order_item = $this->getOrderItem();
+    if ($order_item != NULL) {
+      return $order_item->getOrder();
+    }
+    return NULL;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getState() {
+    return $this->get('state')->first();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setState($state_id) {
+    $this->set('state', $state_id);
+    return $this;
   }
 
 }

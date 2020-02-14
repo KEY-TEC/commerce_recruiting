@@ -26,6 +26,7 @@ class RecruitingManager implements RecruitingManagerInterface {
 
   /**
    * The language manager.
+   *
    * @var \Drupal\Core\Language\LanguageManagerInterface
    */
   protected $languageManager;
@@ -38,6 +39,13 @@ class RecruitingManager implements RecruitingManagerInterface {
   protected $entityTypeManager;
 
   /**
+   * The recruiting session.
+   *
+   * @var \Drupal\commerce_recruitment\RecruitingSessionInterface
+   */
+  private $recruitingSession;
+
+  /**
    * RecruitingManager constructor.
    *
    * @param \Drupal\Core\Session\AccountInterface $current_account
@@ -46,11 +54,14 @@ class RecruitingManager implements RecruitingManagerInterface {
    *   The language manager.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
+   * @param \Drupal\commerce_recruitment\RecruitingSessionInterface $recruiting_session
+   *   The recruiting session.
    */
-  public function __construct(AccountInterface $current_account, LanguageManagerInterface $language_manager, EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(AccountInterface $current_account, LanguageManagerInterface $language_manager, EntityTypeManagerInterface $entity_type_manager, RecruitingSessionInterface $recruiting_session) {
     $this->currentAccount = $current_account;
     $this->languageManager = $language_manager;
     $this->entityTypeManager = $entity_type_manager;
+    $this->recruitingSession = $recruiting_session;
   }
 
   /**
@@ -58,7 +69,7 @@ class RecruitingManager implements RecruitingManagerInterface {
    */
   public function getPublicRecruitingLink(AccountInterface $account = NULL, ProductInterface $product = NULL) {
     $this->entityTypeManager->getStorage('commerce_recruiting_config')->loadByProperties([
-      'recruiter'
+      'recruiter',
     ]);
   }
 
@@ -68,7 +79,7 @@ class RecruitingManager implements RecruitingManagerInterface {
   public function getTotalBonusPerUser($uid, $include_paid_out = FALSE, $recruitment_type = NULL) {
     $query = \Drupal::entityQuery('commerce_recruiting')
       ->condition('recruiter', $uid)
-      ->condition('is_paid_out', (string) $include_paid_out);
+      ->condition('state', 'paid');
 
     if ($recruitment_type !== NULL) {
       $query->condition('type', $recruitment_type);
@@ -92,6 +103,23 @@ class RecruitingManager implements RecruitingManagerInterface {
   public function getRecruitingUrl(RecruitingConfig $recruiting_config, User $recruiter = NULL) {
     $code = $this->getRecruitingCode($recruiting_config, $recruiter);
     return Url::fromRoute('commerce_recruitment.recruiting_url', ['recruiting_code' => $code], ['absolute' => TRUE]);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public function getRecruitingSessionFromCode($code) {
+    $info = $this->getRecruitingInfoFromCode($code);
+    $this->recruitingSession->setRecruiter($info['recruiter']);
+    $this->recruitingSession->setRecruitingConfig($info['recruiting_config']);
+    return $this->recruitingSession;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public function createRecruiting() {
+    // TODO: Implement createRecruiting() method.
   }
 
   /**

@@ -4,12 +4,6 @@ entity.commerce_recruiting.add_form:
   appears_on:
     - entity.commerce_recruiting.collection
 
-entity.commerce_recruiting_type.add_form:
-  route_name: entity.commerce_recruiting_type.add_form
-  title: 'Add recruiting entity type'
-  appears_on:
-    - entity.commerce_recruiting_type.collection
-
 entity.commerce_recruiting_config.add_form:
   route_name: entity.commerce_recruiting_config.add_form
   title: 'Add recruiting config'

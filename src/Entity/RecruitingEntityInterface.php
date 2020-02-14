@@ -133,20 +133,37 @@ interface RecruitingEntityInterface extends ContentEntityInterface, EntityChange
   public function setBonus(Price $price);
 
   /**
-   * Returns true of the bonus has been paid out to the recruiter.
+   * Gets the recruiting state.
    *
-   * @return bool
-   *   True if bonus has been paid out.
+   * @return \Drupal\state_machine\Plugin\Field\FieldType\StateItemInterface
+   *   The recruiting state.
    */
-  public function isPaidOut();
+  public function getState();
 
   /**
-   * Set the paid out status.
+   * Sets the recruiting state.
    *
-   * @param bool $is_paid_out
-   *   Whether the bonus has been paid out to the recruiter.
+   * @param string $state_id
+   *   The new state ID.
    *
    * @return $this
    */
-  public function setPaidOut($is_paid_out);
+  public function setState($state_id);
+
+  /**
+   * Get the order.
+   *
+   * @return \Drupal\commerce_order\Entity\Order
+   *   The order.
+   */
+  public function getOrder();
+
+  /**
+   * Returns the order item.
+   *
+   * @return \Drupal\commerce_order\Entity\OrderItemInterface
+   *   The associated order item.
+   */
+  public function getOrderItem();
+
 }

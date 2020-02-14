@@ -3,6 +3,8 @@
 namespace Drupal\commerce_recruitment;
 
 use Drupal\commerce_recruitment\Entity\RecruitingConfig;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\user\Entity\User;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
@@ -35,6 +37,13 @@ class RecruitingSession implements RecruitingSessionInterface {
   }
 
   /**
+   * The entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  private $entityTypeManager;
+
+  /**
    * The session.
    *
    * @var \Symfony\Component\HttpFoundation\Session\SessionInterface
@@ -46,38 +55,48 @@ class RecruitingSession implements RecruitingSessionInterface {
    *
    * @param \Symfony\Component\HttpFoundation\Session\SessionInterface $session
    *   The session.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The entity type manager.
    */
-  public function __construct(SessionInterface $session) {
+  public function __construct(SessionInterface $session, EntityTypeManagerInterface $entity_type_manager) {
     $this->session = $session;
+    $this->entityTypeManager = $entity_type_manager;
   }
 
   /**
    * {@inheritDoc}
    */
   public function getRecruiter() {
-
-    // TODO: Implement getRecruiter() method.
+    $rid = $this->session->get($this->getSessionKey(self::RECRUITER));
+    if ($rid !== NULL) {
+      return $this->entityTypeManager->getStorage('user')->load($rid);
+    }
+    return NULL;
   }
 
   /**
    * {@inheritDoc}
    */
   public function getRecruitingConfig() {
-    // TODO: Implement getRecruitingConfig() method.
+    $rcid = $this->session->get($this->getSessionKey(self::RECRUITING_CONFIG));
+    if ($rcid !== NULL) {
+      return $this->entityTypeManager->getStorage('commerce_recruiting_config')->load($rcid);
+    }
+    return NULL;
   }
 
   /**
    * {@inheritDoc}
    */
   public function setRecruiter(User $recruiter) {
-    $this->session->set('c');
+    $this->session->set($this->getSessionKey(self::RECRUITER), $recruiter->id());
   }
 
   /**
    * {@inheritDoc}
    */
   public function setRecruitingConfig(RecruitingConfig $recruiting) {
-    // TODO: Implement setRecruitingConfig() method.
+    $this->session->set($this->getSessionKey(self::RECRUITING_CONFIG), $recruiting->id());
   }
 
 }

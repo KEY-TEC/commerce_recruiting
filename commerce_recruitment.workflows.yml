@@ -1,0 +1,26 @@
+recruiting_default:
+  id: Recruiting default
+  group: recruiting
+  label: 'Default'
+  states:
+    created:
+      label: Created
+    accepted:
+      label: Accepted
+    canceled:
+      label: Canceled
+    paid:
+      label: Paid
+  transitions:
+    accept:
+      label: Accept
+      from: [created]
+      to: accepted
+    cancel:
+      label: Cancel
+      from: [created]
+      to: canceled
+    pay:
+      label: Pay
+      from: [accepted]
+      to: paid

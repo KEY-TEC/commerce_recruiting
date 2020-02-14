@@ -24,7 +24,8 @@ interface RecruitingManagerInterface {
    * @param \Drupal\commerce_product\Entity\ProductInterface $product
    *   Optional filter configs by product.
    *
-   * @return mixed
+   * @return \Drupal\Core\Url
+   *   The short url.
    */
   public function getPublicRecruitingLink(AccountInterface $account = NULL, ProductInterface $product = NULL);
 
@@ -44,6 +45,14 @@ interface RecruitingManagerInterface {
   public function getTotalBonusPerUser($uid, $include_paid_out = FALSE, $recruitment_type = NULL);
 
   /**
+   * Create recruiting entity.
+   *
+   * @return \Drupal\commerce_recruitment\Entity\RecruitingEntity
+   *   The recruiting entity
+   */
+  public function createRecruiting();
+
+  /**
    * Returns recruiting info from code.
    *
    * @param string $code
@@ -55,6 +64,17 @@ interface RecruitingManagerInterface {
    *    - recruiting_config
    */
   public function getRecruitingInfoFromCode($code);
+
+  /**
+   * Returns recruiting session from code.
+   *
+   * @param string $code
+   *   The recruiting code.
+   *
+   * @return \Drupal\commerce_recruitment\RecruitingSessionInterface
+   *   The session service.
+   */
+  public function getRecruitingSessionFromCode($code);
 
   /**
    * Returns the recruiting url.

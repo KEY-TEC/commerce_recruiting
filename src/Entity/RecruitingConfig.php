@@ -5,7 +5,6 @@ namespace Drupal\commerce_recruitment\Entity;
 use Drupal\commerce\Entity\CommerceContentEntityBase;
 use Drupal\commerce_price\Price;
 use Drupal\commerce_product\Entity\ProductInterface;
-use Drupal\commerce_product_bundle\Entity\BundleInterface;
 use Drupal\commerce_promotion\Entity\PromotionInterface;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Entity\EntityChangedTrait;
@@ -31,7 +30,8 @@ use Drupal\user\UserInterface;
  *   ),
  *   handlers = {
  *     "view_builder" = "Drupal\Core\Entity\EntityViewBuilder",
- *     "list_builder" = "Drupal\commerce_recruitment\RecruitingConfigListBuilder",
+ *     "list_builder" =
+ *   "Drupal\commerce_recruitment\RecruitingConfigListBuilder",
  *     "views_data" = "Drupal\commerce_recruitment\RecruitingConfigViewsData",
  *     "translation" = "Drupal\content_translation\ContentTranslationHandler",
  *     "access" = "Drupal\entity\EntityAccessControlHandler",
@@ -41,7 +41,8 @@ use Drupal\user\UserInterface;
  *       "default" = "Drupal\commerce_recruitment\Form\RecruitingConfigForm",
  *       "add" = "Drupal\commerce_recruitment\Form\RecruitingConfigForm",
  *       "edit" = "Drupal\commerce_recruitment\Form\RecruitingConfigForm",
- *       "delete" = "Drupal\commerce_recruitment\Form\RecruitingConfigDeleteForm",
+ *       "delete" =
+ *   "Drupal\commerce_recruitment\Form\RecruitingConfigDeleteForm",
  *     },
  *     "local_task_provider" = {
  *       "default" = "Drupal\entity\Menu\DefaultEntityLocalTaskProvider",
@@ -63,10 +64,13 @@ use Drupal\user\UserInterface;
  *     "owner" = "owner",
  *   },
  *   links = {
- *     "canonical" = "/admin/commerce/recruitment/config/{commerce_recruiting_config}",
+ *     "canonical" =
+ *   "/admin/commerce/recruitment/config/{commerce_recruiting_config}",
  *     "add-form" = "/admin/commerce/recruitment/config/add",
- *     "edit-form" = "/admin/commerce/recruitment/config/{commerce_recruiting_config}/edit",
- *     "delete-form" = "/admin/commerce/recruitment/config/{commerce_recruiting_config}/delete",
+ *     "edit-form" =
+ *   "/admin/commerce/recruitment/config/{commerce_recruiting_config}/edit",
+ *     "delete-form" =
+ *   "/admin/commerce/recruitment/config/{commerce_recruiting_config}/delete",
  *     "delete-multiple-form" = "/admin/commerce/recruitment/config/delete",
  *     "collection" = "/admin/commerce/recruitment/config",
  *   },
@@ -78,7 +82,9 @@ class RecruitingConfig extends CommerceContentEntityBase implements RecruitingCo
   use EntityOwnerTrait;
 
   const RECRUIT_BONUS_METHOD_FIX = 'fix';
+
   const RECRUIT_BONUS_METHOD_PERCENT = 'percent';
+
   const RECRUIT_BONUS_METHOD_PERCENT_CART = 'percent_cart';
 
   /**
@@ -159,7 +165,7 @@ class RecruitingConfig extends CommerceContentEntityBase implements RecruitingCo
   /**
    * {@inheritdoc}
    */
-  public function getProductorBundle() {
+  public function getProduct() {
     return $this->get('product')->entity;
   }
 
@@ -168,14 +174,8 @@ class RecruitingConfig extends CommerceContentEntityBase implements RecruitingCo
    */
   public function setProduct(ProductInterface $product) {
     $this->set('product', $product);
-    return $this;  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function setBundle(BundleInterface $bundle) {
-    $this->set('product', $bundle);
-    return $this;  }
+    return $this;
+  }
 
   /**
    * {@inheritdoc}
@@ -393,7 +393,7 @@ class RecruitingConfig extends CommerceContentEntityBase implements RecruitingCo
         'entity_type_ids' => [
           'commerce_product',
           'commerce_product_bundle',
-        ]
+        ],
       ])
       ->setDisplayOptions('view', [
         'label' => 'hidden',
@@ -436,14 +436,14 @@ class RecruitingConfig extends CommerceContentEntityBase implements RecruitingCo
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 
-      $fields['changed'] = BaseFieldDefinition::create('changed')
-        ->setLabel(new TranslatableMarkup('Changed'))
-        ->setDescription(new TranslatableMarkup('The time that this entity was last edited.'))
-        ->setRevisionable(TRUE);
+    $fields['changed'] = BaseFieldDefinition::create('changed')
+      ->setLabel(new TranslatableMarkup('Changed'))
+      ->setDescription(new TranslatableMarkup('The time that this entity was last edited.'))
+      ->setRevisionable(TRUE);
 
-      $fields['created'] = BaseFieldDefinition::create('created')
-        ->setLabel(new TranslatableMarkup('Created'))
-        ->setDescription(new TranslatableMarkup('The time that this entity was created.'));
+    $fields['created'] = BaseFieldDefinition::create('created')
+      ->setLabel(new TranslatableMarkup('Created'))
+      ->setDescription(new TranslatableMarkup('The time that this entity was created.'));
 
     return $fields;
   }
@@ -451,10 +451,9 @@ class RecruitingConfig extends CommerceContentEntityBase implements RecruitingCo
   /**
    * Default value callback for 'start_date' base field definition.
    *
-   * @see ::baseFieldDefinitions()
-   *
    * @return string
    *   The default value (date string).
+   * @see ::baseFieldDefinitions()
    */
   public static function getDefaultStartDate() {
     $timestamp = \Drupal::time()->getRequestTime();

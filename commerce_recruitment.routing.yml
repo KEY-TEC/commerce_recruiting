@@ -15,9 +15,9 @@ commerce_recruitment.collections:
     _permission: 'administer recruiting entity entities'
 
 commerce_recruitment.recruiting_url:
-  path: '/friend/{recruiting_code}'
+  path: '/code/{recruiting_code}'
   defaults:
-    _controller: '\Drupal\commerce_recruitment\Controller\RecruitingCodeController::redirectFromRecruitingUrl'
+    _controller: '\Drupal\commerce_recruitment\Controller\RecruitingCodeController::code'
     _title: 'redirectFromRecruitingUrl'
   requirements:
     _permission: 'access content'

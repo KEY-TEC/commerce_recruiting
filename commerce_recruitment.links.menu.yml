@@ -4,14 +4,6 @@ commerce_recruitment.configuration:
   parent: 'commerce.configuration'
   weight: 0
 
-# Recruiting entity type menu items definition
-entity.commerce_recruiting_type.collection:
-  title: 'Recruiting entity type'
-  route_name: entity.commerce_recruiting_type.collection
-  description: 'List recruiting entity type (bundles)'
-  parent: 'commerce_recruitment.configuration'
-  weight: 99
-
 commerce_recruitment.collections:
   title: 'Recruiting'
   route_name: 'commerce_recruitment.collections'

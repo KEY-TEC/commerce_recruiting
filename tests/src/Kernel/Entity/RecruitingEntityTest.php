@@ -19,7 +19,6 @@ class RecruitingEntityTest extends CommerceRecruitingKernelTestBase {
     $recruitment = $this->createRecruitmentEntity();
     $this->assertEmpty($recruitment->getBonus());
     $this->assertEqual('test', $recruitment->getName());
-    $this->assertFalse($recruitment->isPaidOut());
   }
 
 }

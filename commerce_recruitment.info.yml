@@ -7,3 +7,4 @@ dependencies:
   - commerce_product
   - commerce_promotion
   - dynamic_entity_reference
+  - state_machine
