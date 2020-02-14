@@ -2,9 +2,12 @@
 
 namespace Drupal\commerce_recruitment;
 
-use Drupal\commerce_product\Entity\ProductInterface;
+use Drupal\commerce_order\Entity\OrderInterface;
+use Drupal\commerce_order\Entity\OrderItemInterface;
+use Drupal\commerce_price\Price;
 use Drupal\commerce_recruitment\Entity\RecruitingConfig;
 use Drupal\commerce_recruitment\Entity\RecruitingEntity;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Session\AccountInterface;
@@ -67,17 +70,36 @@ class RecruitingManager implements RecruitingManagerInterface {
   /**
    * {@inheritDoc}
    */
-  public function getPublicRecruitingLink(AccountInterface $account = NULL, ProductInterface $product = NULL) {
-    $this->entityTypeManager->getStorage('commerce_recruiting_config')->loadByProperties([
-      'recruiter',
-    ]);
+  public function findRecruitingConfig(AccountInterface $recruiter = NULL, EntityInterface $product = NULL) {
+    $query = $this->entityTypeManager->getStorage('commerce_recruiting_config')
+      ->getQuery();
+    $query->condition('status', 1);
+    if ($product !== NULL) {
+      $query
+      // ->condition('product__target_type', $product->getEntityTypeId())
+        ->condition('products', $product->id());
+
+    }
+    if ($recruiter !== NULL) {
+      $query
+        ->condition('recruiter', $recruiter->id(), '=');
+    }
+    else {
+      $query
+        ->notExists('recruiter');
+    }
+
+    $rcids = $query->execute();
+    return $this->entityTypeManager->getStorage('commerce_recruiting_config')
+      ->loadMultiple($rcids);
   }
 
   /**
    * {@inheritDoc}
    */
   public function getTotalBonusPerUser($uid, $include_paid_out = FALSE, $recruitment_type = NULL) {
-    $query = \Drupal::entityQuery('commerce_recruiting')
+    $query = $this->entityTypeManager->getStorage('commerce_recruiting')
+      ->getQuery()
       ->condition('recruiter', $uid)
       ->condition('state', 'paid');
 
@@ -100,7 +122,7 @@ class RecruitingManager implements RecruitingManagerInterface {
   /**
    * {@inheritDoc}
    */
-  public function getRecruitingUrl(RecruitingConfig $recruiting_config, User $recruiter = NULL) {
+  public function getRecruitingUrl(RecruitingConfig $recruiting_config, AccountInterface $recruiter = NULL) {
     $code = $this->getRecruitingCode($recruiting_config, $recruiter);
     return Url::fromRoute('commerce_recruitment.recruiting_url', ['recruiting_code' => $code], ['absolute' => TRUE]);
   }
@@ -116,10 +138,87 @@ class RecruitingManager implements RecruitingManagerInterface {
   }
 
   /**
+   * Found matches in session.
+   *
+   * @param \Drupal\user\Entity\User $recruiter
+   *   The recruiter.
+   * @param \Drupal\commerce_recruitment\Entity\RecruitingConfig $config
+   *   The recruiting config.
+   * @param \Drupal\commerce_order\Entity\OrderInterface $order
+   *   The order.
+   *
+   * @return array
+   *   The matches.
+   */
+  private function sessionMatchByConfig(User $recruiter, RecruitingConfig $config, OrderInterface $order) {
+    $products = $config->getProducts();
+    $session_product_ids = [];
+    $matches = [];
+    foreach ($products as $product) {
+      $session_product_ids[] = $product->id();
+    }
+    foreach ($order->getItems() as $item) {
+      if (in_array($item->getPurchasedEntity()->id(), $session_product_ids)) {
+        $matches[$item->getPurchasedEntity()->id()] = [
+          'recruiting_config' => $config,
+          'order_item' => $item,
+          'bonus' => $config->calculateBonus($item),
+          'recruiter' => $recruiter,
+        ];
+      }
+    }
+    return $matches;
+  }
+
+  /**
    * {@inheritDoc}
    */
-  public function createRecruiting() {
-    // TODO: Implement createRecruiting() method.
+  public function sessionMatch(OrderInterface $order) {
+    $config = $this->recruitingSession->getRecruitingConfig();
+    $recruiter = $this->recruitingSession->getRecruiter();
+    if ($config === NULL) {
+      return [];
+    }
+    // First check the matches for stored config.
+    $matches = $this->sessionMatchByConfig($recruiter, $config, $order);
+
+    // Now check additional configs from this recruiter.
+    $addition_configs = $this->entityTypeManager->getStorage('commerce_recruiting_config')
+      ->loadByProperties([
+        'recruiter' => $recruiter->id(),
+        'status' => 1,
+      ]);
+    foreach ($addition_configs as $config) {
+      $additional_matches = $this->sessionMatchByConfig($recruiter, $config, $order);
+      foreach ($additional_matches as $product_id => $additional_match) {
+        if (isset($matches[$product_id])) {
+          // Only use the one with higher bonus per product.
+          if ($matches[$product_id]['bonus']->getNumber() >= $additional_matches[$product_id]['bonus']->getNumber()) {
+            $matches[$product_id] = $additional_matches[$product_id];
+          }
+        }
+      }
+    }
+    return $matches;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public function createRecruiting(OrderItemInterface $order_item, User $recruiter, User $recruited, RecruitingConfig $config, Price $bonus) {
+    return RecruitingEntity::create([
+      'recruiter' => ['target_id' => $recruiter->id()],
+      'name' => ['value' => $recruited->getAccountName() . ' by: ' . $recruiter->getAccountName()],
+      'recruiting_config' => ['target_id' => $recruiter->id()],
+      'recruited' => ['target_id' => $recruited->id()],
+      'order_item' => ['target_id' => $order_item->id()],
+      'status' => 1,
+      'product' => [
+        'target_id' => $order_item->getPurchasedEntity()->id(),
+        'target_type' => $order_item->getPurchasedEntity()->getEntityTypeId(),
+      ],
+      'bonus' => $bonus,
+    ]);
   }
 
   /**
@@ -154,7 +253,7 @@ class RecruitingManager implements RecruitingManagerInterface {
   /**
    * {@inheritDoc}
    */
-  public function getRecruitingCode(RecruitingConfig $recruiting_config, User $recruiter = NULL) {
+  public function getRecruitingCode(RecruitingConfig $recruiting_config, AccountInterface $recruiter = NULL) {
     if ($recruiter == NULL) {
       $recruiter = $recruiting_config->getRecruiter();
     }

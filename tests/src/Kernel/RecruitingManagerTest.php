@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\commerce_recruitment\Kernel;
 
+use Drupal\commerce_recruitment\RecruitingSession;
 use Drupal\Tests\commerce_recruitment\Traits\RecruitingEntityCreationTrait;
 
 /**
@@ -38,16 +39,36 @@ class RecruitingManagerTest extends CommerceRecruitingKernelTestBase {
   /**
    * Test testGetConfigByProduct.
    */
-  public function testGetConfigByProduct() {
+  public function testFindRecruitingConfig() {
 
     $expected_product = $this->createProduct();
     $expected_config = $this->createRecruitmentConfig(NULL, $expected_product);
+
     $differnt_product = $this->createProduct();
     $differnt_config = $this->createRecruitmentConfig(NULL, $differnt_product);
     $assigned_recruiter_config = $this->createRecruitmentConfig($this->drupalCreateUser(), $differnt_product);
-    $configs = $this->recruitingManager->getConfigByProduct($expected_product, NULL);
-    $this->assertEqual(1, count($configs));
-    $this->assertEqual($expected_config->id(), $configs[0]->id());
+    $configs = $this->recruitingManager->findRecruitingConfig(NULL, $expected_product);
+    $this->assertEqual(count($configs), 1);
+    $this->assertEqual($expected_config->id(), $configs[$expected_config->id()]->id());
+  }
+
+  /**
+   * Test testSessionMatch.
+   */
+  public function testSessionMatch() {
+    $recruiter = $this->createUser();
+    $product1 = $this->createProduct();
+    $product2 = $this->createProduct();
+    $oder = $this->createTestOrder([$product1]);
+    $oder2 = $this->createTestOrder([$product2]);
+    $prophecy = $this->prophesize(RecruitingSession::CLASS);
+    $session_config = $this->createRecruitmentConfig($recruiter, $product1);
+    $prophecy->getRecruitingConfig()->willReturn($session_config);
+    \Drupal::getContainer()->set('commerce_recruitment.recruiting_session', $prophecy->reveal());
+    $matches = $this->recruitingManager->sessionMatch($oder);
+    $this->assertEqual(count($matches), 1);
+    $matches = $this->recruitingManager->sessionMatch($oder2);
+    $this->assertEqual(count($matches), 0);
   }
 
   /**

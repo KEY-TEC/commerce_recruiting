@@ -2,7 +2,10 @@
 
 namespace Drupal\commerce_recruitment;
 
-use Drupal\commerce_product\Entity\ProductInterface;
+use Drupal\commerce_order\Entity\OrderInterface;
+use Drupal\commerce_order\Entity\OrderItemInterface;
+use Drupal\commerce_price\Price;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\commerce_recruitment\Entity\RecruitingConfig;
 use Drupal\user\Entity\User;
@@ -13,21 +16,20 @@ use Drupal\user\Entity\User;
 interface RecruitingManagerInterface {
 
   /**
-   * Returns the "recruit a friend" link.
+   * Returns a recruiting confi.
    *
-   * The code in the link differs per account and cannot be created for
-   * anonymous user.
-   * The method will try to find and use the first fitting recruiting config.
+   * The method will try to find and use the first fitting recruiting config
+   * that has no recruiter and matches the given product if given.
    *
-   * @param \Drupal\Core\Session\AccountInterface $account
-   *   The account to create the sharing link for. Leave empty for current user.
-   * @param \Drupal\commerce_product\Entity\ProductInterface $product
+   * @param \Drupal\Core\Session\AccountInterface|null $recruiter
+   *   Optional filter configs by recruiter.
+   * @param \Drupal\Core\Entity\EntityInterface|null $product
    *   Optional filter configs by product.
    *
-   * @return \Drupal\Core\Url
-   *   The short url.
+   * @return \Drupal\commerce_recruitment\Entity\RecruitingConfig
+   *   The found recruiting config.
    */
-  public function getPublicRecruitingLink(AccountInterface $account = NULL, ProductInterface $product = NULL);
+  public function findRecruitingConfig(AccountInterface $recruiter = NULL, EntityInterface $product = NULL);
 
   /**
    * Calculates the sum of all recruiting bonus of an user.
@@ -47,10 +49,38 @@ interface RecruitingManagerInterface {
   /**
    * Create recruiting entity.
    *
+   *   The order item.
+   *
+   * @param \Drupal\commerce_order\Entity\OrderItemInterface $order_item
+   *   The responding order item.
+   * @param \Drupal\user\Entity\User $recruiter
+   *   The recruiter user.
+   * @param \Drupal\user\Entity\User $recruited
+   *   The recruited user.
+   * @param \Drupal\commerce_recruitment\Entity\RecruitingConfig $config
+   *   The recruiting config.
+   * @param \Drupal\commerce_price\Price $bonus
+   *   The bonus.
+   *
    * @return \Drupal\commerce_recruitment\Entity\RecruitingEntity
    *   The recruiting entity
    */
-  public function createRecruiting();
+  public function createRecruiting(OrderItemInterface $order_item, User $recruiter, User $recruited, RecruitingConfig $config, Price $bonus);
+
+  /**
+   * Checks the order for recommend products in RecruitingSession.
+   *
+   * @param \Drupal\commerce_order\Entity\OrderInterface $order
+   *   The order.
+   *
+   * @return array
+   *   keys:
+   *    0
+   *      - order_item
+   *      - recruiting_config
+   *    etc.
+   */
+  public function sessionMatch(OrderInterface $order);
 
   /**
    * Returns recruiting info from code.
@@ -81,25 +111,25 @@ interface RecruitingManagerInterface {
    *
    * @param \Drupal\commerce_recruitment\Entity\RecruitingConfig $recruiting_config
    *   The recruiting config.
-   * @param \Drupal\user\Entity\User $recruiter
+   * @param \Drupal\Core\Session\AccountInterface $recruiter
    *   The recruiter.
    *
    * @return \Drupal\Core\Url
    *   The short url.
    */
-  public function getRecruitingUrl(RecruitingConfig $recruiting_config, User $recruiter = NULL);
+  public function getRecruitingUrl(RecruitingConfig $recruiting_config, AccountInterface $recruiter = NULL);
 
   /**
    * Returns the recruiting code.
    *
    * @param \Drupal\commerce_recruitment\Entity\RecruitingConfig $recruiting_config
    *   The recruiting config.
-   * @param \Drupal\user\Entity\User $recruiter
+   * @param \Drupal\Core\Session\AccountInterface $recruiter
    *   The recruiter.
    *
    * @return string
    *   The code.
    */
-  public function getRecruitingCode(RecruitingConfig $recruiting_config, User $recruiter = NULL);
+  public function getRecruitingCode(RecruitingConfig $recruiting_config, AccountInterface $recruiter = NULL);
 
 }

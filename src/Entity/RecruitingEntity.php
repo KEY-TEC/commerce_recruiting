@@ -53,8 +53,7 @@ use Drupal\user\UserInterface;
  *   },
  *   links = {
  *     "canonical" = "/admin/commerce/recruitment/recruiting/{commerce_recruiting}",
- *     "add-page" = "/admin/commerce/recruitment/recruiting/add",
- *     "add-form" = "/admin/commerce/recruitment/recruiting/add/{commerce_recruiting_type}",
+ *     "add-form" = "/admin/commerce/recruitment/recruiting/add",
  *     "edit-form" = "/admin/commerce/recruitment/recruiting/{commerce_recruiting}/edit",
  *     "delete-form" = "/admin/commerce/recruitment/recruiting/{commerce_recruiting}/delete",
  *     "collection" = "/admin/commerce/recruitment/recruiting",
@@ -207,6 +206,29 @@ class RecruitingEntity extends ContentEntityBase implements RecruitingEntityInte
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE)
       ->setRequired(TRUE);
+
+    $fields['recruiting_config'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(new TranslatableMarkup('Recruiting config'))
+      ->setDescription(t('The recruiting config.'))
+      ->setSetting('target_type', 'commerce_recruiting_config')
+      ->setSetting('handler', 'default')
+      ->setDisplayOptions('view', [
+        'label' => 'hidden',
+        'type' => 'author',
+        'weight' => 0,
+      ])
+      ->setDisplayOptions('form', [
+        'type' => 'entity_reference_autocomplete',
+        'weight' => 5,
+        'settings' => [
+          'match_operator' => 'CONTAINS',
+          'size' => '60',
+          'autocomplete_type' => 'tags',
+          'placeholder' => '',
+        ],
+      ])
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
 
     $fields['recruited'] = BaseFieldDefinition::create('entity_reference')
       ->setLabel(new TranslatableMarkup('Recruited user'))

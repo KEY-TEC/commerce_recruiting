@@ -17,7 +17,7 @@ class RecruitingConfigTest extends CommerceRecruitingKernelTestBase {
    */
   public function testCreate() {
     $recruitment_config = $this->createRecruitmentConfig();
-    $this->assertEmpty($recruitment_config->getName());
+    $this->assertEqual('test', $recruitment_config->getName());
   }
 
 }

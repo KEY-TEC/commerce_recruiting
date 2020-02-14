@@ -7,18 +7,9 @@ services:
     arguments: ['@current_user', '@language_manager', '@entity_type.manager','@commerce_recruitment.recruiting_session']
   commerce_recruitment.recruiting_checkout_subscriber:
     class: Drupal\commerce_recruitment\EventSubscriber\RecruitingCheckoutSubscriber
-    arguments: ['@current_user', '@messenger', '@session']
+    arguments: ['@current_user', '@messenger', '@commerce_recruitment.manager']
     tags:
       - { name: event_subscriber }
-  commerce_recruitment.chain_recruiting_config_resolver:
-    class: Drupal\commerce_recruitment\Resolver\ChainRecruitingConfigResolver
-    tags:
-      - { name: service_collector, call: addResolver, tag: commerce_recruitment.recruiting_config_resolver }
-  commerce_recruitment.default_recruiting_config_resolver:
-    class: Drupal\commerce_recruitment\Resolver\DefaultRecruitingConfigResolver
-    arguments: ['@entity_type.manager']
-    tags:
-      - { name: commerce_recruitment.recruiting_config_resolver, priority: -100 }
   commerce_recruitment.recruiting_session:
     class: Drupal\commerce_recruitment\RecruitingSession
     arguments: ['@session', '@entity_type.manager']

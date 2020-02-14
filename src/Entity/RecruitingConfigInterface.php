@@ -2,8 +2,8 @@
 
 namespace Drupal\commerce_recruitment\Entity;
 
+use Drupal\commerce_order\Entity\OrderItemInterface;
 use Drupal\commerce_price\Price;
-use Drupal\commerce_product\Entity\ProductInterface;
 use Drupal\commerce_promotion\Entity\PromotionInterface;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Entity\ContentEntityInterface;
@@ -17,6 +17,10 @@ use Drupal\user\UserInterface;
  * @ingroup commerce_recruitment
  */
 interface RecruitingConfigInterface extends ContentEntityInterface, EntityChangedInterface, EntityOwnerInterface {
+
+  const RECRUIT_BONUS_METHOD_FIX = 'fix';
+
+  const RECRUIT_BONUS_METHOD_PERCENT = 'percent';
 
   /**
    * Add get/set methods for your configuration properties here.
@@ -98,20 +102,20 @@ interface RecruitingConfigInterface extends ContentEntityInterface, EntityChange
   /**
    * Returns the product or product bundle.
    *
-   * @return \Drupal\commerce_product\Entity\ProductInterface|\Drupal\commerce_product_bundle\Entity\BundleInterface
+   * @return \Drupal\Core\Entity\EntityInterface[]
    *   The product or product bundle entity.
    */
-  public function getProduct();
+  public function getProducts();
 
   /**
    * Sets the product entity.
    *
-   * @param \Drupal\commerce_product\Entity\ProductInterface $product
+   * @param \Drupal\Core\Entity\EntityInterface[] $product
    *   The product entity.
    *
    * @return $this
    */
-  public function setProduct(ProductInterface $product);
+  public function setProducts(array $product);
 
   /**
    * Returns the promotion entity.
@@ -120,6 +124,17 @@ interface RecruitingConfigInterface extends ContentEntityInterface, EntityChange
    *   The promotion entity.
    */
   public function getPromotion();
+
+  /**
+   * Calculates the bonus.
+   *
+   * @param \Drupal\commerce_order\Entity\OrderItemInterface $order_item
+   *   The bonus.
+   *
+   * @return \Drupal\commerce_price\Price
+   *   The calculated bonus.
+   */
+  public function calculateBonus(OrderItemInterface $order_item);
 
   /**
    * Sets the promotion entity.

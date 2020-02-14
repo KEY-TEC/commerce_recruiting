@@ -1,5 +1,5 @@
 entity.commerce_recruiting.add_form:
-  route_name: entity.commerce_recruiting.add_page
+  route_name: entity.commerce_recruiting.add_form
   title: 'Add recruiting entity'
   appears_on:
     - entity.commerce_recruiting.collection

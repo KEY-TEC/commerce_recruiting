@@ -3,8 +3,8 @@
 namespace Drupal\commerce_recruitment\Entity;
 
 use Drupal\commerce\Entity\CommerceContentEntityBase;
+use Drupal\commerce_order\Entity\OrderItemInterface;
 use Drupal\commerce_price\Price;
-use Drupal\commerce_product\Entity\ProductInterface;
 use Drupal\commerce_promotion\Entity\PromotionInterface;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Entity\EntityChangedTrait;
@@ -14,6 +14,7 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
 use Drupal\user\EntityOwnerTrait;
 use Drupal\user\UserInterface;
+use http\Exception\InvalidArgumentException;
 
 /**
  * Defines the recruitment config entity class.
@@ -80,12 +81,6 @@ class RecruitingConfig extends CommerceContentEntityBase implements RecruitingCo
 
   use EntityChangedTrait;
   use EntityOwnerTrait;
-
-  const RECRUIT_BONUS_METHOD_FIX = 'fix';
-
-  const RECRUIT_BONUS_METHOD_PERCENT = 'percent';
-
-  const RECRUIT_BONUS_METHOD_PERCENT_CART = 'percent_cart';
 
   /**
    * {@inheritdoc}
@@ -165,15 +160,32 @@ class RecruitingConfig extends CommerceContentEntityBase implements RecruitingCo
   /**
    * {@inheritdoc}
    */
-  public function getProduct() {
-    return $this->get('product')->entity;
+  public function getProducts() {
+    return $this->get('products')->referencedEntities();
   }
 
   /**
    * {@inheritdoc}
    */
-  public function setProduct(ProductInterface $product) {
-    $this->set('product', $product);
+  public function calculateBonus(OrderItemInterface $order_item) {
+    if ($this->getBonusMethod() == RecruitingConfigInterface::RECRUIT_BONUS_METHOD_FIX) {
+      return $this->getBonus();
+    }
+    elseif ($this->getBonusMethod() == RecruitingConfigInterface::RECRUIT_BONUS_METHOD_PERCENT) {
+      $total_price = $order_item->getTotalPrice()->getNumber();
+      $bonus = $total_price / 100 * $this->getBonusPercent();
+      return new Price($bonus, $order_item->getTotalPrice()->getCurrencyCode());
+    }
+    else {
+      throw new InvalidArgumentException("No valid bonus method selected. Method: '" . $this->getBonusMethod() . "'");
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setProducts(array $products) {
+    $this->set('products', $products);
     return $this;
   }
 
@@ -215,7 +227,9 @@ class RecruitingConfig extends CommerceContentEntityBase implements RecruitingCo
    * {@inheritdoc}
    */
   public function getBonus() {
-    return $this->get('bonus')->value;
+    if (!$this->get('bonus')->isEmpty()) {
+      return $this->get('bonus')->first()->toPrice();
+    }
   }
 
   /**
@@ -223,6 +237,13 @@ class RecruitingConfig extends CommerceContentEntityBase implements RecruitingCo
    */
   public function setBonus(Price $price) {
     return $this->set('bonus', $price);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getBonusMethod() {
+    return $this->get('bonus_method')->value;
   }
 
   /**
@@ -319,8 +340,8 @@ class RecruitingConfig extends CommerceContentEntityBase implements RecruitingCo
       ->setSetting('allowed_values', [
         self::RECRUIT_BONUS_METHOD_FIX => 'Fix bonus',
         self::RECRUIT_BONUS_METHOD_PERCENT => 'Percentage bonus of product',
-        self::RECRUIT_BONUS_METHOD_PERCENT_CART => 'Percentage bonus of cart (test)',
       ])
+      ->setDefaultValue(self::RECRUIT_BONUS_METHOD_FIX)
       ->setRequired(TRUE)
       ->setDisplayOptions('view', [
         'label' => 'above',
@@ -385,14 +406,14 @@ class RecruitingConfig extends CommerceContentEntityBase implements RecruitingCo
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 
-    $fields['product'] = BaseFieldDefinition::create('dynamic_entity_reference')
-      ->setLabel(new TranslatableMarkup('Product'))
+    $fields['products'] = BaseFieldDefinition::create('dynamic_entity_reference')
+      ->setLabel(new TranslatableMarkup('Products'))
+      ->setCardinality(BaseFieldDefinition::CARDINALITY_UNLIMITED)
       ->setDescription(new TranslatableMarkup('The product or bundle for which someone will get the bonus after checkout.'))
       ->setSettings([
         'exclude_entity_types' => FALSE,
         'entity_type_ids' => [
           'commerce_product',
-          'commerce_product_bundle',
         ],
       ])
       ->setDisplayOptions('view', [

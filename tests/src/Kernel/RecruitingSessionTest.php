@@ -3,7 +3,7 @@
 namespace Drupal\Tests\commerce_recruitment\Kernel;
 
 /**
- * RecruitingSession.
+ * RecruitingSessionTest.
  *
  * @group commerce_recruitment
  */

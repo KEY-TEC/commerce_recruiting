@@ -3,14 +3,11 @@
 namespace Drupal\commerce_recruitment\Plugin\Block;
 
 use Drupal\commerce_recruitment\RecruitingManagerInterface;
-use Drupal\commerce_recruitment\Resolver\ChainRecruitingConfigResolverInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\Url;
-use Drupal\commerce_recruitment\Encryption;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -35,7 +32,8 @@ class SharingLink extends BlockBase implements ContainerFactoryPluginInterface {
 
   /**
    * The recruiting manager.
-   * @var
+   *
+   * @var \Drupal\commerce_recruitment\RecruitingManagerInterface
    */
   protected $recruitingManager;
 
@@ -83,20 +81,8 @@ class SharingLink extends BlockBase implements ContainerFactoryPluginInterface {
   public function build() {
     $build = [];
     $build['#theme'] = 'sharing_link';
-
-    /** @var \Drupal\user\UserInterface $user */
-    $user = $this->getContextValue('user');
-    if (!empty($parent) && !empty($user)) {
-      $language = $this->languageManager->getCurrentLanguage();
-      $uid = $user->id();
-      $pid = $parent->id();
-      $entity_type = $parent->getEntityType()->id();
-      $values = [$uid, $pid, $entity_type];
-      $code = Encryption::encrypt(implode(';', $values));
-      if (!empty($code)) {
-        $build['recruiting']['#markup'] = Url::fromRoute('commerce_recruitment.recruiting_url', ['recruiting_code' => $code], ['absolute' => TRUE, 'language' => $language])->toString();
-      }
-    }
+    // @todo get product from current page
+    $build['recruiting']['#markup'] = $this->recruitingManager->findRecruitingConfig();
     return $build;
   }
 
@@ -104,6 +90,7 @@ class SharingLink extends BlockBase implements ContainerFactoryPluginInterface {
    * Checks access. Don't show this block if user is anonymous.
    *
    * @param \Drupal\Core\Session\AccountInterface $account
+   *   The account.
    *
    * @return \Drupal\Core\Access\AccessResult|\Drupal\Core\Access\AccessResultForbidden
    *   The access result.

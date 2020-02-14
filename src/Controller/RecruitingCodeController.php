@@ -47,19 +47,16 @@ class RecruitingCodeController extends ControllerBase {
     try {
       $recruiting_session = $this->recruitingManager->getRecruitingSessionFromCode($recruiting_code);
       $config = $recruiting_session->getRecruitingConfig();
-      $product = $config->getProduct();
-      if ($product !== NULL) {
+      $products = $config->getProducts();
+      foreach ($products as $product) {
         $route_name = 'entity.' . $product->getEntityTypeId() . '.canonical';
         return $this->redirect($route_name, [$product->getEntityTypeId() => $product->id()]);
-      }
-      else {
-        // Default redirect on error.
-        return $this->redirect('<front>');
       }
     }
     catch (\Throwable $e) {
       $this->getLogger('commerce_recruitment')->error($e->getMessage());
-      $this->messenger()->addError($this->t("Invalid Code. Please contact us."));
+      $this->messenger()
+        ->addError($this->t("Invalid Code. Please contact us."));
       return $this->redirect('<front>');
     }
 
