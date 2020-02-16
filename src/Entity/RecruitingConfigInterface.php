@@ -40,7 +40,7 @@ interface RecruitingConfigInterface extends ContentEntityInterface, EntityChange
    * @param string $name
    *   The recruiting entity name.
    *
-   * @return \Drupal\commerce_recruitment\Entity\RecruitingEntityInterface
+   * @return \Drupal\commerce_recruitment\Entity\RecruitingInterface
    *   The called recruiting entity entity.
    */
   public function setName($name);

@@ -62,7 +62,7 @@ interface RecruitingManagerInterface {
    * @param \Drupal\commerce_price\Price $bonus
    *   The bonus.
    *
-   * @return \Drupal\commerce_recruitment\Entity\RecruitingEntity
+   * @return \Drupal\commerce_recruitment\Entity\Recruiting
    *   The recruiting entity
    */
   public function createRecruiting(OrderItemInterface $order_item, User $recruiter, User $recruited, RecruitingConfig $config, Price $bonus);

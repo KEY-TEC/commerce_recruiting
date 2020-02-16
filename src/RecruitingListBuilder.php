@@ -11,7 +11,7 @@ use Drupal\Core\Link;
  *
  * @ingroup commerce_recruitment
  */
-class RecruitingEntityListBuilder extends EntityListBuilder {
+class RecruitingListBuilder extends EntityListBuilder {
 
   /**
    * {@inheritdoc}
@@ -26,7 +26,7 @@ class RecruitingEntityListBuilder extends EntityListBuilder {
    * {@inheritdoc}
    */
   public function buildRow(EntityInterface $entity) {
-    /* @var \Drupal\commerce_recruitment\Entity\RecruitingEntity $entity */
+    /* @var \Drupal\commerce_recruitment\Entity\Recruiting $entity */
     $row['id'] = $entity->id();
     $row['name'] = Link::createFromRoute(
       $entity->label(),

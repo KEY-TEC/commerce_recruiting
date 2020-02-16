@@ -15,7 +15,7 @@ use Drupal\user\UserInterface;
  *
  * @ingroup commerce_recruitment
  */
-interface RecruitingEntityInterface extends ContentEntityInterface, EntityChangedInterface, EntityPublishedInterface, EntityOwnerInterface {
+interface RecruitingInterface extends ContentEntityInterface, EntityChangedInterface, EntityPublishedInterface, EntityOwnerInterface {
 
   /**
    * Add get/set methods for your configuration properties here.
@@ -35,7 +35,7 @@ interface RecruitingEntityInterface extends ContentEntityInterface, EntityChange
    * @param string $name
    *   The recruiting entity name.
    *
-   * @return \Drupal\commerce_recruitment\Entity\RecruitingEntityInterface
+   * @return \Drupal\commerce_recruitment\Entity\RecruitingInterface
    *   The called recruiting entity entity.
    */
   public function setName($name);
@@ -54,7 +54,7 @@ interface RecruitingEntityInterface extends ContentEntityInterface, EntityChange
    * @param int $timestamp
    *   The recruiting entity creation timestamp.
    *
-   * @return \Drupal\commerce_recruitment\Entity\RecruitingEntityInterface
+   * @return \Drupal\commerce_recruitment\Entity\RecruitingInterface
    *   The called recruiting entity entity.
    */
   public function setCreatedTime($timestamp);

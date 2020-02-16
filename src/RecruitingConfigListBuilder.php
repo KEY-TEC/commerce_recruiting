@@ -26,7 +26,7 @@ class RecruitingConfigListBuilder extends EntityListBuilder {
    * {@inheritdoc}
    */
   public function buildRow(EntityInterface $entity) {
-    /* @var \Drupal\commerce_recruitment\Entity\RecruitingEntity $entity */
+    /* @var \Drupal\commerce_recruitment\Entity\Recruiting $entity */
     $row['id'] = $entity->id();
     $row['name'] = Link::createFromRoute(
       $entity->label(),

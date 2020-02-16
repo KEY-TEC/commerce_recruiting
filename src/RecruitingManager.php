@@ -6,7 +6,7 @@ use Drupal\commerce_order\Entity\OrderInterface;
 use Drupal\commerce_order\Entity\OrderItemInterface;
 use Drupal\commerce_price\Price;
 use Drupal\commerce_recruitment\Entity\RecruitingConfig;
-use Drupal\commerce_recruitment\Entity\RecruitingEntity;
+use Drupal\commerce_recruitment\Entity\Recruiting;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
@@ -108,10 +108,10 @@ class RecruitingManager implements RecruitingManagerInterface {
     }
 
     $recruiting_ids = $query->execute();
-    $recruitings = RecruitingEntity::loadMultiple($recruiting_ids);
+    $recruitings = Recruiting::loadMultiple($recruiting_ids);
     $total_price = NULL;
     foreach ($recruitings as $recruit) {
-      /* @var \Drupal\commerce_recruitment\Entity\RecruitingEntityInterface $recruit */
+      /* @var \Drupal\commerce_recruitment\Entity\RecruitingInterface $recruit */
       if ($bonus = $recruit->getBonus()->toPrice()) {
         $total_price = $total_price ? $total_price->add($bonus) : $bonus;
       }
@@ -206,7 +206,7 @@ class RecruitingManager implements RecruitingManagerInterface {
    * {@inheritDoc}
    */
   public function createRecruiting(OrderItemInterface $order_item, User $recruiter, User $recruited, RecruitingConfig $config, Price $bonus) {
-    return RecruitingEntity::create([
+    return Recruiting::create([
       'recruiter' => ['target_id' => $recruiter->id()],
       'name' => ['value' => $recruited->getAccountName() . ' by: ' . $recruiter->getAccountName()],
       'recruiting_config' => ['target_id' => $recruiter->id()],

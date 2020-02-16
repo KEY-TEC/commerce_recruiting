@@ -9,7 +9,7 @@ use Drupal\commerce_price\Price;
 use Drupal\commerce_product\Entity\Product;
 use Drupal\commerce_recruitment\Entity\RecruitingConfig;
 use Drupal\commerce_recruitment\Entity\RecruitingConfigInterface;
-use Drupal\commerce_recruitment\Entity\RecruitingEntity;
+use Drupal\commerce_recruitment\Entity\Recruiting;
 use Drupal\Tests\commerce\Kernel\CommerceKernelTestBase;
 use Drupal\Tests\commerce_cart\Traits\CartManagerTestTrait;
 use Drupal\Tests\commerce_recruitment\Traits\RecruitingEntityCreationTrait;
@@ -106,14 +106,14 @@ class CommerceRecruitingKernelTestBase extends CommerceKernelTestBase {
   /**
    * Create an recruiting entity.
    *
-   * @return \Drupal\commerce_recruitment\Entity\RecruitingEntityInterface
+   * @return \Drupal\commerce_recruitment\Entity\RecruitingInterface
    *   The recruiting entity.
    */
   protected function createRecruitmentEntity(array $options = [
     'type' => 'default',
     'name' => 'test',
   ]) {
-    $recruitment = RecruitingEntity::create($options);
+    $recruitment = Recruiting::create($options);
     return $recruitment;
   }
 

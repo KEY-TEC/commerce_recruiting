@@ -20,7 +20,7 @@ use Drupal\Core\Render\Element;
  *   - attributes: HTML attributes for the containing element.
  */
 function template_preprocess_recruiting(array &$variables) {
-  // Fetch RecruitingEntity Entity Object.
+  // Fetch Recruiting Entity Object.
   $recruiting = $variables['elements']['#recruiting'];
 
   // Helpful $content variable for templates.

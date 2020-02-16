@@ -59,7 +59,7 @@ class RecruitingEntityForm extends ContentEntityForm {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    /* @var \Drupal\commerce_recruitment\Entity\RecruitingEntity $entity */
+    /* @var \Drupal\commerce_recruitment\Entity\Recruiting $entity */
     $form = parent::buildForm($form, $form_state);
 
     return $form;

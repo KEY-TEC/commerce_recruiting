@@ -7,7 +7,7 @@ use Drupal\views\EntityViewsData;
 /**
  * Provides Views data for Recruiting entity entities.
  */
-class RecruitingEntityViewsData extends EntityViewsData {
+class RecruitingViewsData extends EntityViewsData {
 
   /**
    * {@inheritdoc}

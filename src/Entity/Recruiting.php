@@ -24,10 +24,10 @@ use Drupal\user\UserInterface;
  *   bundle_label = @Translation("Recruitings"),
  *   handlers = {
  *     "view_builder" = "Drupal\Core\Entity\EntityViewBuilder",
- *     "list_builder" = "Drupal\commerce_recruitment\RecruitingEntityListBuilder",
- *     "views_data" = "Drupal\commerce_recruitment\RecruitingEntityViewsData",
- *     "translation" = "Drupal\commerce_recruitment\RecruitingEntityTranslationHandler",
- *     "access" = "Drupal\commerce_recruitment\RecruitingEntityAccessControlHandler",
+ *     "list_builder" = "Drupal\commerce_recruitment\RecruitingListBuilder",
+ *     "views_data" = "Drupal\commerce_recruitment\RecruitingViewsData",
+ *     "translation" = "Drupal\commerce_recruitment\RecruitingTranslationHandler",
+ *     "access" = "Drupal\commerce_recruitment\RecruitingAccessControlHandler",
  *
  *     "form" = {
  *       "default" = "Drupal\commerce_recruitment\Form\RecruitingEntityForm",
@@ -36,7 +36,7 @@ use Drupal\user\UserInterface;
  *       "delete" = "Drupal\commerce_recruitment\Form\RecruitingEntityDeleteForm",
  *     },
  *     "route_provider" = {
- *       "html" = "Drupal\commerce_recruitment\RecruitingEntityHtmlRouteProvider",
+ *       "html" = "Drupal\commerce_recruitment\RecruitingHtmlRouteProvider",
  *     },
  *   },
  *   base_table = "commerce_recruitment",
@@ -60,7 +60,7 @@ use Drupal\user\UserInterface;
  *   },
  * )
  */
-class RecruitingEntity extends ContentEntityBase implements RecruitingEntityInterface {
+class Recruiting extends ContentEntityBase implements RecruitingInterface {
 
   use EntityChangedTrait;
   use EntityPublishedTrait;
