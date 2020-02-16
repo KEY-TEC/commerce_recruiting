@@ -14,14 +14,14 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Provides a 'Sharing Link' block.
  *
  * @Block(
- *  id = "commerce_recruitment_link_sharing_block",
+ *  id = "commerce_recruitment_friend",
  *  admin_label = @Translation("Product link sharing block"),
  *  context = {
  *    "user" = @ContextDefinition("entity:user", required = FALSE)
  *  }
  * )
  */
-class SharingLink extends BlockBase implements ContainerFactoryPluginInterface {
+class FriendBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
   /**
    * The language manager.
@@ -81,7 +81,6 @@ class SharingLink extends BlockBase implements ContainerFactoryPluginInterface {
   public function build() {
     $build = [];
     $build['#theme'] = 'sharing_link';
-    // @todo get product from current page
     $build['recruiting']['#markup'] = $this->recruitingManager->findRecruitingConfig();
     return $build;
   }

@@ -50,6 +50,8 @@ class RecruitingManagerTest extends CommerceRecruitingKernelTestBase {
     $configs = $this->recruitingManager->findRecruitingConfig(NULL, $expected_product);
     $this->assertEqual(count($configs), 1);
     $this->assertEqual($expected_config->id(), $configs[$expected_config->id()]->id());
+
+    $configs = $this->recruitingManager->findRecruitingConfig(NULL, $expected_product);
   }
 
   /**
