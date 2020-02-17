@@ -64,4 +64,10 @@ interface RecruitingManagerInterface {
    */
   public function sessionMatch(OrderInterface $order);
 
+  /**
+   * Manages the recruiting state transition.
+   * @return mixed
+   */
+  public function applyTransitions();
+
 }

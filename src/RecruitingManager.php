@@ -156,6 +156,22 @@ class RecruitingManager implements RecruitingManagerInterface {
   /**
    * {@inheritDoc}
    */
+  public function applyTransitions() {
+    $recruitings = $this->entityTypeManager->getStorage('commerce_recruiting')
+      ->loadByProperties([
+        'state' => 'created',
+        'status' => 1,
+      ]);
+    /** @var \Drupal\commerce_recruiting\Entity\RecruitingInterface $recruiting */
+    foreach ($recruitings as $recruiting) {
+      $recruiting->getState()->applyTransitionById('accept');
+      $recruiting->getState()->applyTransitionById('cancel');
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public function createRecruiting(OrderItemInterface $order_item, User $recruiter, User $recruited, CampaignOption $option, Price $bonus) {
     return Recruiting::create([
       'recruiter' => ['target_id' => $recruiter->id()],

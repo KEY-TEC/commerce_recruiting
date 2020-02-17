@@ -17,3 +17,9 @@ services:
   commerce_recruiting.recruiting_session:
     class: Drupal\commerce_recruiting\RecruitingSession
     arguments: ['@session', '@entity_type.manager']
+
+  commerce_recruiting.recruiting_guard:
+    class: Drupal\commerce_recruiting\Guard\RecrutingGuard
+    arguments: ['@current_user', '@plugin.manager.workflow']
+    tags:
+      - { name: state_machine.guard, group: recruiting }

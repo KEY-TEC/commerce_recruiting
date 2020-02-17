@@ -35,4 +35,19 @@ class RecruitingManagerTest extends CommerceRecruitingKernelTestBase {
     $this->assertEqual(count($matches), 0);
   }
 
+  public function testApplyTransitions() {
+
+    $recruiter = $this->createUser();
+    $products[] = $this->createProduct();
+    $products[] = $this->createProduct();
+
+    $order = $this->createOrder($products);
+    foreach ($order->get) {
+
+    }
+    $oder2 = $this->createOrder([$product2]);
+    $prophecy = $this->prophesize(RecruitingSession::CLASS);
+    $session_config = $this->createCampaign($recruiter, $product1);
+  }
+
 }

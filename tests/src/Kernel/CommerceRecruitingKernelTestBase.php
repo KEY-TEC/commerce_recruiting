@@ -60,6 +60,9 @@ class CommerceRecruitingKernelTestBase extends CommerceKernelTestBase {
    *
    * @param array $products
    *   Each product one product item.
+   *
+   * @return \Drupal\commerce_order\Entity\Order
+   *   The order.
    */
   protected function createOrder(array $products = []) {
 
