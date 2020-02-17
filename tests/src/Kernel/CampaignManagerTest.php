@@ -59,7 +59,7 @@ class CampaignManagerTest extends CommerceRecruitingKernelTestBase {
     $friend_recruiter = $this->createUser();
     $code_string = $friend_campaign->getFirstOption()->getCode();
     $code = Code::createFromCode($code_string . '--' . $friend_recruiter->id());
-    $session = $this->campaignManager->getSessionFromCode($code);
+    $session = $this->campaignManager->saveRecruitingSession($code);
     $this->assertEqual($session->getRecruiter()->id(), $friend_recruiter->id());
     $this->assertEqual($session->getCampaignOption()->id(), $friend_campaign->getFirstOption()->id());
 
@@ -67,7 +67,7 @@ class CampaignManagerTest extends CommerceRecruitingKernelTestBase {
     $recruiter_campaign = $this->createCampaign($recruiter_recruiter);
     $code_string = $recruiter_campaign->getFirstOption()->getCode();
     $code = Code::createFromCode($code_string);
-    $recruiter_session = $this->campaignManager->getSessionFromCode($code);
+    $recruiter_session = $this->campaignManager->saveRecruitingSession($code);
     $this->assertEqual($recruiter_session->getRecruiter()->id(), $recruiter_campaign->getRecruiter()->id());
     $this->assertEqual($recruiter_session->getCampaignOption()->id(), $recruiter_campaign->getFirstOption()->id());
 

@@ -80,7 +80,7 @@ class RecruitingSession implements RecruitingSessionInterface {
   public function getCampaignOption() {
     $rcid = $this->session->get($this->getSessionKey(self::CAMPAIGN_OPTION));
     if ($rcid !== NULL) {
-      return $this->entityTypeManager->getStorage('commerce_recruiting_campaign')->load($rcid);
+      return $this->entityTypeManager->getStorage('commerce_recruiting_camp_option')->load($rcid);
     }
     return NULL;
   }

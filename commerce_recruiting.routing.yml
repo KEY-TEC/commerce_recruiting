@@ -1,11 +1,3 @@
-commerce_recruiting.configuration:
-  path: '/admin/commerce/config/recruiting'
-  defaults:
-    _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
-    _title: 'Recruitment'
-  requirements:
-    _permission: 'administer recruiting entity entities'
-
 commerce_recruiting.collections:
   path: '/admin/commerce/recruiting'
   defaults:
@@ -15,7 +7,7 @@ commerce_recruiting.collections:
     _permission: 'administer recruiting entity entities'
 
 commerce_recruiting.recruiting_url:
-  path: '/code/{recruiting_code}'
+  path: '/code/{campaign_code}'
   defaults:
     _controller: '\Drupal\commerce_recruiting\Controller\RecruitingCodeController::code'
     _title: 'redirectFromRecruitingUrl'

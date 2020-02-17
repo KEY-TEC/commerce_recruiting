@@ -10,9 +10,9 @@ theme: bartik
 region: content
 weight: 0
 provider: null
-plugin: commerce_recruiting_link_sharing_block
+plugin: commerce_recruiting_friend
 settings:
-  id: commerce_recruiting_link_sharing_block
+  id: commerce_recruiting_friend
   label: 'Product link sharing block'
   provider: commerce_recruiting
   label_display: '0'

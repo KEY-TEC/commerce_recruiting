@@ -1,9 +1,3 @@
-commerce_recruiting.configuration:
-  title: 'Recruiting'
-  route_name: 'commerce_recruiting.configuration'
-  parent: 'commerce.configuration'
-  weight: 0
-
 commerce_recruiting.collections:
   title: 'Recruiting'
   route_name: 'commerce_recruiting.collections'
