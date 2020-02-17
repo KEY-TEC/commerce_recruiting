@@ -2,7 +2,7 @@
 
 namespace Drupal\commerce_recruiting\Plugin\Block;
 
-use Drupal\commerce_recruiting\RecruitingManagerInterface;
+use Drupal\commerce_recruiting\CampaignManagerInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Language\LanguageManagerInterface;
@@ -33,9 +33,9 @@ class FriendBlock extends BlockBase implements ContainerFactoryPluginInterface {
   /**
    * The recruiting manager.
    *
-   * @var \Drupal\commerce_recruiting\RecruitingManagerInterface
+   * @var \Drupal\commerce_recruiting\CampaignManagerInterface
    */
-  protected $recruitingManager;
+  protected $campaignManager;
 
   /**
    * Constructs a new CartBlock.
@@ -48,13 +48,13 @@ class FriendBlock extends BlockBase implements ContainerFactoryPluginInterface {
    *   The plugin implementation definition.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The language manager.
-   * @param \Drupal\commerce_recruiting\RecruitingManagerInterface $recruiting_manager
-   *   The recruiting manager.
+   * @param \Drupal\commerce_recruiting\CampaignManagerInterface $recruiting_manager
+   *   The campaign manager.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, LanguageManagerInterface $language_manager, RecruitingManagerInterface $recruiting_manager) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, LanguageManagerInterface $language_manager, CampaignManagerInterface $recruiting_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->languageManager = $language_manager;
-    $this->recruitingManager = $recruiting_manager;
+    $this->campaignManager = $recruiting_manager;
   }
 
   /**
@@ -66,7 +66,7 @@ class FriendBlock extends BlockBase implements ContainerFactoryPluginInterface {
       $plugin_id,
       $plugin_definition,
       $container->get('language_manager'),
-      $container->get('commerce_recruiting.manager')
+      $container->get('commerce_recruiting.campaign_manager')
     );
   }
 
@@ -75,13 +75,13 @@ class FriendBlock extends BlockBase implements ContainerFactoryPluginInterface {
    *
    * @return array
    *   The build array.
-   *
-   * @throws \Drupal\Component\Plugin\Exception\PluginException
    */
   public function build() {
     $build = [];
     $build['#theme'] = 'sharing_link';
-    $build['recruiting']['#markup'] = $this->recruitingManager->findRecruitingCampaignOption();
+    $campaigns = $this->campaignManager->findCampaigns();
+    $code = 'foobar';
+    $build['recruiting_code']['#markup'] = $code;
     return $build;
   }
 

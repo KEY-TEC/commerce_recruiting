@@ -15,7 +15,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @ingroup commerce_recruiting
  */
-class RecruitingForm extends ContentEntityForm {
+class CampaignForm extends ContentEntityForm {
 
   /**
    * The current user account.
