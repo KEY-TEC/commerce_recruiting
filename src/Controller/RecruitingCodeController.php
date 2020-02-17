@@ -2,6 +2,7 @@
 
 namespace Drupal\commerce_recruiting\Controller;
 
+use Drupal\commerce_recruiting\CampaignManagerInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
