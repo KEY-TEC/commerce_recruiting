@@ -10,7 +10,8 @@ use Drupal\commerce_product\Entity\Product;
 use Drupal\commerce_product_bundle\Entity\ProductBundle;
 use Drupal\commerce_product_bundle\Entity\ProductBundleItem;
 use Drupal\commerce_product\Entity\ProductVariation;
-use Drupal\commerce_recruiting\Entity\CampaignOptionInterface;
+use Drupal\commerce_recruiting\Entity\CampaignOption;
+use Drupal\commerce_recruiting\Entity\Campaign;
 use Drupal\commerce_store\Entity\Store;
 use Drupal\user\Entity\User;
 
@@ -101,33 +102,73 @@ function commerce_recruiting_test_install() {
 
   // Create a general recruiting campaign...
   // Applies for any product ("recruit a friend")
-  $commerce_recruiting_camp_option = CampaignOptionInterface::create([
+  $campaign = Campaign::create([
     'name' => 'general',
-    'bonus' => new Price(1, $currency),
+    'status' => 1,
   ]);
-  $commerce_recruiting_camp_option->save();
+  $option = CampaignOption::create([
+    'status' => 1,
+    'bonus' => new Price(10, $currency),
+    'bonus_method' => CampaignOption::RECRUIT_BONUS_METHOD_FIX,
+    'code' => 'general_test',
+  ]);
+  $option->save();
+  $campaign->addOption($option);
+  $campaign->save();
 
   // Create a product specific recruiting campaign...
-  $commerce_recruiting_camp_option = CampaignOptionInterface::create([
+  $campaign = Campaign::create([
     'name' => 'product',
-    'bonus' => new Price(2, $currency),
-    'product' => $products[0],
+    'status' => 1,
   ]);
+  $option = CampaignOption::create([
+    'status' => 1,
+    'bonus' => new Price(10, $currency),
+    'bonus_method' => CampaignOption::RECRUIT_BONUS_METHOD_FIX,
+    'code' => 'product_test',
+    'product' => [
+      'target_type' => $products[0]->getEntityTypeId(),
+      'target_id' => $products[0]->id(),
+    ],
+  ]);
+  $option->save();
+  $campaign->addOption($option);
+  $campaign->save();
 
   // Create a user specific recruiting campaign...
   // Applies for any product but will benefit this user.
-  $commerce_recruiting_camp_option = CampaignOptionInterface::create([
+  $campaign = Campaign::create([
     'name' => 'user',
-    'bonus' => new Price(3, $currency),
+    'status' => 1,
     'recruiter' => $user,
   ]);
+  $option = CampaignOption::create([
+    'status' => 1,
+    'bonus' => new Price(10, $currency),
+    'bonus_method' => CampaignOption::RECRUIT_BONUS_METHOD_FIX,
+    'code' => 'user_only_test',
+  ]);
+  $option->save();
+  $campaign->addOption($option);
+  $campaign->save();
 
   // Create a product-user specific recruiting campaign...
-  $commerce_recruiting_camp_option = CampaignOptionInterface::create([
-    'name' => 'product_user',
-    'bonus' => new Price(4, $currency),
-    'product' => $products[1],
+  $campaign = Campaign::create([
+    'name' => 'user_product',
+    'status' => 1,
     'recruiter' => $user,
   ]);
-  $commerce_recruiting_camp_option->save();
+  $option = CampaignOption::create([
+    'status' => 1,
+    'bonus' => new Price(10, $currency),
+    'bonus_method' => CampaignOption::RECRUIT_BONUS_METHOD_FIX,
+    'code' => 'user_with_product_test',
+    'product' => [
+      'target_type' => $products[1]->getEntityTypeId(),
+      'target_id' => $products[1]->id(),
+    ],
+  ]);
+  $option->save();
+  $campaign->addOption($option);
+  $campaign->save();
 }

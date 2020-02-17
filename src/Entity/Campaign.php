@@ -29,19 +29,16 @@ use Drupal\user\UserInterface;
  *   ),
  *   handlers = {
  *     "view_builder" = "Drupal\Core\Entity\EntityViewBuilder",
- *     "list_builder" =
- *   "Drupal\commerce_recruiting\CampaignListBuilder",
+ *     "list_builder" = "Drupal\commerce_recruiting\CampaignListBuilder",
  *     "views_data" = "Drupal\commerce_recruiting\CampaignViewsData",
  *     "translation" = "Drupal\content_translation\ContentTranslationHandler",
  *     "access" = "Drupal\entity\EntityAccessControlHandler",
  *     "permission_provider" = "Drupal\entity\EntityPermissionProvider",
- *
  *     "form" = {
  *       "default" = "Drupal\commerce_recruiting\Form\CampaignForm",
  *       "add" = "Drupal\commerce_recruiting\Form\CampaignForm",
  *       "edit" = "Drupal\commerce_recruiting\Form\CampaignForm",
- *       "delete" =
- *   "Drupal\commerce_recruiting\Form\CampaignDeleteForm",
+ *       "delete" = "Drupal\Core\Entity\ContentEntityDeleteForm",
  *     },
  *     "local_task_provider" = {
  *       "default" = "Drupal\entity\Menu\DefaultEntityLocalTaskProvider",
