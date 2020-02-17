@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\commerce_recruitment\Entity;
+namespace Drupal\commerce_recruiting\Entity;
 
 use Drupal\commerce_price\Price;
 use Drupal\commerce_product\Entity\ProductInterface;
@@ -16,7 +16,7 @@ use Drupal\user\UserInterface;
 /**
  * Defines the Recruiting entity entity.
  *
- * @ingroup commerce_recruitment
+ * @ingroup commerce_recruiting
  *
  * @ContentEntityType(
  *   id = "commerce_recruiting",
@@ -24,23 +24,22 @@ use Drupal\user\UserInterface;
  *   bundle_label = @Translation("Recruitings"),
  *   handlers = {
  *     "view_builder" = "Drupal\Core\Entity\EntityViewBuilder",
- *     "list_builder" = "Drupal\commerce_recruitment\RecruitingListBuilder",
- *     "views_data" = "Drupal\commerce_recruitment\RecruitingViewsData",
- *     "translation" = "Drupal\commerce_recruitment\RecruitingTranslationHandler",
- *     "access" = "Drupal\commerce_recruitment\RecruitingAccessControlHandler",
- *
+ *     "list_builder" = "Drupal\commerce_recruiting\RecruitingListBuilder",
+ *     "views_data" = "Drupal\commerce_recruiting\RecruitingViewsData",
+ *     "translation" = "Drupal\commerce_recruiting\RecruitingTranslationHandler",
+ *     "access" = "Drupal\commerce_recruiting\RecruitingAccessControlHandler",
  *     "form" = {
- *       "default" = "Drupal\commerce_recruitment\Form\RecruitingEntityForm",
- *       "add" = "Drupal\commerce_recruitment\Form\RecruitingEntityForm",
- *       "edit" = "Drupal\commerce_recruitment\Form\RecruitingEntityForm",
- *       "delete" = "Drupal\commerce_recruitment\Form\RecruitingEntityDeleteForm",
+ *       "default" = "Drupal\commerce_recruiting\Form\RecruitingForm",
+ *       "add" = "Drupal\commerce_recruiting\Form\RecruitingForm",
+ *       "edit" = "Drupal\commerce_recruiting\Form\RecruitingForm",
+ *       "delete" = "Drupal\commerce_recruiting\Form\RecruitingDeleteForm",
  *     },
  *     "route_provider" = {
- *       "html" = "Drupal\commerce_recruitment\RecruitingHtmlRouteProvider",
+ *       "html" = "Drupal\commerce_recruiting\RecruitingHtmlRouteProvider",
  *     },
  *   },
- *   base_table = "commerce_recruitment",
- *   data_table = "commerce_recruitment_field_data",
+ *   base_table = "commerce_recruiting",
+ *   data_table = "commerce_recruiting_field_data",
  *   translatable = TRUE,
  *   admin_permission = "administer recruiting entity entities",
  *   entity_keys = {
@@ -52,11 +51,11 @@ use Drupal\user\UserInterface;
  *     "published" = "status",
  *   },
  *   links = {
- *     "canonical" = "/admin/commerce/recruitment/recruiting/{commerce_recruiting}",
- *     "add-form" = "/admin/commerce/recruitment/recruiting/add",
- *     "edit-form" = "/admin/commerce/recruitment/recruiting/{commerce_recruiting}/edit",
- *     "delete-form" = "/admin/commerce/recruitment/recruiting/{commerce_recruiting}/delete",
- *     "collection" = "/admin/commerce/recruitment/recruiting",
+ *     "canonical" = "/admin/commerce/recruiting/recruiting/{commerce_recruiting}",
+ *     "add-form" = "/admin/commerce/recruiting/recruiting/add",
+ *     "edit-form" = "/admin/commerce/recruiting/recruiting/{commerce_recruiting}/edit",
+ *     "delete-form" = "/admin/commerce/recruiting/recruiting/{commerce_recruiting}/delete",
+ *     "collection" = "/admin/commerce/recruiting/recruiting",
  *   },
  * )
  */
@@ -207,10 +206,10 @@ class Recruiting extends ContentEntityBase implements RecruitingInterface {
       ->setDisplayConfigurable('view', TRUE)
       ->setRequired(TRUE);
 
-    $fields['recruiting_config'] = BaseFieldDefinition::create('entity_reference')
-      ->setLabel(new TranslatableMarkup('Recruiting config'))
-      ->setDescription(t('The recruiting config.'))
-      ->setSetting('target_type', 'commerce_recruiting_config')
+    $fields['campaign_option'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(new TranslatableMarkup('Recruiting campaign options'))
+      ->setDescription(t('The recruiting campaign options.'))
+      ->setSetting('target_type', 'commerce_recruiting_campaign')
       ->setSetting('handler', 'default')
       ->setDisplayOptions('view', [
         'label' => 'hidden',

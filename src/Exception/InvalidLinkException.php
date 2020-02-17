@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\commerce_recruitment\Exception;
+namespace Drupal\commerce_recruiting\Exception;
 
 /**
  * Thrown when attempting to create a duplicate cart.

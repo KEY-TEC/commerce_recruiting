@@ -1,9 +1,9 @@
 <?php
 
-namespace Drupal\commerce_recruitment\Plugin\views\area;
+namespace Drupal\commerce_recruiting\Plugin\views\area;
 
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\commerce_recruitment\RecruitingManagerInterface;
+use Drupal\commerce_recruiting\RecruitingManagerInterface;
 use Drupal\views\Plugin\views\area\AreaPluginBase;
 use Drupal\views\Plugin\views\argument\NumericArgument;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -23,7 +23,7 @@ class BonusTotal extends AreaPluginBase {
   /**
    * The recruiting service.
    *
-   * @var \Drupal\commerce_recruitment\RecruitingManagerInterface
+   * @var \Drupal\commerce_recruiting\RecruitingManagerInterface
    */
   protected $recruitingManager;
 
@@ -36,7 +36,7 @@ class BonusTotal extends AreaPluginBase {
    *   The plugin_id for the plugin instance.
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
-   * @param \Drupal\commerce_recruitment\RecruitingManagerInterface $recruiting_manager
+   * @param \Drupal\commerce_recruiting\RecruitingManagerInterface $recruiting_manager
    *   The entity type manager.
    */
   public function __construct(array $configuration, $plugin_id, $plugin_definition, RecruitingManagerInterface $recruiting_manager) {
@@ -53,7 +53,7 @@ class BonusTotal extends AreaPluginBase {
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('commerce_recruitment.manager')
+      $container->get('commerce_recruiting.manager')
     );
   }
 

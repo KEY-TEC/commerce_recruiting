@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\commerce_recruitment;
+namespace Drupal\commerce_recruiting;
 
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\Routing\AdminHtmlRouteProvider;
@@ -43,7 +43,7 @@ class RecruitingHtmlRouteProvider extends AdminHtmlRouteProvider {
       $route = new Route("/admin/structure/{$entity_type->id()}/settings");
       $route
         ->setDefaults([
-          '_form' => 'Drupal\commerce_recruitment\Form\RecruitingEntitySettingsForm',
+          '_form' => 'Drupal\commerce_recruiting\Form\RecruitingSettingsForm',
           '_title' => "{$entity_type->getLabel()} settings",
         ])
         ->setRequirement('_permission', $entity_type->getAdminPermission())

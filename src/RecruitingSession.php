@@ -1,8 +1,8 @@
 <?php
 
-namespace Drupal\commerce_recruitment;
+namespace Drupal\commerce_recruiting;
 
-use Drupal\commerce_recruitment\Entity\RecruitingConfig;
+use Drupal\commerce_recruiting\Entity\CampaignOptionInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\user\Entity\User;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -26,8 +26,8 @@ class RecruitingSession implements RecruitingSessionInterface {
    */
   protected function getSessionKey($type) {
     $keys = [
-      self::RECRUITER => 'commerce_recruitment_rid',
-      self::RECRUITING_CONFIG => 'commerce_recruitment_rcid',
+      self::RECRUITER => 'commerce_recruiting_rid',
+      self::CAMPAIGN_OPTION => 'commerce_recruiting_rcid',
     ];
     if (!isset($keys[$type])) {
       throw new \InvalidArgumentException(sprintf('Unknown type "%s".', $type));
@@ -77,10 +77,10 @@ class RecruitingSession implements RecruitingSessionInterface {
   /**
    * {@inheritDoc}
    */
-  public function getRecruitingConfig() {
-    $rcid = $this->session->get($this->getSessionKey(self::RECRUITING_CONFIG));
+  public function getCampaignOption() {
+    $rcid = $this->session->get($this->getSessionKey(self::CAMPAIGN_OPTION));
     if ($rcid !== NULL) {
-      return $this->entityTypeManager->getStorage('commerce_recruiting_config')->load($rcid);
+      return $this->entityTypeManager->getStorage('commerce_recruiting_campaign')->load($rcid);
     }
     return NULL;
   }
@@ -95,8 +95,8 @@ class RecruitingSession implements RecruitingSessionInterface {
   /**
    * {@inheritDoc}
    */
-  public function setRecruitingConfig(RecruitingConfig $recruiting) {
-    $this->session->set($this->getSessionKey(self::RECRUITING_CONFIG), $recruiting->id());
+  public function setRecruitingCampaignOption(CampaignOptionInterface $recruiting) {
+    $this->session->set($this->getSessionKey(self::CAMPAIGN_OPTION), $recruiting->id());
   }
 
 }

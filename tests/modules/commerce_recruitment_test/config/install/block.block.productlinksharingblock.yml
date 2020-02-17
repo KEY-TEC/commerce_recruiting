@@ -2,7 +2,7 @@ langcode: en
 status: true
 dependencies:
   module:
-    - commerce_recruitment
+    - commerce_recruiting
   theme:
     - bartik
 id: productlinksharingblock
@@ -10,11 +10,11 @@ theme: bartik
 region: content
 weight: 0
 provider: null
-plugin: commerce_recruitment_link_sharing_block
+plugin: commerce_recruiting_link_sharing_block
 settings:
-  id: commerce_recruitment_link_sharing_block
+  id: commerce_recruiting_link_sharing_block
   label: 'Product link sharing block'
-  provider: commerce_recruitment
+  provider: commerce_recruiting
   label_display: '0'
   context_mapping:
     user: '@user.current_user_context:current_user'

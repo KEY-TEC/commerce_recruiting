@@ -1,15 +1,15 @@
 <?php
 
-namespace Drupal\Tests\commerce_recruitment\EventSubscriber;
+namespace Drupal\Tests\commerce_recruiting\EventSubscriber;
 
-use Drupal\commerce_recruitment\RecruitingSession;
+use Drupal\commerce_recruiting\RecruitingSession;
 use Drupal\state_machine\Event\WorkflowTransitionEvent;
-use Drupal\Tests\commerce_recruitment\Kernel\CommerceRecruitingKernelTestBase;
+use Drupal\Tests\commerce_recruiting\Kernel\CommerceRecruitingKernelTestBase;
 
 /**
  * Class RecruitingCheckoutSubscriberTest.
  *
- * @package Drupal\Tests\commerce_recruitment\EventSubscriber
+ * @package Drupal\Tests\commerce_recruiting\EventSubscriber
  */
 class RecruitingCheckoutSubscriberTest extends CommerceRecruitingKernelTestBase {
 
@@ -23,24 +23,25 @@ class RecruitingCheckoutSubscriberTest extends CommerceRecruitingKernelTestBase 
     $not_recruited_product = $this->createProduct();
     $recruiter = $this->createUser();
 
-    $recruiting_config = $this->createRecruitmentConfig($recruiter, $recruited_product);
+    $campaign = $this->createCampaign($recruiter, $recruited_product);
 
+    $option = $campaign->getFirstOption();
     $workflow_prophecy = $this->prophesize(WorkflowTransitionEvent::CLASS);
 
     $checkout_user = $this->setUpCurrentUser();
 
-    $order = $this->createTestOrder([
+    $order = $this->createOrder([
       $recruited_product,
       $not_recruited_product,
     ]);
     $workflow_prophecy->getEntity()->willReturn($order);
     $session_prophecy = $this->prophesize(RecruitingSession::CLASS);
-    $session_prophecy->getRecruitingConfig()->willReturn($recruiting_config);
+    $session_prophecy->getCampaignOption()->willReturn($option);
     $session_prophecy->getRecruiter()->willReturn($recruiter);
-    \Drupal::getContainer()->set('commerce_recruitment.recruiting_session', $session_prophecy->reveal());
+    \Drupal::getContainer()->set('commerce_recruiting.recruiting_session', $session_prophecy->reveal());
 
-    /** @var \Drupal\commerce_recruitment\EventSubscriber\RecruitingCheckoutSubscriber $checkout_subscriber */
-    $checkout_subscriber = \Drupal::service('commerce_recruitment.recruiting_checkout_subscriber');
+    /** @var \Drupal\commerce_recruiting\EventSubscriber\RecruitingCheckoutSubscriber $checkout_subscriber */
+    $checkout_subscriber = \Drupal::service('commerce_recruiting.recruiting_checkout_subscriber');
     $checkout_subscriber->onOrderPlace($workflow_prophecy->reveal());
     $recruitings = $this->entityTypeManager->getStorage('commerce_recruiting')->loadByProperties([]);
     $this->assertEqual(count($recruitings), 1);

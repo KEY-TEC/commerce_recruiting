@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\commerce_recruitment\Entity;
+namespace Drupal\commerce_recruiting\Entity;
 
 use Drupal\commerce_price\Price;
 use Drupal\commerce_product\Entity\ProductInterface;
@@ -13,7 +13,7 @@ use Drupal\user\UserInterface;
 /**
  * Provides an interface for defining recruiting entity entities.
  *
- * @ingroup commerce_recruitment
+ * @ingroup commerce_recruiting
  */
 interface RecruitingInterface extends ContentEntityInterface, EntityChangedInterface, EntityPublishedInterface, EntityOwnerInterface {
 
@@ -35,7 +35,7 @@ interface RecruitingInterface extends ContentEntityInterface, EntityChangedInter
    * @param string $name
    *   The recruiting entity name.
    *
-   * @return \Drupal\commerce_recruitment\Entity\RecruitingInterface
+   * @return \Drupal\commerce_recruiting\Entity\RecruitingInterface
    *   The called recruiting entity entity.
    */
   public function setName($name);
@@ -54,7 +54,7 @@ interface RecruitingInterface extends ContentEntityInterface, EntityChangedInter
    * @param int $timestamp
    *   The recruiting entity creation timestamp.
    *
-   * @return \Drupal\commerce_recruitment\Entity\RecruitingInterface
+   * @return \Drupal\commerce_recruiting\Entity\RecruitingInterface
    *   The called recruiting entity entity.
    */
   public function setCreatedTime($timestamp);

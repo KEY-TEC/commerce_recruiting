@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\commerce_recruitment;
+namespace Drupal\commerce_recruiting;
 
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityListBuilder;
@@ -9,7 +9,7 @@ use Drupal\Core\Link;
 /**
  * Defines a class to build a listing of Recruiting entity entities.
  *
- * @ingroup commerce_recruitment
+ * @ingroup commerce_recruiting
  */
 class RecruitingListBuilder extends EntityListBuilder {
 
@@ -26,7 +26,7 @@ class RecruitingListBuilder extends EntityListBuilder {
    * {@inheritdoc}
    */
   public function buildRow(EntityInterface $entity) {
-    /* @var \Drupal\commerce_recruitment\Entity\Recruiting $entity */
+    /* @var \Drupal\commerce_recruiting\Entity\Recruiting $entity */
     $row['id'] = $entity->id();
     $row['name'] = Link::createFromRoute(
       $entity->label(),

@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\commerce_recruitment;
+namespace Drupal\commerce_recruiting;
 
 use Drupal\Core\Entity\EntityAccessControlHandler;
 use Drupal\Core\Entity\EntityInterface;
@@ -10,7 +10,7 @@ use Drupal\Core\Access\AccessResult;
 /**
  * Access controller for the Recruiting entity entity.
  *
- * @see \Drupal\commerce_recruitment\Entity\Recruiting.
+ * @see \Drupal\commerce_recruiting\Entity\Recruiting.
  */
 class RecruitingAccessControlHandler extends EntityAccessControlHandler {
 
@@ -18,7 +18,7 @@ class RecruitingAccessControlHandler extends EntityAccessControlHandler {
    * {@inheritdoc}
    */
   protected function checkAccess(EntityInterface $entity, $operation, AccountInterface $account) {
-    /** @var \Drupal\commerce_recruitment\Entity\RecruitingInterface $entity */
+    /** @var \Drupal\commerce_recruiting\Entity\RecruitingInterface $entity */
     switch ($operation) {
       case 'view':
         if (!$entity->isPublished()) {

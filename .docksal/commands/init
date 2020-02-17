@@ -9,5 +9,5 @@ set -e
 
 fin exec composer install
 fin drush site-install -y
-fin drush en commerce_recruitment -y
+fin drush en commerce_recruiting -y
 fin drush en commerce_product_bundle devel_entity_updates admin_toolbar twig_tweak -y

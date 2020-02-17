@@ -1,7 +1,7 @@
 {
-  "name": "drupal/commerce_recruitment",
+  "name": "drupal/commerce_recruiting",
   "type": "drupal-module",
-  "description": "Commerce Recruitment",
+  "description": "Commerce Recruiting",
   "keywords": ["drupal", "web", "ui"],
   "license": "GPL-2.0+",
   "minimum-stability": "dev",
@@ -44,12 +44,12 @@
   ],
   "autoload": {
     "psr-4": {
-      "Drupal\\commerce_recruitment_settings\\": "./src"
+      "Drupal\\commerce_recruiting\\": "./src"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "Drupal\\Tests\\commerce_recruitment_settings\\": "./tests/src"
+      "Drupal\\Tests\\commerce_recruiting\\": "./tests/src"
     }
   },
   "scripts": {
@@ -69,5 +69,8 @@
   },
   "config": {
     "sort-packages": true
+  },
+  "require": {
+    "crisu83/shortid": "*"
   }
 }

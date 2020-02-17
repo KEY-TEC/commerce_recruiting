@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\commerce_recruitment;
+namespace Drupal\commerce_recruiting;
 
 use Drupal\content_translation\ContentTranslationHandler;
 

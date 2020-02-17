@@ -1,9 +1,8 @@
 <?php
 
-namespace Drupal\commerce_recruitment\Controller;
+namespace Drupal\commerce_recruiting\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\commerce_recruitment\RecruitingManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -12,20 +11,20 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class RecruitingCodeController extends ControllerBase {
 
   /**
-   * The recruiting service.
+   * The campaign service.
    *
-   * @var \Drupal\commerce_recruitment\RecruitingManagerInterface
+   * @var \Drupal\commerce_recruiting\CampaignManagerInterface
    */
-  protected $recruitingManager;
+  protected $campaignManager;
 
   /**
    * Constructs a new RecruitingCodeController object.
    *
-   * @param \Drupal\commerce_recruitment\RecruitingManagerInterface $recruiting_manager
-   *   The recruiting service.
+   * @param \Drupal\commerce_recruiting\CampaignManagerInterface $campaign_manager
+   *   The recruiting service.   *.
    */
-  public function __construct(RecruitingManagerInterface $recruiting_manager) {
-    $this->recruitingManager = $recruiting_manager;
+  public function __construct(CampaignManagerInterface $campaign_manager) {
+    $this->campaignManager = $campaign_manager;
   }
 
   /**
@@ -33,7 +32,7 @@ class RecruitingCodeController extends ControllerBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('commerce_recruitment.manager')
+      $container->get('commerce_recruiting.campaign_manager')
     );
   }
 
@@ -45,16 +44,14 @@ class RecruitingCodeController extends ControllerBase {
    */
   public function code($recruiting_code) {
     try {
-      $recruiting_session = $this->recruitingManager->getRecruitingSessionFromCode($recruiting_code);
-      $config = $recruiting_session->getRecruitingConfig();
-      $products = $config->getProducts();
-      foreach ($products as $product) {
-        $route_name = 'entity.' . $product->getEntityTypeId() . '.canonical';
-        return $this->redirect($route_name, [$product->getEntityTypeId() => $product->id()]);
-      }
+      $recruiting_session = $this->campaignManager->getSessionFromCode($recruiting_code);
+      $config = $recruiting_session->getCampaignOption();
+      $product = $config->getProduct();
+      $route_name = 'entity.' . $product->getEntityTypeId() . '.canonical';
+      return $this->redirect($route_name, [$product->getEntityTypeId() => $product->id()]);
     }
     catch (\Throwable $e) {
-      $this->getLogger('commerce_recruitment')->error($e->getMessage());
+      $this->getLogger('commerce_recruiting')->error($e->getMessage());
       $this->messenger()
         ->addError($this->t("Invalid Code. Please contact us."));
       return $this->redirect('<front>');
