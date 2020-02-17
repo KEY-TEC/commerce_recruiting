@@ -10,14 +10,14 @@ use Drupal\commerce_product\Entity\Product;
 use Drupal\commerce_product_bundle\Entity\ProductBundle;
 use Drupal\commerce_product_bundle\Entity\ProductBundleItem;
 use Drupal\commerce_product\Entity\ProductVariation;
-use Drupal\commerce_recruitment\Entity\RecruitingConfig;
+use Drupal\commerce_recruiting\Entity\CampaignOptionInterface;
 use Drupal\commerce_store\Entity\Store;
 use Drupal\user\Entity\User;
 
 /**
  * Implements hook_install().
  */
-function commerce_recruitment_test_install() {
+function commerce_recruiting_test_install() {
   // Create test user...
   $user = User::create(['name' => 'Test user', 'mail' => 'test@test.com']);
   $user->save();
@@ -40,7 +40,7 @@ function commerce_recruitment_test_install() {
       'locality' => 'city',
       'postal_code' => '12345',
       'address_line1' => 'street',
-    ]
+    ],
   ]);
   $store->save();
 
@@ -63,9 +63,9 @@ function commerce_recruitment_test_install() {
     }
     $product = Product::create([
       'type' => 'default',
-      'title' => 'product '. $p,
+      'title' => 'product ' . $p,
       'variations' => $variations,
-      'stores' => [$store]
+      'stores' => [$store],
     ]);
     $product->save();
     $products[] = $product;
@@ -81,7 +81,7 @@ function commerce_recruitment_test_install() {
       if (isset($products[$bi + $b])) {
         $bundle_item = ProductBundleItem::create([
           'type' => 'default',
-          'title' => 'bundle item '. $bi,
+          'title' => 'bundle item ' . $bi,
           'product' => $products[$bi + $b],
         ]);
 
@@ -99,35 +99,35 @@ function commerce_recruitment_test_install() {
     $bundles[] = $bundle;
   }
 
-  // Create a general recruitment config...
+  // Create a general recruiting campaign...
   // Applies for any product ("recruit a friend")
-  $recruiting_config = RecruitingConfig::create([
+  $commerce_recruiting_camp_option = CampaignOptionInterface::create([
     'name' => 'general',
     'bonus' => new Price(1, $currency),
   ]);
-  $recruiting_config->save();
+  $commerce_recruiting_camp_option->save();
 
-  // Create a product specific recruitment config...
-  $recruiting_config = RecruitingConfig::create([
+  // Create a product specific recruiting campaign...
+  $commerce_recruiting_camp_option = CampaignOptionInterface::create([
     'name' => 'product',
     'bonus' => new Price(2, $currency),
     'product' => $products[0],
   ]);
 
-  // Create a user specific recruitment config...
+  // Create a user specific recruiting campaign...
   // Applies for any product but will benefit this user.
-  $recruiting_config = RecruitingConfig::create([
+  $commerce_recruiting_camp_option = CampaignOptionInterface::create([
     'name' => 'user',
     'bonus' => new Price(3, $currency),
     'recruiter' => $user,
   ]);
 
-  // Create a product-user specific recruitment config...
-  $recruiting_config = RecruitingConfig::create([
+  // Create a product-user specific recruiting campaign...
+  $commerce_recruiting_camp_option = CampaignOptionInterface::create([
     'name' => 'product_user',
     'bonus' => new Price(4, $currency),
     'product' => $products[1],
-    'recruiter' => $user
+    'recruiter' => $user,
   ]);
-  $recruiting_config->save();
+  $commerce_recruiting_camp_option->save();
 }

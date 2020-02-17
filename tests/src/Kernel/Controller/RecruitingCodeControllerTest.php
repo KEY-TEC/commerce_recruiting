@@ -1,11 +1,11 @@
 <?php
 
-namespace Drupal\commerce_recruitment\Tests\Kernel\Controller;
+namespace Drupal\commerce_recruiting\Tests\Kernel\Controller;
 
 use Drupal\simpletest\WebTestBase;
 
 /**
- * Provides automated tests for the commerce_recruitment module.
+ * Provides automated tests for the commerce_recruiting module.
  */
 class RecruitingCodeControllerTest extends WebTestBase {
 
@@ -35,17 +35,17 @@ class RecruitingCodeControllerTest extends WebTestBase {
    */
   public static function getInfo() {
     return [
-      'name' => "commerce_recruitment RecruitingCodeController's controller functionality",
-      'description' => 'Test Unit for module commerce_recruitment and controller RecruitingCodeController.',
+      'name' => "commerce_recruiting RecruitingCodeController's controller functionality",
+      'description' => 'Test Unit for module commerce_recruiting and controller RecruitingCodeController.',
       'group' => 'Other',
     ];
   }
 
   /**
-   * Tests commerce_recruitment functionality.
+   * Tests commerce_recruiting functionality.
    */
   public function testRecruitingCodeController() {
-    // Check that the basic functions of module commerce_recruitment.
+    // Check that the basic functions of module commerce_recruiting.
     $this->assertEquals(TRUE, TRUE, 'Test Unit Generated via Drupal Console.');
   }
 

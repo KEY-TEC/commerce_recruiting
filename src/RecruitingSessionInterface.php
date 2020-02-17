@@ -1,19 +1,19 @@
 <?php
 
-namespace Drupal\commerce_recruitment;
+namespace Drupal\commerce_recruiting;
 
-use Drupal\commerce_recruitment\Entity\RecruitingConfig;
+use Drupal\commerce_recruiting\Entity\CampaignOptionInterface;
 use Drupal\user\Entity\User;
 
 /**
  * Stores the active recruiting session.
  *
- * @see \Drupal\commerce_recruitment\RecruitingSessionInterface
+ * @see \Drupal\commerce_recruiting\RecruitingSessionInterface
  */
 interface RecruitingSessionInterface {
   // The recruiting session types.
   const RECRUITER = 'recruiter';
-  const RECRUITING_CONFIG = 'recruiting_config';
+  const CAMPAIGN_OPTION = 'campaign_option';
 
   /**
    * Gets the recruiter.
@@ -24,12 +24,12 @@ interface RecruitingSessionInterface {
   public function getRecruiter();
 
   /**
-   * Gets the recruiting config.
+   * Gets the recruiting campaign option.
    *
-   * @return \Drupal\commerce_recruitment\Entity\RecruitingConfig
-   *   The recruiting config.
+   * @return \Drupal\commerce_recruiting\Entity\CampaignOption
+   *   The recruiting campaign option.
    */
-  public function getRecruitingConfig();
+  public function getCampaignOption();
 
   /**
    * Sets the recruiter.
@@ -40,11 +40,11 @@ interface RecruitingSessionInterface {
   public function setRecruiter(User $recruiter);
 
   /**
-   * Sets the recruiting config.
+   * Sets the recruiting campaign option.
    *
-   * @param \Drupal\commerce_recruitment\Entity\RecruitingConfig $recruiting
-   *   The recruiting config.
+   * @param \Drupal\commerce_recruiting\Entity\CampaignOptionInterface $recruiting
+   *   The recruiting campaign option.
    */
-  public function setRecruitingConfig(RecruitingConfig $recruiting);
+  public function setRecruitingCampaignOption(CampaignOptionInterface $recruiting);
 
 }

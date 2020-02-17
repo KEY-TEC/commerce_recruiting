@@ -1,8 +1,8 @@
 <?php
 
-namespace Drupal\commerce_recruitment\EventSubscriber;
+namespace Drupal\commerce_recruiting\EventSubscriber;
 
-use Drupal\commerce_recruitment\RecruitingManagerInterface;
+use Drupal\commerce_recruiting\RecruitingManagerInterface;
 use Drupal\Core\Messenger\Messenger;
 use Drupal\Core\Session\AccountProxy;
 use Drupal\state_machine\Event\WorkflowTransitionEvent;
@@ -29,9 +29,9 @@ class RecruitingCheckoutSubscriber implements EventSubscriberInterface {
   protected $messenger;
 
   /**
-   * The recruting manager.
+   * The recruiting manager.
    *
-   * @var \Drupal\commerce_recruitment\RecruitingManagerInterface
+   * @var \Drupal\commerce_recruiting\RecruitingManagerInterface
    */
   private $recruitingManager;
 
@@ -42,7 +42,7 @@ class RecruitingCheckoutSubscriber implements EventSubscriberInterface {
    *   The current user.
    * @param \Drupal\Core\Messenger\Messenger $messenger
    *   The messenger.
-   * @param \Drupal\commerce_recruitment\RecruitingManagerInterface $recruiting_manager
+   * @param \Drupal\commerce_recruiting\RecruitingManagerInterface $recruiting_manager
    *   The manager.
    */
   public function __construct(AccountProxy $current_user, Messenger $messenger, RecruitingManagerInterface $recruiting_manager) {
@@ -74,7 +74,7 @@ class RecruitingCheckoutSubscriber implements EventSubscriberInterface {
     $matches = $this->recruitingManager->sessionMatch($order);
     $user = User::load($this->currentUser->id());
     foreach ($matches as $product_id => $match) {
-      $recruiting = $this->recruitingManager->createRecruiting($match['order_item'], $match['recruiting_config']->getRecruiter(), $user, $match['recruiting_config'], $match['bonus']);
+      $recruiting = $this->recruitingManager->createRecruiting($match['order_item'], $match['recruiter'], $user, $match['campaign_option'], $match['bonus']);
       $recruiting->save();
     }
   }

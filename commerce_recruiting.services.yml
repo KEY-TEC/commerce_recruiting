@@ -1,0 +1,19 @@
+services:
+  logger.channel.common_recruit_a_friend:
+    parent: logger.channel_base
+    arguments: ['commerce_recruiting']
+  commerce_recruiting.manager:
+    class: Drupal\commerce_recruiting\RecruitingManager
+    arguments: ['@current_user', '@language_manager', '@entity_type.manager','@commerce_recruiting.recruiting_session']
+  commerce_recruiting.campaign_manager:
+    class: Drupal\commerce_recruiting\CampaignManager
+    arguments: ['@current_user', '@language_manager', '@entity_type.manager','@commerce_recruiting.recruiting_session']
+
+  commerce_recruiting.recruiting_checkout_subscriber:
+    class: Drupal\commerce_recruiting\EventSubscriber\RecruitingCheckoutSubscriber
+    arguments: ['@current_user', '@messenger', '@commerce_recruiting.manager']
+    tags:
+      - { name: event_subscriber }
+  commerce_recruiting.recruiting_session:
+    class: Drupal\commerce_recruiting\RecruitingSession
+    arguments: ['@session', '@entity_type.manager']

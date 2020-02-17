@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\Tests\commerce_recruitment\Traits;
+namespace Drupal\Tests\commerce_recruiting\Traits;
 
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;

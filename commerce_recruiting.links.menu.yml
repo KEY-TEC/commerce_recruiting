@@ -1,0 +1,28 @@
+commerce_recruiting.configuration:
+  title: 'Recruiting'
+  route_name: 'commerce_recruiting.configuration'
+  parent: 'commerce.configuration'
+  weight: 0
+
+commerce_recruiting.collections:
+  title: 'Recruiting'
+  route_name: 'commerce_recruiting.collections'
+  description: 'Manage recruiting.'
+  parent: 'commerce.admin_commerce'
+  weight: 0
+
+# Recruiting entity menu items definition
+entity.commerce_recruiting.collection:
+  title: 'Recruiting'
+  route_name: entity.commerce_recruiting.collection
+  description: 'List of recruiting entities'
+  parent: 'commerce_recruiting.collections'
+  weight: 100
+
+# Recruiting entity type menu items definition
+entity.commerce_recruiting_campaign.collection:
+  title: 'Recruiting Campaigns'
+  route_name: entity.commerce_recruiting_campaign.collection
+  description: 'List of recruiting campaigns'
+  parent: 'commerce_recruiting.collections'
+  weight: 99

@@ -1,0 +1,29 @@
+<?php
+
+/**
+ * @file
+ * Contains commerce_recruiting.module.
+ */
+
+/**
+ * Implements hook_theme().
+ */
+function commerce_recruiting_theme($existing, $type, $theme, $path) {
+  $theme = [];
+  $theme['sharing_link'] = [
+    'render element' => 'children',
+    'path' => $path . '/templates',
+    'template'  => 'sharing-link',
+  ];
+  $theme['recruiting'] = [
+    'render element' => 'elements',
+    'file' => 'commerce_recruiting.page.inc',
+    'template' => 'recruiting',
+  ];
+  $theme['recruiting_content_add_list'] = [
+    'render element' => 'content',
+    'variables' => ['content' => NULL],
+    'file' => 'commerce_recruiting.page.inc',
+  ];
+  return $theme;
+}
