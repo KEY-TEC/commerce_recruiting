@@ -1,0 +1,59 @@
+add recruiting entity entities:
+  title: 'Create new recruiting entity entities'
+
+administer recruiting entity entities:
+  title: 'Administer recruiting entity entities'
+  description: 'Allow to access the administration form to configure recruiting entity entities.'
+  restrict access: true
+
+delete recruiting entity entities:
+  title: 'Delete recruiting entity entities'
+
+edit recruiting entity entities:
+  title: 'Edit recruiting entity entities'
+
+view published recruiting entity entities:
+  title: 'View published recruiting entity entities'
+
+view unpublished recruiting entity entities:
+  title: 'View unpublished recruiting entity entities'
+
+add recruiting campaign entities:
+  title: 'Create new recruiting campaign entities'
+
+administer recruiting campaign entities:
+  title: 'Administer recruiting campaign entities'
+  description: 'Allow to access the administration form to configure recruiting campaign entities.'
+  restrict access: true
+
+delete recruiting campaign entities:
+  title: 'Delete recruiting campaign entities'
+
+edit recruiting campaign entities:
+  title: 'Edit recruiting campaign entities'
+
+view published recruiting campaign entities:
+  title: 'View published recruiting campaign entities'
+
+view unpublished recruiting campaign entities:
+  title: 'View unpublished recruiting campaign entities'
+add recruiting option entities:
+  title: 'Create new Recruiting option entities'
+
+administer recruiting option entities:
+  title: 'Administer Recruiting option entities'
+  description: 'Allow to access the administration form to configure Recruiting option entities.'
+  restrict access: true
+
+delete recruiting option entities:
+  title: 'Delete Recruiting option entities'
+
+edit recruiting option entities:
+  title: 'Edit Recruiting option entities'
+
+view published recruiting option entities:
+  title: 'View published Recruiting option entities'
+
+view unpublished recruiting option entities:
+  title: 'View unpublished Recruiting option entities'
+

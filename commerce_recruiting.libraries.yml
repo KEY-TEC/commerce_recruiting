@@ -1,0 +1,6 @@
+sharing-link:
+  css:
+    component:
+      css/sharing-link-block.css: {}
+  js:
+    js/sharingLink.js: {}
