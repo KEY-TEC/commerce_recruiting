@@ -87,20 +87,20 @@ class CampaignManager implements CampaignManagerInterface {
         ->notExists('recruiter');
     }
 
+    $options_query = $this->entityTypeManager->getStorage('commerce_recruiting_camp_option')
+      ->getQuery();
     if ($product !== NULL) {
-      $options_query = $this->entityTypeManager->getStorage('commerce_recruiting_camp_option')
-        ->getQuery();
       $options_query
         ->condition('product.target_id', $product->id())
         ->condition('product.target_type', $product->getEntityTypeId());
-      $options = $query->execute();
-      $query
-        ->condition('options', $options, 'IN');
     }
     else {
-      $query
+      $options_query
         ->notExists('product.target_id');
     }
+    $options = $options_query->execute();
+    $query
+      ->condition('options', $options, 'IN');
 
     $rcids = $query->execute();
     return $this->entityTypeManager->getStorage('commerce_recruiting_campaign')
