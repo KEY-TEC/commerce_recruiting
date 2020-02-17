@@ -66,8 +66,10 @@ interface RecruitingManagerInterface {
 
   /**
    * Manages the recruiting state transition.
-   * @return mixed
+   *
+   * @param string $state
+   *   The state.
    */
-  public function applyTransitions();
+  public function applyTransitions($state);
 
 }

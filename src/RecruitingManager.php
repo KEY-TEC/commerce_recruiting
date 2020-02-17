@@ -5,6 +5,7 @@ namespace Drupal\commerce_recruiting;
 use Drupal\commerce_order\Entity\OrderInterface;
 use Drupal\commerce_order\Entity\OrderItemInterface;
 use Drupal\commerce_price\Price;
+use Drupal\commerce_product\Entity\ProductVariation;
 use Drupal\commerce_recruiting\Entity\Recruiting;
 use Drupal\commerce_recruiting\Entity\CampaignOption;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -106,8 +107,12 @@ class RecruitingManager implements RecruitingManagerInterface {
     $product = $option->getProduct();
     $matches = [];
     foreach ($order->getItems() as $item) {
-      if ($item->getPurchasedEntity()->id() === $product->id()) {
-        $matches[$item->getPurchasedEntity()->id()] = [
+      $purchased_product = $item->getPurchasedEntity();
+      if ($purchased_product instanceof ProductVariation) {
+        $purchased_product = $purchased_product->getProduct();
+      }
+      if ($purchased_product->id() === $product->id()) {
+        $matches[$purchased_product->id()] = [
           'campaign_option' => $option,
           'order_item' => $item,
           'bonus' => $option->calculateBonus($item),
@@ -156,7 +161,7 @@ class RecruitingManager implements RecruitingManagerInterface {
   /**
    * {@inheritDoc}
    */
-  public function applyTransitions() {
+  public function applyTransitions($state) {
     $recruitings = $this->entityTypeManager->getStorage('commerce_recruiting')
       ->loadByProperties([
         'state' => 'created',
@@ -164,8 +169,10 @@ class RecruitingManager implements RecruitingManagerInterface {
       ]);
     /** @var \Drupal\commerce_recruiting\Entity\RecruitingInterface $recruiting */
     foreach ($recruitings as $recruiting) {
-      $recruiting->getState()->applyTransitionById('accept');
-      $recruiting->getState()->applyTransitionById('cancel');
+      $recruiting->getState()->applyTransitionById($state);
+      if ($recruiting->getState()->isValid()) {
+        $recruiting->save();
+      }
     }
   }
 
@@ -181,7 +188,7 @@ class RecruitingManager implements RecruitingManagerInterface {
       'order_item' => ['target_id' => $order_item->id()],
       'status' => 1,
       'product' => [
-        'target_id' => $order_item->getPurchasedEntity()->id(),
+        'target_id' => $order_item->getPurchasedEntityId(),
         'target_type' => $order_item->getPurchasedEntity()->getEntityTypeId(),
       ],
       'bonus' => $bonus,

@@ -7,6 +7,8 @@ use Drupal\commerce_order\Entity\OrderItem;
 use Drupal\commerce_order\Entity\OrderItemType;
 use Drupal\commerce_price\Price;
 use Drupal\commerce_product\Entity\Product;
+use Drupal\commerce_product\Entity\ProductVariation;
+use Drupal\commerce_product\Entity\ProductVariationType;
 use Drupal\commerce_recruiting\Entity\Campaign;
 use Drupal\commerce_recruiting\Entity\CampaignOptionInterface;
 use Drupal\commerce_recruiting\Entity\Recruiting;
@@ -60,15 +62,19 @@ class CommerceRecruitingKernelTestBase extends CommerceKernelTestBase {
    *
    * @param array $products
    *   Each product one product item.
+   * @param string $state
+   *   The order state.
    *
    * @return \Drupal\commerce_order\Entity\Order
    *   The order.
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
    */
-  protected function createOrder(array $products = []) {
+  protected function createOrder(array $products = [], $state = 'completed') {
 
     $order = Order::create([
       'type' => 'default',
-      'state' => 'completed',
+      'state' => $state,
       'store_id' => $this->store->id(),
     ]);
     $order->save();
@@ -76,9 +82,15 @@ class CommerceRecruitingKernelTestBase extends CommerceKernelTestBase {
 
     /** @var \Drupal\commerce_product\Entity\Product $product */
     foreach ($products as $product) {
+
+      /** @var \Drupal\commerce_order\Entity\OrderItemInterface $order_item */
       $order_item = OrderItem::create([
         'type' => 'test',
+        'purchased_entity' => $product->getDefaultVariation(),
       ]);
+      $order_item->save();
+
+      $this->assertTrue($order_item->getPurchasedEntity() instanceof ProductVariation);
       $order_item->setTitle('My order item');
       $this->assertEquals('My order item', $order_item->getTitle());
       $this->assertEquals(1, $order_item->getQuantity());
@@ -88,12 +100,14 @@ class CommerceRecruitingKernelTestBase extends CommerceKernelTestBase {
       $this->assertFalse($order_item->isUnitPriceOverridden());
       $unit_price = new Price(10, 'USD');
       $order_item->setUnitPrice($unit_price, TRUE);
-      $order_item->purchased_entity = $product;
       $order_item->save();
+
       $items[] = $order_item;
     }
 
     $order->setItems($items);
+
+    $order->save();
     return $order;
   }
 
@@ -105,11 +119,20 @@ class CommerceRecruitingKernelTestBase extends CommerceKernelTestBase {
     $store = $this->store;
     // Add currency...
     // Create some products...
+    /** @var \Drupal\commerce_product\Entity\Product $product */
     $product = Product::create([
       'type' => 'default',
       'title' => 'product ',
       'stores' => [$store],
     ]);
+
+    $variation = ProductVariation::create([
+      'type' => 'test',
+      'title' => 'My Super Product',
+      'status' => TRUE,
+    ]);
+    $variation->save();
+    $product->addVariation($variation);
     $product->save();
     return $product;
   }
@@ -174,6 +197,7 @@ class CommerceRecruitingKernelTestBase extends CommerceKernelTestBase {
     $this->installEntitySchema('commerce_order');
     $this->installEntitySchema('commerce_order_item');
     $this->installEntitySchema('commerce_product');
+    $this->installEntitySchema('commerce_product_variation');
     $this->installEntitySchema('commerce_promotion');
     $this->installEntitySchema('commerce_recruiting_campaign');
     $this->installEntitySchema('commerce_recruiting_camp_option');
@@ -187,10 +211,17 @@ class CommerceRecruitingKernelTestBase extends CommerceKernelTestBase {
     $this->campaignManager = $this->container->get('commerce_recruiting.campaign_manager');
     $this->installCommerceCart();
     // An order item type that doesn't need a purchasable entity.
-    OrderItemType::create([
+    $order_item_type = OrderItemType::create([
       'id' => 'test',
       'label' => 'Test',
       'orderType' => 'default',
+      'purchasableEntityType' => 'commerce_product_variation',
+    ])->save();
+
+    ProductVariationType::create([
+      'id' => 'test',
+      'label' => 'Test',
+      'orderItemType' => 'default',
     ])->save();
 
     // Reset entity type manager otherwise commerce_recruiting not found.

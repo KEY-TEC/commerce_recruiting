@@ -127,7 +127,7 @@ class Recruiting extends ContentEntityBase implements RecruitingInterface {
    * {@inheritdoc}
    */
   public function getProduct() {
-    return $this->get('product')->value;
+    return $this->get('product')->entity;
   }
 
   /**
@@ -292,6 +292,7 @@ class Recruiting extends ContentEntityBase implements RecruitingInterface {
         'exclude_entity_types' => FALSE,
         'entity_type_ids' => [
           'commerce_product',
+          'commerce_product_variation',
           'commerce_product_bundle',
         ],
       ])

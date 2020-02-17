@@ -2,6 +2,8 @@
 
 namespace Drupal\Tests\commerce_recruiting\Kernel;
 
+use Drupal\commerce_price\Price;
+use Drupal\commerce_product\Entity\ProductVariation;
 use Drupal\commerce_recruiting\RecruitingSession;
 use Drupal\Tests\commerce_recruiting\Traits\RecruitingEntityCreationTrait;
 
@@ -35,19 +37,37 @@ class RecruitingManagerTest extends CommerceRecruitingKernelTestBase {
     $this->assertEqual(count($matches), 0);
   }
 
+  /**
+   * Test applyTransitions.
+   */
   public function testApplyTransitions() {
 
     $recruiter = $this->createUser();
+    $campaign = $this->createCampaign($recruiter);
+    $recruited = $this->createUser();
+    $products = [];
     $products[] = $this->createProduct();
     $products[] = $this->createProduct();
 
     $order = $this->createOrder($products);
-    foreach ($order->get) {
+
+    $recrutings = [];
+    foreach ($order->getItems() as $item) {
+      $this->assertNotEqual($item->getOrder(), NULL);
+      $this->assertTrue($item->getPurchasedEntity() instanceof ProductVariation);
+      $recruting = $this->recruitingManager->createRecruiting($item, $recruiter, $recruited, $campaign->getFirstOption(), new Price("10", "USD"));
+      $recruting->save();
+      $this->assertNotEqual($recruting->getOrder(), NULL);
+      $this->assertNotEqual($recruting->getProduct(), NULL);
+      $this->assertNotNull($recruting->getProduct());
+      $this->assertTrue($recruting->product->entity instanceof ProductVariation, get_class($recruting->product->entity));
+      $recrutings[] = $recruting;
 
     }
-    $oder2 = $this->createOrder([$product2]);
-    $prophecy = $this->prophesize(RecruitingSession::CLASS);
-    $session_config = $this->createCampaign($recruiter, $product1);
+    $this->assertEqual(count($recrutings), 2);
+    $this->recruitingManager->applyTransitions("accept");
+    $items = $this->entityTypeManager->getStorage('commerce_recruiting')->loadByProperties(['state' => 'accepted']);
+    $this->assertEqual(count($items), 0);
   }
 
 }
