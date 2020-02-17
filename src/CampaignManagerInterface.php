@@ -29,23 +29,23 @@ interface CampaignManagerInterface {
   /**
    * Returns recruiting info from code.
    *
-   * @param string $code
+   * @param \Drupal\commerce_recruiting\Code $code
    *   The recruiting code.
    *
    * @return \Drupal\commerce_recruiting\Entity\CampaignOptionInterface
    *   The campaignOption
    */
-  public function findCampaignOptionFromCode($code);
+  public function findCampaignOptionFromCode(Code $code);
 
   /**
    * Returns recruiting session from code.
    *
-   * @param string $code
+   * @param \Drupal\commerce_recruiting\Code $code
    *   The recruiting code.
    *
    * @return \Drupal\commerce_recruiting\RecruitingSessionInterface
    *   The session service.
    */
-  public function getSessionFromCode($code);
+  public function getSessionFromCode(Code $code);
 
 }

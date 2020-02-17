@@ -11,7 +11,7 @@ use Drupal\Core\Session\AccountProxyInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Form controller for recruiting entity edit forms.
+ * Form controller for recruiting campaign edit forms.
  *
  * @ingroup commerce_recruiting
  */
@@ -25,7 +25,7 @@ class CampaignForm extends ContentEntityForm {
   protected $account;
 
   /**
-   * Constructs a new RecruitingForm.
+   * Constructs a new CampaignForm.
    *
    * @param \Drupal\Core\Session\AccountProxyInterface $account
    *   The current user account.
@@ -75,17 +75,17 @@ class CampaignForm extends ContentEntityForm {
 
     switch ($status) {
       case SAVED_NEW:
-        $this->messenger()->addMessage($this->t('Created the %label Recruiting entity.', [
+        $this->messenger()->addMessage($this->t('Created the %label recruiting campaign.', [
           '%label' => $entity->label(),
         ]));
         break;
 
       default:
-        $this->messenger()->addMessage($this->t('Saved the %label Recruiting entity.', [
+        $this->messenger()->addMessage($this->t('Saved the %label recruiting campaign.', [
           '%label' => $entity->label(),
         ]));
     }
-    $form_state->setRedirect('entity.commerce_recruiting.canonical', ['commerce_recruiting' => $entity->id()]);
+    $form_state->setRedirect('entity.commerce_recruiting_campaign.canonical', ['commerce_recruiting_campaign' => $entity->id()]);
   }
 
 }

@@ -13,7 +13,6 @@ use Drupal\Core\Entity\EntityChangedTrait;
 use Drupal\Core\Entity\EntityPublishedTrait;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Drupal\Core\Url;
 use Drupal\user\UserInterface;
 use http\Exception\InvalidArgumentException;
 
@@ -54,14 +53,6 @@ class CampaignOption extends ContentEntityBase implements CampaignOptionInterfac
 
   use EntityChangedTrait;
   use EntityPublishedTrait;
-
-  /**
-   * {@inheritdoc}
-   */
-  public function toUrl($rel = 'canonical', array $options = []) {
-    $code = $this->getCode();
-    return Url::fromRoute('commerce_recruiting.campaign_option_code', ['campaign_option_code' => $code], ['absolute' => TRUE]);
-  }
 
   /**
    * {@inheritdoc}

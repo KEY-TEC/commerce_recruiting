@@ -62,10 +62,20 @@ class CampaignManager implements CampaignManagerInterface {
   /**
    * {@inheritDoc}
    */
-  public function getSessionFromCode($code) {
-    $info = $this->findCampaignOptionFromCode($code);
-    $this->recruitingSession->setRecruiter($info['recruiter']);
-    $this->recruitingSession->setRecruitingCampaignOption($info['campaign_option']);
+  public function getSessionFromCode(Code $code) {
+    $option = $this->findCampaignOptionFromCode($code);
+    $campaign = $option->getCampaign();
+    if ($campaign->getRecruiter() == NULL && $code->getRecruiterId() == NULL) {
+      throw new \InvalidArgumentException("No valid code");
+    }
+    if ($campaign->getRecruiter() == NULL && $code->getRecruiterId() != NULL) {
+      $recruiter = $this->entityTypeManager->getStorage('user')->load($code->getRecruiterId());
+    }
+    else {
+      $recruiter = $campaign->getRecruiter();
+    }
+    $this->recruitingSession->setRecruiter($recruiter);
+    $this->recruitingSession->setRecruitingCampaignOption($option);
     return $this->recruitingSession;
   }
 
@@ -110,12 +120,12 @@ class CampaignManager implements CampaignManagerInterface {
   /**
    * {@inheritDoc}
    */
-  public function findCampaignOptionFromCode($code) {
+  public function findCampaignOptionFromCode(Code $code) {
     $query = $this->entityTypeManager->getStorage('commerce_recruiting_camp_option')
       ->getQuery();
 
     $query->condition('status', 1);
-    $query->condition('code', $code);
+    $query->condition('code', $code->getCode());
 
     $rcids = $query->execute();
     $cid = current($rcids);
