@@ -3,6 +3,7 @@
 namespace Drupal\commerce_recruiting\Controller;
 
 use Drupal\commerce_recruiting\CampaignManagerInterface;
+use Drupal\commerce_recruiting\Code;
 use Drupal\Core\Controller\ControllerBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -43,9 +44,10 @@ class RecruitingCodeController extends ControllerBase {
    * @return \Symfony\Component\HttpFoundation\RedirectResponse
    *   Redirect to product.
    */
-  public function code($recruiting_code) {
+  public function code($campaign_code) {
+    $code = Code::createFromCode($campaign_code);
     try {
-      $recruiting_session = $this->campaignManager->getSessionFromCode($recruiting_code);
+      $recruiting_session = $this->campaignManager->saveRecruitingSession($code);
       $config = $recruiting_session->getCampaignOption();
       $product = $config->getProduct();
       $route_name = 'entity.' . $product->getEntityTypeId() . '.canonical';
@@ -54,10 +56,9 @@ class RecruitingCodeController extends ControllerBase {
     catch (\Throwable $e) {
       $this->getLogger('commerce_recruiting')->error($e->getMessage());
       $this->messenger()
-        ->addError($this->t("Invalid Code. Please contact us."));
+        ->addError($this->t("Invalid Code. If you believe this to be an error please contact us."));
       return $this->redirect('<front>');
     }
-
   }
 
 }

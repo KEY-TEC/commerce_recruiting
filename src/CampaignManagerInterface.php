@@ -38,7 +38,7 @@ interface CampaignManagerInterface {
   public function findCampaignOptionFromCode(Code $code);
 
   /**
-   * Returns recruiting session from code.
+   * Saves and returns a recruiting session from code.
    *
    * @param \Drupal\commerce_recruiting\Code $code
    *   The recruiting code.
@@ -46,6 +46,6 @@ interface CampaignManagerInterface {
    * @return \Drupal\commerce_recruiting\RecruitingSessionInterface
    *   The session service.
    */
-  public function getSessionFromCode(Code $code);
+  public function saveRecruitingSession(Code $code);
 
 }

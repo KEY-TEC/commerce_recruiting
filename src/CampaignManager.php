@@ -62,7 +62,7 @@ class CampaignManager implements CampaignManagerInterface {
   /**
    * {@inheritDoc}
    */
-  public function getSessionFromCode(Code $code) {
+  public function saveRecruitingSession(Code $code) {
     $option = $this->findCampaignOptionFromCode($code);
     $campaign = $option->getCampaign();
     if ($campaign->getRecruiter() == NULL && $code->getRecruiterId() == NULL) {
