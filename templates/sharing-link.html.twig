@@ -1,25 +1,28 @@
 {#
 /**
-* @file
-* Default theme implementation to display a block.
-*
-* @see template_preprocess_block()
-*
-* @ingroup themeable
-*/
+ * @file sharing-link.html.twig
+ * Default template for rendering a copy link component.
+ *
+ * Available variables:
+ * - share_link: the sharing link
+ * - copy_text: visible text after clicking the copy button
+ * - button_label: text of the copy button
+ *
+ * @see template_preprocess_sharing_link()
+ *
+ * @ingroup themeable
+ */
 #}
+
 {{ attach_library('commerce_recruiting/sharing-link') }}
 <div class="sharing-link">
-  <h2 class="sharing-link__headline">{{ "Recommend this product and get great rewards!"|t }}</h2>
-    <div class="sharing-link__input-wrapper">
-      <input class="sharing-link__input" type="text" value="{{ children.recruiting_code }}">
-      <div class="sharing-link__copied-message">
-        {{ "Copied"|t }}
-      </div>
+  <div class="sharing-link__input-wrapper">
+    <input class="sharing-link__input" type="text" value="{{ share_link }}" />
+    <div class="sharing-link__copied-message">
+      {{ copy_text|default("Copied"|t) }}
     </div>
-    <button class="js-sharing-link-copy-button" onclick="'copyRecruitAFriendLink()'">
-      {{ "Copy Link"|t }}
-    </button>
   </div>
-  <p class="sharing-link__description">{{ "Copy your personal referral link and send it to a friend. We'll give you a great bonus for every purchase you make."|t }}</p>
+  <button class="js-sharing-link-copy-button">
+    {{ button_label|default("Copy Link"|t) }}
+  </button>
 </div>

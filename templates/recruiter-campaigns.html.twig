@@ -1,0 +1,35 @@
+{#
+/**
+ * @file recruiter-campaigns.html.twig
+ * Default theme implementation for showing a user campaigns and their share links.
+ *
+ * This template is rendered by RecruiterBlock.
+ *
+ * Available variables:
+ * - campaigns: list of active campaigns of the user, each containing
+ *       - entity: the campaign entity
+ *       - options: array of campaign options, each containing
+ *               - entity: the campaign option entity
+ *               - url: the share url to a product
+ *
+ * @see template_preprocess_recruiter_campaigns()
+ *
+ * @ingroup themeable
+ */
+#}
+
+<div class="friend-sharing-block">
+  {% for campaign in campaigns %}
+    <h2>{{ campaign.entity.getName() }}</h2>
+
+    {% for option in campaign.options %}
+      <div>
+        {{ option.entity.getProduct().getTitle() }}
+      </div>
+      {% include "@commerce_recruiting/sharing-link.html.twig" with {
+        "share_link": option.url
+      } only %}
+    {% endfor %}
+  {% endfor %}
+</div>
+

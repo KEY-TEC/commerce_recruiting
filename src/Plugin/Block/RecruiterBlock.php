@@ -95,17 +95,17 @@ class RecruiterBlock extends BlockBase implements ContainerFactoryPluginInterfac
     }
 
     foreach ($campaigns as $campaign) {
-      $build['campaigns'][$campaign->id()]['entity'] = $campaign;
+      $build['#campaigns'][$campaign->id()]['entity'] = $campaign;
 
       /* @var \Drupal\commerce_recruiting\Entity\CampaignOptionInterface $option */
       $options = $campaign->getOptions();
       foreach ($options as $option) {
         $url = Code::create($option->getCode(), $this->getContextValue('user')->id())->url()->toString();
-        $build['campaigns'][$campaign->id()]['options'][$option->id()]['url'] = $url;
-        $build['campaigns'][$campaign->id()]['options'][$option->id()]['entity'] = $option;
+        $build['#campaigns'][$campaign->id()]['options'][$option->id()]['url'] = $url;
+        $build['#campaigns'][$campaign->id()]['options'][$option->id()]['entity'] = $option;
       }
     }
-    $build['#theme'] = 'sharing_link';
+    $build['#theme'] = 'recruiter_campaigns';
     return $build;
   }
 

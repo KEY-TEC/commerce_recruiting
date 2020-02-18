@@ -17,7 +17,6 @@
 
         $('.js-sharing-link-copy-button', container).click(function() {
           copyToClipboard(input);
-          console.log('asdf')
           var $label = $('.sharing-link__copied-message', container);
           $label.addClass('visible');
           setTimeout(function() {

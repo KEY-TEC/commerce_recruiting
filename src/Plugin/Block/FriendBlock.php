@@ -112,8 +112,8 @@ class FriendBlock extends BlockBase implements ContainerFactoryPluginInterface {
       /* @var \Drupal\commerce_recruiting\Entity\CampaignOptionInterface $option */
       if ($option->getProduct()->id() == $entity->id() && $option->getProduct()->getEntityTypeId() == $entity->getEntityTypeId()) {
         $url = Code::create($option->getCode(), $this->getContextValue('user')->id())->url()->toString();
-        $build['#theme'] = 'sharing_link';
-        $build['recruiting_code']['#markup'] = $url;
+        $build['#theme'] = 'friend_share_block';
+        $build['#share_link'] = $url;
         return $build;
       }
     }
