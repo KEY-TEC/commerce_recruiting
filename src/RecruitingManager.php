@@ -199,6 +199,37 @@ class RecruitingManager implements RecruitingManagerInterface {
   /**
    * {@inheritDoc}
    */
+  public function recruitingSummaryByCampaign(CampaignInterface $campaign, $state) {
+    $recruitings = $this->findRecruitingByCampaign($campaign, $state);
+    $price = NULL;
+    $results = [];
+    foreach ($recruitings as $recruiting) {
+      $product = $recruiting->getProduct() instanceof ProductVariation ? $recruiting->getProduct()
+        ->getProduct() : $recruiting->getProduct();
+      $unique_key = $product
+        ->id() . ' ' . $product->getEntityTypeId();
+
+      if ($price == NULL) {
+        $price = new Price($recruiting->getBonus()
+          ->getNumber(), $recruiting->getBonus()->getCurrencyCode());
+      }
+      else {
+        $price = $price->add($recruiting->getBonus());
+      }
+      if (!isset($results[$unique_key])) {
+        $results[$unique_key] = new RecruitingResult($product->label(), $recruiting->getBonus());
+      }
+      else {
+        $results[$unique_key]->addPrice($recruiting);
+      }
+
+    }
+    return new RecruitingSummary($price, $results);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public function findRecruitingByCampaign(CampaignInterface $campaign, $state) {
     $option_ids = [];
     foreach ($campaign->getOptions() as $option) {
@@ -210,7 +241,8 @@ class RecruitingManager implements RecruitingManagerInterface {
     $query->condition('campaign_option.entity.id', $option_ids, 'in');
     $ids = $query->execute();
     if (count($ids) !== 0) {
-      return $this->entityTypeManager->getStorage('commerce_recruiting')->loadMultiple($ids);
+      return $this->entityTypeManager->getStorage('commerce_recruiting')
+        ->loadMultiple($ids);
     }
     else {
       return [];

@@ -64,6 +64,19 @@ interface RecruitingManagerInterface {
   public function findRecruitingByCampaign(CampaignInterface $campaign, $state);
 
   /**
+   * Finds recruiting by given campaign and state.
+   *
+   * @param \Drupal\commerce_recruiting\Entity\CampaignInterface $campaign
+   *   The campaign.
+   * @param string $state
+   *   The stat of the recruiting.
+   *
+   * @return \Drupal\commerce_recruiting\RecruitingSummary
+   *   The recruiting summary.
+   */
+  public function recruitingSummaryByCampaign(CampaignInterface $campaign, $state);
+
+  /**
    * Checks the order for recommend products in RecruitingSession.
    *
    * @param \Drupal\commerce_order\Entity\OrderInterface $order

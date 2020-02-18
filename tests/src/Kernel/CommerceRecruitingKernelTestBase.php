@@ -5,6 +5,7 @@ namespace Drupal\Tests\commerce_recruiting\Kernel;
 use Drupal\commerce_order\Entity\Order;
 use Drupal\commerce_order\Entity\OrderItem;
 use Drupal\commerce_order\Entity\OrderItemType;
+use Drupal\commerce_order\Entity\OrderType;
 use Drupal\commerce_price\Price;
 use Drupal\commerce_product\Entity\Product;
 use Drupal\commerce_product\Entity\ProductVariation;
@@ -197,8 +198,8 @@ class CommerceRecruitingKernelTestBase extends CommerceKernelTestBase {
   /**
    * Create test recruitings.
    */
-  protected function createRecrutings(CampaignInterface $campaign, User $recruiter, User $recruited, $products) {
-    $order = $this->createOrder($products);
+  protected function createRecrutings(CampaignInterface $campaign, User $recruiter, User $recruited, $products, $order_state = 'completed') {
+    $order = $this->createOrder($products, $order_state);
     foreach ($order->getItems() as $item) {
       $this->assertNotEqual($item->getOrder(), NULL);
       $this->assertTrue($item->getPurchasedEntity() instanceof ProductVariation);
@@ -239,6 +240,14 @@ class CommerceRecruitingKernelTestBase extends CommerceKernelTestBase {
     $this->campaignManager = $this->container->get('commerce_recruiting.campaign_manager');
     $this->invoiceManager = \Drupal::service('commerce_recruiting.invoice_manager');
     $this->installCommerceCart();
+
+    $order_type = OrderType::create([
+      'id' => 'default',
+      'label' => 'Test',
+      'orderType' => 'default',
+      'workflow' => 'order_default',
+    ])->save();
+
     // An order item type that doesn't need a purchasable entity.
     $order_item_type = OrderItemType::create([
       'id' => 'test',

@@ -47,12 +47,40 @@ class RecruitingManagerTest extends CommerceRecruitingKernelTestBase {
     $products[] = $this->createProduct();
     $products[] = $this->createProduct();
 
-    $recrutings = $this->createRecrutings($campaign, $recruiter, $recruited, $products);
+    $recrutings = $this->createRecrutings($campaign, $recruiter, $recruited, $products, 'draft');
 
     $this->assertEqual(count($recrutings), 2);
     $this->recruitingManager->applyTransitions("accept");
     $items = $this->entityTypeManager->getStorage('commerce_recruiting')->loadByProperties(['state' => 'accepted']);
     $this->assertEqual(count($items), 0);
+  }
+
+  /**
+   * Test recruitingSummaryByCampaign.
+   */
+  public function testRecruitingSummaryByCampaign() {
+    $recruiter = $this->createUser();
+    $product1 = $this->createProduct();
+    $product2 = $this->createProduct();
+    $product3 = $this->createProduct();
+    $campaign = $this->createCampaign($recruiter, $product1);
+    $recruited = $this->createUser();
+    $campaign2 = $this->createCampaign($recruiter);
+    $productc21 = $this->createProduct();
+    $productc22 = $this->createProduct();
+    $productc23 = $this->createProduct();
+
+    $this->createRecrutings($campaign, $recruiter, $recruited,
+      [$product1, $product2, $product3]
+    );
+    $recrutings2 = $this->createRecrutings($campaign2, $recruiter, $recruited,
+      [$productc21, $productc22, $productc23]
+    );
+    $this->assertEqual(count($recrutings2), 3);
+    $this->recruitingManager->applyTransitions("accept");
+    $summary = $this->recruitingManager->recruitingSummaryByCampaign($campaign, 'accepted');
+    $this->assertEqual(count($summary->getResults()), 3);
+    $this->assertEqual($summary->getTotalPrice()->getNumber(), 30);
   }
 
   /**
