@@ -113,8 +113,9 @@ class RecruitingSummaryBlock extends BlockBase implements ContainerFactoryPlugin
 
     $summaries = [];
     foreach ($campaigns as $campaign) {
-      $summary = $this->recruitingManager->recruitingSummaryByCampaign($campaign);
-      $summaries[] = ['#theme' => 'recruiting_summary', 'summary' => $summary];
+      $summary = $this->recruitingManager->recruitingSummaryByCampaign($campaign, 'accepted');
+
+      $summaries[] = ['#theme' => 'recruiting_summary', '#summary' => $summary];
     }
     return $summaries;
   }
@@ -128,11 +129,11 @@ class RecruitingSummaryBlock extends BlockBase implements ContainerFactoryPlugin
    * @throws \Drupal\Component\Plugin\Exception\PluginException
    */
   private function findCampaigns() {
-    if (empty($this->campaign)) {
+    if (empty($this->campaigns)) {
       $user = $this->getContextValue('user');
       $this->campaigns = $this->campaignManager->findRecruiterCampaigns($user);
     }
-    return $this->campaign;
+    return $this->campaigns;
   }
 
   /**

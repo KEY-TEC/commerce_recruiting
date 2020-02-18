@@ -31,7 +31,7 @@ class RecruitingListBuilder extends EntityListBuilder {
     $row['name'] = Link::createFromRoute(
       $entity->label(),
       'entity.commerce_recruiting.edit_form',
-      ['recruiting' => $entity->id()]
+      ['commerce_recruiting' => $entity->id()]
     );
     return $row + parent::buildRow($entity);
   }

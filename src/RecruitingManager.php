@@ -224,6 +224,9 @@ class RecruitingManager implements RecruitingManagerInterface {
       }
 
     }
+    if ($price == NULL) {
+      $price = new Price(0, "EUR");
+    }
     return new RecruitingSummary($price, $results);
   }
 
