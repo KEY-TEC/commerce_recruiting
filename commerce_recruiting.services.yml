@@ -7,7 +7,7 @@ services:
     arguments: ['@current_user', '@language_manager', '@entity_type.manager','@commerce_recruiting.recruiting_session']
   commerce_recruiting.campaign_manager:
     class: Drupal\commerce_recruiting\CampaignManager
-    arguments: ['@current_user', '@language_manager', '@entity_type.manager','@commerce_recruiting.recruiting_session']
+    arguments: ['@language_manager', '@entity_type.manager','@commerce_recruiting.recruiting_session']
 
   commerce_recruiting.recruiting_checkout_subscriber:
     class: Drupal\commerce_recruiting\EventSubscriber\RecruitingCheckoutSubscriber

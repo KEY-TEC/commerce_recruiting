@@ -5,12 +5,21 @@ namespace Drupal\commerce_recruiting\Controller;
 use Drupal\commerce_recruiting\CampaignManagerInterface;
 use Drupal\commerce_recruiting\Code;
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Messenger\MessengerInterface;
+use Drupal\Core\Session\AccountInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class RecruitingCodeController.
  */
 class RecruitingCodeController extends ControllerBase {
+
+  /**
+   * The current account.
+   *
+   * @var \Drupal\Core\Session\AccountInterface
+   */
+  protected $currentAccount;
 
   /**
    * The campaign service.
@@ -20,13 +29,26 @@ class RecruitingCodeController extends ControllerBase {
   protected $campaignManager;
 
   /**
+   * The messenger.
+   *
+   * @var \Drupal\Core\Messenger\MessengerInterface
+   */
+  protected $messenger;
+
+  /**
    * Constructs a new RecruitingCodeController object.
    *
+   * @param \Drupal\Core\Session\AccountInterface $current_account
+   *   The current account.
    * @param \Drupal\commerce_recruiting\CampaignManagerInterface $campaign_manager
-   *   The recruiting service.   *.
+   *   The recruiting service.
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
+   *   The messenger.
    */
-  public function __construct(CampaignManagerInterface $campaign_manager) {
+  public function __construct(AccountInterface $current_account, CampaignManagerInterface $campaign_manager, MessengerInterface $messenger) {
     $this->campaignManager = $campaign_manager;
+    $this->messenger = $messenger;
+    $this->currentAccount = $current_account;
   }
 
   /**
@@ -34,7 +56,9 @@ class RecruitingCodeController extends ControllerBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('commerce_recruiting.campaign_manager')
+      $container->get('current_user'),
+      $container->get('commerce_recruiting.campaign_manager'),
+      $container->get('messenger')
     );
   }
 
@@ -46,10 +70,18 @@ class RecruitingCodeController extends ControllerBase {
    */
   public function code($campaign_code) {
     $code = Code::createFromCode($campaign_code);
+
     try {
-      $recruiting_session = $this->campaignManager->saveRecruitingSession($code);
-      $config = $recruiting_session->getCampaignOption();
-      $product = $config->getProduct();
+      $recruiter = $this->campaignManager->getRecruiterFromCode($code);
+      if ($recruiter->id() == $this->currentAccount->id()) {
+        \Drupal::messenger()->addMessage(t('You can not use your own recommendation url.'));
+      }
+      else {
+        $recruiting_session = $this->campaignManager->saveRecruitingSession($code);
+      }
+
+      $option = $this->campaignManager->findCampaignOptionFromCode($code);
+      $product = $option->getProduct();
       $route_name = 'entity.' . $product->getEntityTypeId() . '.canonical';
       return $this->redirect($route_name, [$product->getEntityTypeId() => $product->id()]);
     }

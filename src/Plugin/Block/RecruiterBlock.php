@@ -2,7 +2,8 @@
 
 namespace Drupal\commerce_recruiting\Plugin\Block;
 
-use Drupal\commerce_recruiting\RecruitingManagerInterface;
+use Drupal\commerce_recruiting\CampaignManagerInterface;
+use Drupal\commerce_recruiting\Code;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Language\LanguageManagerInterface;
@@ -31,11 +32,18 @@ class RecruiterBlock extends BlockBase implements ContainerFactoryPluginInterfac
   protected $languageManager;
 
   /**
-   * The recruiting manager.
+   * The campaign manager.
    *
-   * @var \Drupal\commerce_recruiting\RecruitingManagerInterface
+   * @var \Drupal\commerce_recruiting\CampaignManagerInterface
    */
-  protected $recruitingManager;
+  protected $campaignManager;
+
+  /**
+   * Recruiter campaigns.
+   *
+   * @var \Drupal\commerce_recruiting\Entity\CampaignInterface[]|null
+   */
+  private $campaigns = [];
 
   /**
    * Constructs a new CartBlock.
@@ -48,13 +56,13 @@ class RecruiterBlock extends BlockBase implements ContainerFactoryPluginInterfac
    *   The plugin implementation definition.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The language manager.
-   * @param \Drupal\commerce_recruiting\RecruitingManagerInterface $recruiting_manager
+   * @param \Drupal\commerce_recruiting\CampaignManagerInterface $campaign_manager
    *   The recruiting manager.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, LanguageManagerInterface $language_manager, RecruitingManagerInterface $recruiting_manager) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, LanguageManagerInterface $language_manager, CampaignManagerInterface $campaign_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->languageManager = $language_manager;
-    $this->recruitingManager = $recruiting_manager;
+    $this->campaignManager = $campaign_manager;
   }
 
   /**
@@ -66,7 +74,7 @@ class RecruiterBlock extends BlockBase implements ContainerFactoryPluginInterfac
       $plugin_id,
       $plugin_definition,
       $container->get('language_manager'),
-      $container->get('commerce_recruiting.manager')
+      $container->get('commerce_recruiting.campaign_manager')
     );
   }
 
@@ -79,11 +87,43 @@ class RecruiterBlock extends BlockBase implements ContainerFactoryPluginInterfac
    * @throws \Drupal\Component\Plugin\Exception\PluginException
    */
   public function build() {
-    $build = [];
-    $build['#theme'] = 'sharing_link';
-    // @todo get product from current page
-    $build['recruiting']['#markup'] = $this->recruitingManager->findRecruitingCampaignOption();
+    $campaigns = $this->findCampaigns();
+
+    if (empty($campaigns)) {
+      return [];
+    }
+
+    foreach ($campaigns as $campaign) {
+      $build['#campaigns'][$campaign->id()]['entity'] = $campaign;
+
+      /* @var \Drupal\commerce_recruiting\Entity\CampaignOptionInterface $option */
+      $options = $campaign->getOptions();
+      foreach ($options as $option) {
+        $url = Code::create($option->getCode(), $this->getContextValue('user')->id())->url()->toString();
+        $build['#campaigns'][$campaign->id()]['options'][$option->id()]['url'] = $url;
+        $build['#campaigns'][$campaign->id()]['options'][$option->id()]['entity'] = $option;
+      }
+    }
+    $build['#theme'] = 'recruiter_campaigns';
     return $build;
+  }
+
+  /**
+   * Helper method to find current user's campaigns.
+   *
+   * @return \Drupal\commerce_recruiting\Entity\CampaignInterface[]|null
+   *   List of campaigns or null.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\PluginException
+   */
+  private function findCampaigns() {
+    if (empty($this->campaigns)) {
+      $user = $this->getContextValue('user');
+      if (!empty($user)) {
+        $this->campaigns = $this->campaignManager->findRecruiterCampaigns($user);
+      }
+    }
+    return $this->campaigns;
   }
 
   /**

@@ -10,10 +10,21 @@
  */
 function commerce_recruiting_theme($existing, $type, $theme, $path) {
   $theme = [];
-  $theme['sharing_link'] = [
-    'render element' => 'children',
+  $theme['friend_share_block'] = [
     'path' => $path . '/templates',
-    'template'  => 'sharing-link',
+    'template'  => 'friend-share-block',
+    'variables' => [
+      'share_link' => NULL,
+      'block_headline' => NULL,
+      'block_description' => NULL,
+    ],
+  ];
+  $theme['recruiter_campaigns'] = [
+    'path' => $path . '/templates',
+    'template'  => 'recruiter-campaigns',
+    'variables' => [
+      'campaigns' => [],
+    ],
   ];
   $theme['recruiting'] = [
     'render element' => 'elements',
