@@ -13,13 +13,6 @@ use Drupal\Core\Session\AccountInterface;
 class CampaignManager implements CampaignManagerInterface {
 
   /**
-   * The current account.
-   *
-   * @var \Drupal\Core\Session\AccountInterface
-   */
-  protected $currentAccount;
-
-  /**
    * The language manager.
    *
    * @var \Drupal\Core\Language\LanguageManagerInterface
@@ -43,8 +36,6 @@ class CampaignManager implements CampaignManagerInterface {
   /**
    * RecruitingManager constructor.
    *
-   * @param \Drupal\Core\Session\AccountInterface $current_account
-   *   The current account.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The language manager.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -52,8 +43,7 @@ class CampaignManager implements CampaignManagerInterface {
    * @param \Drupal\commerce_recruiting\RecruitingSessionInterface $recruiting_session
    *   The recruiting session.
    */
-  public function __construct(AccountInterface $current_account, LanguageManagerInterface $language_manager, EntityTypeManagerInterface $entity_type_manager, RecruitingSessionInterface $recruiting_session) {
-    $this->currentAccount = $current_account;
+  public function __construct(LanguageManagerInterface $language_manager, EntityTypeManagerInterface $entity_type_manager, RecruitingSessionInterface $recruiting_session) {
     $this->languageManager = $language_manager;
     $this->entityTypeManager = $entity_type_manager;
     $this->recruitingSession = $recruiting_session;
@@ -62,20 +52,33 @@ class CampaignManager implements CampaignManagerInterface {
   /**
    * {@inheritDoc}
    */
-  public function saveRecruitingSession(Code $code) {
+  public function getRecruiterFromCode(Code $code) {
     $option = $this->findCampaignOptionFromCode($code);
     $campaign = $option->getCampaign();
-    if ($campaign->getRecruiter() == NULL && $code->getRecruiterId() == NULL) {
-      throw new \InvalidArgumentException("No valid code");
-    }
-    if ($campaign->getRecruiter() == NULL && $code->getRecruiterId() != NULL) {
+    if ($code->getRecruiterId() != NULL) {
       $recruiter = $this->entityTypeManager->getStorage('user')->load($code->getRecruiterId());
     }
-    else {
+    else if ($campaign->getRecruiter() != NULL) {
       $recruiter = $campaign->getRecruiter();
     }
+
+    return $recruiter;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public function saveRecruitingSession(Code $code) {
+    $option = $this->findCampaignOptionFromCode($code);
+    $recruiter = $this->getRecruiterFromCode($code);
+
+    if (empty($recruiter)) {
+      throw new \InvalidArgumentException("No valid code");
+    }
+
     $this->recruitingSession->setRecruiter($recruiter);
     $this->recruitingSession->setRecruitingCampaignOption($option);
+
     return $this->recruitingSession;
   }
 

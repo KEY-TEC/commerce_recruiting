@@ -4,7 +4,7 @@ description: Recruitment marketing for commerce.
 core: 8.x
 package: Commerce
 dependencies:
-  - commerce_product
-  - commerce_promotion
-  - dynamic_entity_reference
-  - state_machine
+  - commerce:commerce_product
+  - commerce:commerce_promotion
+  - dynamic_entity_reference:dynamic_entity_reference
+  - state_machine:state_machine

@@ -46,6 +46,20 @@ interface CampaignManagerInterface {
   public function findCampaignOptionFromCode(Code $code);
 
   /**
+   * Returns the recruiter that is associated with the given code.
+   *
+   * @param \Drupal\commerce_recruiting\Code $code
+   *   The code.
+   *
+   * @return \Drupal\Core\Entity\EntityInterface|\Drupal\user\UserInterface|null
+   *   The recruiter or null.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   */
+  public function getRecruiterFromCode(Code $code);
+
+  /**
    * Saves and returns a recruiting session from code.
    *
    * @param \Drupal\commerce_recruiting\Code $code
