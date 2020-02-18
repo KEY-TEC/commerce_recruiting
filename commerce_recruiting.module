@@ -26,6 +26,13 @@ function commerce_recruiting_theme($existing, $type, $theme, $path) {
       'campaigns' => [],
     ],
   ];
+  $theme['recruiting_summary'] = [
+    'path' => $path . '/templates',
+    'template'  => 'recruiting-summary',
+    'variables' => [
+      'summary' => NULL,
+    ],
+  ];
   $theme['recruiting'] = [
     'render element' => 'elements',
     'file' => 'commerce_recruiting.page.inc',

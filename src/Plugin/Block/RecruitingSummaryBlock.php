@@ -3,19 +3,20 @@
 namespace Drupal\commerce_recruiting\Plugin\Block;
 
 use Drupal\commerce_recruiting\CampaignManagerInterface;
-use Drupal\commerce_recruiting\Code;
+use Drupal\commerce_recruiting\RecruitingManagerInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Provides a 'RecruitingSummaryBlock' block.
+ * Provides a 'Recruiting Summary' block.
  *
  * @Block(
- *  id = "commerce_recruiting_recruiting_summary",
+ *  id = "commerce_recruiting_summary",
  *  admin_label = @Translation("Recruiting Summary block"),
  *  context = {
  *    "user" = @ContextDefinition("entity:user", required = FALSE)
@@ -32,18 +33,33 @@ class RecruitingSummaryBlock extends BlockBase implements ContainerFactoryPlugin
   protected $languageManager;
 
   /**
+   * The route.
+   *
+   * @var \Drupal\Core\Routing\RouteMatchInterface
+   */
+  protected $route;
+
+  /**
    * The campaign manager.
    *
    * @var \Drupal\commerce_recruiting\CampaignManagerInterface
    */
   protected $campaignManager;
 
+
   /**
-   * Recruiter campaigns.
+   * Loaded campaign.
    *
-   * @var \Drupal\commerce_recruiting\Entity\CampaignInterface[]|null
+   * @var \Drupal\commerce_recruiting\Entity\CampaignInterface[]
    */
-  private $campaigns = [];
+  private $campaigns;
+
+  /**
+   * The recruiting manager.
+   *
+   * @var \Drupal\commerce_recruiting\RecruitingManagerInterface
+   */
+  private $recruitingManager;
 
   /**
    * Constructs a new CartBlock.
@@ -56,13 +72,19 @@ class RecruitingSummaryBlock extends BlockBase implements ContainerFactoryPlugin
    *   The plugin implementation definition.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The language manager.
+   * @param \Drupal\Core\Routing\RouteMatchInterface $route
+   *   The current route.
    * @param \Drupal\commerce_recruiting\CampaignManagerInterface $campaign_manager
+   *   The campaign manager.
+   * @param \Drupal\commerce_recruiting\RecruitingManagerInterface $recruiting_manager
    *   The recruiting manager.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, LanguageManagerInterface $language_manager, CampaignManagerInterface $campaign_manager) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, LanguageManagerInterface $language_manager, RouteMatchInterface $route, CampaignManagerInterface $campaign_manager, RecruitingManagerInterface $recruiting_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->languageManager = $language_manager;
     $this->campaignManager = $campaign_manager;
+    $this->route = $route;
+    $this->recruitingManager = $recruiting_manager;
   }
 
   /**
@@ -74,56 +96,43 @@ class RecruitingSummaryBlock extends BlockBase implements ContainerFactoryPlugin
       $plugin_id,
       $plugin_definition,
       $container->get('language_manager'),
-      $container->get('commerce_recruiting.campaign_manager')
+      $container->get('current_route_match'),
+      $container->get('commerce_recruiting.campaign_manager'),
+      $container->get('commerce_recruiting.manager')
     );
   }
 
   /**
-   * Returns the block build array with a encrypted recruiting code.
+   * Returns the block build array with a recruiting url to share.
    *
    * @return array
    *   The build array.
-   *
-   * @throws \Drupal\Component\Plugin\Exception\PluginException
    */
   public function build() {
     $campaigns = $this->findCampaigns();
 
-    if (empty($campaigns)) {
-      return [];
-    }
-
+    $summaries = [];
     foreach ($campaigns as $campaign) {
-      $build['#campaigns'][$campaign->id()]['entity'] = $campaign;
-
-      /* @var \Drupal\commerce_recruiting\Entity\CampaignOptionInterface $option */
-      $options = $campaign->getOptions();
-      foreach ($options as $option) {
-        $url = Code::create($option->getCode(), $this->getContextValue('user')->id())->url()->toString();
-        $build['#campaigns'][$campaign->id()]['options'][$option->id()]['url'] = $url;
-        $build['#campaigns'][$campaign->id()]['options'][$option->id()]['entity'] = $option;
-      }
+      $summary = $this->recruitingManager->recruitingSummaryByCampaign($campaign);
+      $summaries[] = ['#theme' => 'recruiting_summary', 'summary' => $summary];
     }
-    $build['#theme'] = 'recruiter_campaigns';
-    return $build;
+    return $summaries;
   }
 
   /**
-   * Helper method to find current user's campaigns.
+   * Helper method to find the current matching campaign.
    *
-   * @return \Drupal\commerce_recruiting\Entity\CampaignInterface[]|null
-   *   List of campaigns or null.
+   * @return \Drupal\commerce_recruiting\Entity\CampaignInterface|mixed|null
+   *   The campaign or null.
    *
    * @throws \Drupal\Component\Plugin\Exception\PluginException
    */
   private function findCampaigns() {
-    if (empty($this->campaigns)) {
+    if (empty($this->campaign)) {
       $user = $this->getContextValue('user');
-      if (!empty($user)) {
-        $this->campaigns = $this->campaignManager->findRecruiterCampaigns($user);
-      }
+      $this->campaigns = $this->campaignManager->findRecruiterCampaigns($user);
     }
-    return $this->campaigns;
+    return $this->campaign;
   }
 
   /**
@@ -143,6 +152,11 @@ class RecruitingSummaryBlock extends BlockBase implements ContainerFactoryPlugin
     if ($user->isAnonymous()) {
       return AccessResult::forbidden();
     }
+
+    if (count($this->findCampaigns()) == 0) {
+      return AccessResult::forbidden();
+    }
+
     return parent::blockAccess($account);
   }
 
