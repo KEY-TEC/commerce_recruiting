@@ -15,3 +15,24 @@ entity.commerce_recruiting.delete_form:
   base_route:  entity.commerce_recruiting.canonical
   title: Delete
   weight: 10
+# Invoice routing definition
+commerce_recruiting_invoice.settings_tab:
+  route_name: commerce_recruiting_invoice.settings
+  title: 'Settings'
+  base_route: commerce_recruiting_invoice.settings
+
+entity.commerce_recruiting_invoice.canonical:
+  route_name: entity.commerce_recruiting_invoice.canonical
+  base_route: entity.commerce_recruiting_invoice.canonical
+  title: 'View'
+
+entity.commerce_recruiting_invoice.edit_form:
+  route_name: entity.commerce_recruiting_invoice.edit_form
+  base_route: entity.commerce_recruiting_invoice.canonical
+  title: 'Edit'
+
+entity.commerce_recruiting_invoice.delete_form:
+  route_name:  entity.commerce_recruiting_invoice.delete_form
+  base_route:  entity.commerce_recruiting_invoice.canonical
+  title: Delete
+  weight: 10

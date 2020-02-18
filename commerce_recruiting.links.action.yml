@@ -9,3 +9,8 @@ entity.commerce_recruiting_campaign.add_form:
   title: 'Add Campaign'
   appears_on:
     - entity.commerce_recruiting_campaign.collection
+entity.commerce_recruiting_invoice.add_form:
+  route_name: entity.commerce_recruiting_invoice.add_form
+  title: 'Add Invoice'
+  appears_on:
+    - entity.commerce_recruiting_invoice.collection

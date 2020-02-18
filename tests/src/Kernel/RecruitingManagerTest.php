@@ -2,8 +2,6 @@
 
 namespace Drupal\Tests\commerce_recruiting\Kernel;
 
-use Drupal\commerce_price\Price;
-use Drupal\commerce_product\Entity\ProductVariation;
 use Drupal\commerce_recruiting\RecruitingSession;
 use Drupal\Tests\commerce_recruiting\Traits\RecruitingEntityCreationTrait;
 
@@ -49,25 +47,38 @@ class RecruitingManagerTest extends CommerceRecruitingKernelTestBase {
     $products[] = $this->createProduct();
     $products[] = $this->createProduct();
 
-    $order = $this->createOrder($products);
+    $recrutings = $this->createRecrutings($campaign, $recruiter, $recruited, $products);
 
-    $recrutings = [];
-    foreach ($order->getItems() as $item) {
-      $this->assertNotEqual($item->getOrder(), NULL);
-      $this->assertTrue($item->getPurchasedEntity() instanceof ProductVariation);
-      $recruting = $this->recruitingManager->createRecruiting($item, $recruiter, $recruited, $campaign->getFirstOption(), new Price("10", "USD"));
-      $recruting->save();
-      $this->assertNotEqual($recruting->getOrder(), NULL);
-      $this->assertNotEqual($recruting->getProduct(), NULL);
-      $this->assertNotNull($recruting->getProduct());
-      $this->assertTrue($recruting->product->entity instanceof ProductVariation, get_class($recruting->product->entity));
-      $recrutings[] = $recruting;
-
-    }
     $this->assertEqual(count($recrutings), 2);
     $this->recruitingManager->applyTransitions("accept");
     $items = $this->entityTypeManager->getStorage('commerce_recruiting')->loadByProperties(['state' => 'accepted']);
     $this->assertEqual(count($items), 0);
+  }
+
+  /**
+   * Test findRecruitingByCampaign.
+   */
+  public function testFindRecruitingByCampaign() {
+    $recruiter = $this->createUser();
+    $product1 = $this->createProduct();
+    $product2 = $this->createProduct();
+    $product3 = $this->createProduct();
+    $campaign = $this->createCampaign($recruiter, $product1);
+    $recruited = $this->createUser();
+    $campaign2 = $this->createCampaign($recruiter);
+    $productc21 = $this->createProduct();
+    $productc22 = $this->createProduct();
+    $productc23 = $this->createProduct();
+
+    $recrutings = $this->createRecrutings($campaign, $recruiter, $recruited,
+      [$product1, $product2, $product3]
+    );
+    $recrutings2 = $this->createRecrutings($campaign2, $recruiter, $recruited,
+      [$productc21, $productc22, $productc23]
+    );
+    $this->assertEqual(count($recrutings), 3);
+    $found_recrutings = $this->recruitingManager->findRecruitingByCampaign($campaign, 'created');
+    $this->assertEqual(count($found_recrutings), 3);
   }
 
 }

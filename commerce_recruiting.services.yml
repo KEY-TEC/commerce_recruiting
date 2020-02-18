@@ -23,3 +23,11 @@ services:
     arguments: ['@current_user', '@plugin.manager.workflow']
     tags:
       - { name: state_machine.guard, group: recruiting }
+
+  logger.channel.commerce_recruiting:
+    parent: logger.channel_base
+    arguments: ['commerce_recruiting']
+
+  commerce_recruiting.invoice_manager:
+    class: Drupal\commerce_recruiting\InvoiceManager
+    arguments: ['@entity_type.manager','@commerce_recruiting.manager']

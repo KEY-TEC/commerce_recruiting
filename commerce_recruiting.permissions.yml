@@ -57,3 +57,23 @@ view published recruiting option entities:
 view unpublished recruiting option entities:
   title: 'View unpublished Recruiting option entities'
 
+add invoice entities:
+  title: 'Create new Invoice entities'
+
+administer invoice entities:
+  title: 'Administer Invoice entities'
+  description: 'Allow to access the administration form to configure Invoice entities.'
+  restrict access: true
+
+delete invoice entities:
+  title: 'Delete Invoice entities'
+
+edit invoice entities:
+  title: 'Edit Invoice entities'
+
+view published invoice entities:
+  title: 'View published Invoice entities'
+
+view unpublished invoice entities:
+  title: 'View unpublished Invoice entities'
+

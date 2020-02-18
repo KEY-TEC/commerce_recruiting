@@ -20,3 +20,17 @@ entity.commerce_recruiting_campaign.collection:
   description: 'List of recruiting campaigns'
   parent: 'commerce_recruiting.collections'
   weight: 99
+
+# Invoice menu items definition
+entity.commerce_recruiting_invoice.collection:
+  title: 'Invoice list'
+  route_name: entity.commerce_recruiting_invoice.collection
+  description: 'List Invoice entities'
+  parent: system.admin_structure
+  weight: 100
+
+commerce_recruiting_invoice.admin.structure.settings:
+  title: 'Invoice settings'
+  description: 'Configure Invoice entities'
+  route_name: commerce_recruiting_invoice.settings
+  parent: system.admin_structure

@@ -10,6 +10,7 @@ use Drupal\commerce_product\Entity\Product;
 use Drupal\commerce_product\Entity\ProductVariation;
 use Drupal\commerce_product\Entity\ProductVariationType;
 use Drupal\commerce_recruiting\Entity\Campaign;
+use Drupal\commerce_recruiting\Entity\CampaignInterface;
 use Drupal\commerce_recruiting\Entity\CampaignOptionInterface;
 use Drupal\commerce_recruiting\Entity\Recruiting;
 use Drupal\commerce_recruiting\Entity\CampaignOption;
@@ -42,6 +43,13 @@ class CommerceRecruitingKernelTestBase extends CommerceKernelTestBase {
     'profile',
     'state_machine',
   ];
+
+  /**
+   * The Invoice manager.
+   *
+   * @var \Drupal\commerce_recruiting\InvoiceManagerInterface
+   */
+  protected $invoiceManager;
 
   /**
    * The Campaign manager.
@@ -187,6 +195,25 @@ class CommerceRecruitingKernelTestBase extends CommerceKernelTestBase {
   }
 
   /**
+   * Create test recruitings.
+   */
+  protected function createRecrutings(CampaignInterface $campaign, User $recruiter, User $recruited, $products) {
+    $order = $this->createOrder($products);
+    foreach ($order->getItems() as $item) {
+      $this->assertNotEqual($item->getOrder(), NULL);
+      $this->assertTrue($item->getPurchasedEntity() instanceof ProductVariation);
+      $recruting = $this->recruitingManager->createRecruiting($item, $recruiter, $recruited, $campaign->getFirstOption(), new Price("10", "USD"));
+      $recruting->save();
+      $this->assertNotEqual($recruting->getOrder(), NULL);
+      $this->assertNotEqual($recruting->getProduct(), NULL);
+      $this->assertNotNull($recruting->getProduct());
+      $this->assertTrue($recruting->product->entity instanceof ProductVariation, get_class($recruting->product->entity));
+      $recrutings[] = $recruting;
+    }
+    return $recrutings;
+  }
+
+  /**
    * {@inheritdoc}
    */
   protected function setUp() {
@@ -202,6 +229,7 @@ class CommerceRecruitingKernelTestBase extends CommerceKernelTestBase {
     $this->installEntitySchema('commerce_recruiting_campaign');
     $this->installEntitySchema('commerce_recruiting_camp_option');
     $this->installEntitySchema('commerce_recruiting');
+    $this->installEntitySchema('commerce_recruiting_invoice');
 
     $user = $this->createUser();
     $this->user = $this->reloadEntity($user);
@@ -209,6 +237,7 @@ class CommerceRecruitingKernelTestBase extends CommerceKernelTestBase {
 
     $this->recruitingManager = $this->container->get('commerce_recruiting.manager');
     $this->campaignManager = $this->container->get('commerce_recruiting.campaign_manager');
+    $this->invoiceManager = \Drupal::service('commerce_recruiting.invoice_manager');
     $this->installCommerceCart();
     // An order item type that doesn't need a purchasable entity.
     $order_item_type = OrderItemType::create([

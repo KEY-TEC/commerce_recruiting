@@ -6,6 +6,7 @@ use Drupal\commerce_order\Entity\OrderInterface;
 use Drupal\commerce_order\Entity\OrderItemInterface;
 use Drupal\commerce_price\Price;
 use Drupal\commerce_product\Entity\ProductVariation;
+use Drupal\commerce_recruiting\Entity\CampaignInterface;
 use Drupal\commerce_recruiting\Entity\Recruiting;
 use Drupal\commerce_recruiting\Entity\CampaignOption;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -193,6 +194,27 @@ class RecruitingManager implements RecruitingManagerInterface {
       ],
       'bonus' => $bonus,
     ]);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public function findRecruitingByCampaign(CampaignInterface $campaign, $state) {
+    $option_ids = [];
+    foreach ($campaign->getOptions() as $option) {
+      $option_ids[] = $option->id();
+    }
+    $query = $this->entityTypeManager->getStorage('commerce_recruiting')
+      ->getQuery();
+    $query->condition('state', $state);
+    $query->condition('campaign_option.entity.id', $option_ids, 'in');
+    $ids = $query->execute();
+    if (count($ids) !== 0) {
+      return $this->entityTypeManager->getStorage('commerce_recruiting')->loadMultiple($ids);
+    }
+    else {
+      return [];
+    }
   }
 
 }

@@ -141,7 +141,9 @@ class Recruiting extends ContentEntityBase implements RecruitingInterface {
    * {@inheritdoc}
    */
   public function getBonus() {
-    return $this->get('bonus')->value;
+    if (!$this->get('bonus')->isEmpty()) {
+      return $this->get('bonus')->first()->toPrice();
+    }
   }
 
   /**

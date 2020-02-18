@@ -5,6 +5,7 @@ namespace Drupal\commerce_recruiting;
 use Drupal\commerce_order\Entity\OrderInterface;
 use Drupal\commerce_order\Entity\OrderItemInterface;
 use Drupal\commerce_price\Price;
+use Drupal\commerce_recruiting\Entity\CampaignInterface;
 use Drupal\commerce_recruiting\Entity\CampaignOption;
 use Drupal\user\Entity\User;
 
@@ -48,6 +49,19 @@ interface RecruitingManagerInterface {
    *   The recruiting entity
    */
   public function createRecruiting(OrderItemInterface $order_item, User $recruiter, User $recruited, CampaignOption $option, Price $bonus);
+
+  /**
+   * Finds recruiting by given campaign and state.
+   *
+   * @param \Drupal\commerce_recruiting\Entity\CampaignInterface $campaign
+   *   The campaign.
+   * @param string $state
+   *   The stat of the recruiting.
+   *
+   * @return \Drupal\commerce_recruiting\Entity\RecruitingInterface[]
+   *   The recruitings.
+   */
+  public function findRecruitingByCampaign(CampaignInterface $campaign, $state);
 
   /**
    * Checks the order for recommend products in RecruitingSession.

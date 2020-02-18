@@ -109,6 +109,9 @@ class CampaignManager implements CampaignManagerInterface {
         ->notExists('product.target_id');
     }
     $options = $options_query->execute();
+    if (count($options) == 0) {
+      return [];
+    }
     $query
       ->condition('options', $options, 'IN');
 

@@ -51,7 +51,7 @@ class RecrutingGuard implements GuardInterface {
     /** @var \Drupal\commerce_recruiting\Entity\Recruiting $recruiting */
     $recruiting = $entity;
     if ($transition->getToState()->getId() == 'accepted') {
-      if ($recruiting->getOrder() != NULL && $recruiting->getOrder()->getState() != 'completed'
+      if ($recruiting->getOrder() != NULL && $recruiting->getOrder()->getState()->getId() != 'completed'
         && $recruiting->getProduct() instanceof ProductVariation
       ) {
         return FALSE;

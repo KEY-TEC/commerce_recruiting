@@ -9,6 +9,8 @@ recruiting_default:
       label: Accepted
     canceled:
       label: Canceled
+    paid_pending:
+      label: Paid Pending
     paid:
       label: Paid
   transitions:
@@ -20,7 +22,26 @@ recruiting_default:
       label: Cancel
       from: [created]
       to: canceled
+    pay_request:
+      label: Pay Request
+      from: [accepted]
+      to: paid_pending
     pay:
       label: Pay
-      from: [accepted]
+      from: [paid_pending]
+      to: paid
+
+invoice_default:
+  id: Recruiting default
+  group: recruiting
+  label: 'Default'
+  states:
+    paid_pending:
+      label: Paid Pending
+    paid:
+      label: Paid
+  transitions:
+    pay:
+      label: Pay
+      from: [paid_pending]
       to: paid
