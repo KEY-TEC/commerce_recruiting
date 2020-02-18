@@ -15,39 +15,40 @@ class CampaignManagerTest extends CommerceRecruitingKernelTestBase {
   use RecruitingEntityCreationTrait;
 
   /**
-   * Test testGetConfigByProduct.
+   * Test testFindNoRecruiterCampaigns.
    */
-  public function testFindCampaigns() {
+  public function testFindNoRecruiterCampaigns() {
     $unspecific_config = $this->createCampaign(NULL, NULL);
 
     $expected_product = $this->createProduct();
     $product_specific_config = $this->createCampaign(NULL, $expected_product);
 
+    // No filter test.
+    $configs = $this->campaignManager->findNoRecruiterCampaigns();
+    $this->assertEqual(count($configs), 2);
+    $this->assertEqual($unspecific_config->id(), $configs[$unspecific_config->id()]->id());
+    $this->assertEqual($product_specific_config->id(), $configs[$product_specific_config->id()]->id());
+
+    // Product filter test.
+    $configs = $this->campaignManager->findNoRecruiterCampaigns($expected_product);
+    $this->assertEqual(count($configs), 1);
+    $this->assertEqual($product_specific_config->id(), $configs[$product_specific_config->id()]->id());
+  }
+
+  /**
+   * Test testFindRecruiterCampaigns.
+   */
+  public function testFindRecruiterCampaigns() {
     $user = $this->drupalCreateUser();
     $recruiter_config = $this->createCampaign($user, NULL);
 
     $differnt_product = $this->createProduct();
     $recruiter_product_config = $this->createCampaign($user, $differnt_product);
 
-    // No filter test.
-    $configs = $this->campaignManager->findCampaigns();
-    $this->assertEqual(count($configs), 1);
-    $this->assertEqual($unspecific_config->id(), $configs[$unspecific_config->id()]->id());
-
-    // Product filter test.
-    $configs = $this->campaignManager->findCampaigns(NULL, $expected_product);
-    $this->assertEqual(count($configs), 1);
-    $this->assertEqual($product_specific_config->id(), $configs[$product_specific_config->id()]->id());
-
     // User filter test.
-    $configs = $this->campaignManager->findCampaigns($user);
+    $configs = $this->campaignManager->findRecruiterCampaigns($user);
     $this->assertEqual(count($configs), 2);
     $this->assertEqual($recruiter_config->id(), $configs[$recruiter_config->id()]->id());
-    $this->assertEqual($recruiter_product_config->id(), $configs[$recruiter_product_config->id()]->id());
-
-    // User + product filter test.
-    $configs = $this->campaignManager->findCampaigns($user, $differnt_product);
-    $this->assertEqual(count($configs), 1);
     $this->assertEqual($recruiter_product_config->id(), $configs[$recruiter_product_config->id()]->id());
   }
 

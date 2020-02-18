@@ -13,11 +13,11 @@ use Drupal\Core\Session\AccountInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Provides a 'Sharing Link' block.
+ * Provides a 'Product sharing link' block.
  *
  * @Block(
  *  id = "commerce_recruiting_friend",
- *  admin_label = @Translation("Product link sharing block"),
+ *  admin_label = @Translation("Product sharing link block"),
  *  context = {
  *    "entity" = @ContextDefinition("entity", required = FALSE),
  *    "user" = @ContextDefinition("entity:user", required = FALSE)
@@ -41,7 +41,7 @@ class FriendBlock extends BlockBase implements ContainerFactoryPluginInterface {
   protected $route;
 
   /**
-   * The recruiting manager.
+   * The campaign manager.
    *
    * @var \Drupal\commerce_recruiting\CampaignManagerInterface
    */
@@ -67,13 +67,13 @@ class FriendBlock extends BlockBase implements ContainerFactoryPluginInterface {
    *   The language manager.
    * @param \Drupal\Core\Routing\RouteMatchInterface $route
    *   The current route.
-   * @param \Drupal\commerce_recruiting\CampaignManagerInterface $recruiting_manager
+   * @param \Drupal\commerce_recruiting\CampaignManagerInterface $campaign_manager
    *   The campaign manager.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, LanguageManagerInterface $language_manager, RouteMatchInterface $route, CampaignManagerInterface $recruiting_manager) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, LanguageManagerInterface $language_manager, RouteMatchInterface $route, CampaignManagerInterface $campaign_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->languageManager = $language_manager;
-    $this->campaignManager = $recruiting_manager;
+    $this->campaignManager = $campaign_manager;
     $this->route = $route;
   }
 
@@ -92,29 +92,33 @@ class FriendBlock extends BlockBase implements ContainerFactoryPluginInterface {
   }
 
   /**
-   * Returns the block build array with a encrypted recruiting code.
+   * Returns the block build array with a recruiting url to share.
    *
    * @return array
    *   The build array.
    */
   public function build() {
-    $build = [];
-    $build['#theme'] = 'sharing_link';
-
     /* @var \Drupal\commerce_recruiting\Entity\CampaignInterface $campaign */
     $campaign = $this->findCampaign();
 
     if (empty($campaign)) {
       // Nothing found.
-      return $build;
+      return [];
     }
 
-    /* @var \Drupal\commerce_recruiting\Entity\CampaignOptionInterface $option */
-    $option = current($campaign->getOptions());
+    /* @var \Drupal\Core\Entity\EntityInterface $entity */
+    $entity = $this->getContextValue('entity');
+    foreach ($campaign->getOptions() as $option) {
+      /* @var \Drupal\commerce_recruiting\Entity\CampaignOptionInterface $option */
+      if ($option->getProduct()->id() == $entity->id() && $option->getProduct()->getEntityTypeId() == $entity->getEntityTypeId()) {
+        $url = Code::create($option->getCode(), $this->getContextValue('user')->id())->url()->toString();
+        $build['#theme'] = 'sharing_link';
+        $build['recruiting_code']['#markup'] = $url;
+        return $build;
+      }
+    }
 
-    $url = Code::create($option->getCode(), $this->getContextValue('user')->id())->url()->toString();
-    $build['recruiting_code']['#markup'] = $url;
-    return $build;
+    return [];
   }
 
   /**
@@ -129,10 +133,10 @@ class FriendBlock extends BlockBase implements ContainerFactoryPluginInterface {
     if (empty($this->campaign)) {
       $entity = $this->getContextValue('entity');
       if (!empty($entity)) {
-        $campaigns = $this->campaignManager->findCampaigns(NULL, $entity);
+        $campaigns = $this->campaignManager->findNoRecruiterCampaigns($entity);
       }
       if (empty($campaigns)) {
-        $campaigns = $this->campaignManager->findCampaigns();
+        $campaigns = $this->campaignManager->findNoRecruiterCampaigns();
       }
       if (!empty($campaigns)) {
         $this->campaign = current($campaigns);

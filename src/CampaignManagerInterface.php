@@ -11,20 +11,28 @@ use Drupal\Core\Session\AccountInterface;
 interface CampaignManagerInterface {
 
   /**
-   * Returns campaigns.
+   * Returns recruiter specific campaigns.
    *
-   * The method will try to find and campaigns
-   * filtered by recruiter and/or product if given.
+   * @param \Drupal\Core\Session\AccountInterface $recruiter
+   *   The recruiter.
    *
-   * @param \Drupal\Core\Session\AccountInterface|null $recruiter
-   *   Optional filter configs by recruiter.
+   * @return \Drupal\commerce_recruiting\Entity\CampaignInterface[]
+   *   The found recruiting campaign option.
+   */
+  public function findRecruiterCampaigns(AccountInterface $recruiter = NULL);
+
+  /**
+   * Returns campaigns without specific recruiter filtered by the given product.
+   *
+   * These campaigns are used for "recruit a friend".
+   *
    * @param \Drupal\Core\Entity\EntityInterface|null $product
    *   Optional filter configs by product.
    *
    * @return \Drupal\commerce_recruiting\Entity\CampaignInterface[]
    *   The found recruiting campaign option.
    */
-  public function findCampaigns(AccountInterface $recruiter = NULL, EntityInterface $product = NULL);
+  public function findNoRecruiterCampaigns(EntityInterface $product = NULL);
 
   /**
    * Returns recruiting info from code.

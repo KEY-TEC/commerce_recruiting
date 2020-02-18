@@ -82,23 +82,14 @@ class CampaignManager implements CampaignManagerInterface {
   /**
    * {@inheritDoc}
    */
-  public function findCampaigns(AccountInterface $recruiter = NULL, EntityInterface $product = NULL) {
+  public function findNoRecruiterCampaigns(EntityInterface $product = NULL) {
     $query = $this->entityTypeManager->getStorage('commerce_recruiting_campaign')
       ->getQuery();
 
     $query->condition('status', 1);
-
-    if ($recruiter !== NULL) {
-      $query
-        ->condition('recruiter', $recruiter->id(), '=');
-    }
-    else {
-      $query
-        ->notExists('recruiter');
-    }
-
     $options_query = $this->entityTypeManager->getStorage('commerce_recruiting_camp_option')
       ->getQuery();
+
     if ($product !== NULL) {
       $options_query
         ->condition('product.target_id', $product->id())
@@ -109,8 +100,32 @@ class CampaignManager implements CampaignManagerInterface {
         ->notExists('product.target_id');
     }
     $options = $options_query->execute();
-    $query
-      ->condition('options', $options, 'IN');
+    if (!empty($options)) {
+      $query
+        ->condition('options', $options, 'IN');
+    }
+
+    $rcids = $query->execute();
+    return $this->entityTypeManager->getStorage('commerce_recruiting_campaign')
+      ->loadMultiple($rcids);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public function findRecruiterCampaigns(AccountInterface $recruiter = NULL) {
+    $query = $this->entityTypeManager->getStorage('commerce_recruiting_campaign')
+      ->getQuery();
+    $query->condition('status', 1);
+
+    if ($recruiter !== NULL) {
+      $query
+        ->condition('recruiter', $recruiter->id(), '=');
+    }
+    else {
+      $query
+        ->notExists('recruiter');
+    }
 
     $rcids = $query->execute();
     return $this->entityTypeManager->getStorage('commerce_recruiting_campaign')
