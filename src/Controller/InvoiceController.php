@@ -55,11 +55,10 @@ class InvoiceController extends ControllerBase {
    *   Redirect to product.
    */
   public function createInvoice(CampaignInterface $commerce_recruiting_campaign) {
-
     try {
       $user = User::load($this->accountProxy->id());
       $invoice = $this->invoiceManager->createInvoice($commerce_recruiting_campaign, $user);
-      return new RedirectResponse($invoice->toUrl(), 302);;
+      return new RedirectResponse($invoice->toUrl()->toString(), 302);;
     }
     catch (\Throwable $e) {
       $this->getLogger('commerce_recruiting')->error($e->getMessage());

@@ -220,7 +220,7 @@ class RecruitingManager implements RecruitingManagerInterface {
         $results[$unique_key] = new RecruitingResult($product->label(), $recruiting->getBonus());
       }
       else {
-        $results[$unique_key]->addPrice($recruiting);
+        $results[$unique_key]->addPrice($recruiting->getBonus());
       }
 
     }
