@@ -156,10 +156,6 @@ class RecruitingSummaryBlock extends BlockBase implements ContainerFactoryPlugin
       return AccessResult::forbidden();
     }
 
-    if (count($this->findCampaigns()) == 0) {
-      return AccessResult::forbidden();
-    }
-
     return parent::blockAccess($account);
   }
 
