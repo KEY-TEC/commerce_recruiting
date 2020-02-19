@@ -39,7 +39,7 @@ use Drupal\user\UserInterface;
  *     },
  *   },
  *   base_table = "commerce_recruiting",
- *   data_table = "commerce_rInvoiceHtmlRouteProviderecruiting_field_data",
+ *   data_table = "commerce_recruiting_field_data",
  *   translatable = TRUE,
  *   admin_permission = "administer recruiting entities",
  *   entity_keys = {
