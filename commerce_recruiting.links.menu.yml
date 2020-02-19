@@ -45,3 +45,9 @@ commerce_recruiting_campaign.admin.structure.settings:
   description: 'Configure Campaign entities'
   route_name: commerce_recruiting_campaign.settings
   parent: commerce_recruiting.configuration
+
+commerce_recruiting_camp_option.admin.structure.settings:
+  title: 'Campaign Option settings'
+  description: 'Configure Campaign option entities'
+  route_name: commerce_recruiting_camp_option.settings
+  parent: commerce_recruiting.configuration

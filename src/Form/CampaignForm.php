@@ -85,7 +85,7 @@ class CampaignForm extends ContentEntityForm {
           '%label' => $entity->label(),
         ]));
     }
-    $form_state->setRedirect('entity.commerce_recruiting_campaign.canonical', ['commerce_recruiting_campaign' => $entity->id()]);
+    $form_state->setRedirect('entity.commerce_recruiting_campaign.collection');
   }
 
 }

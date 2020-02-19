@@ -35,6 +35,9 @@ use http\Exception\InvalidArgumentException;
  *       "delete" = "Drupal\Core\Entity\ContentEntityDeleteForm",
  *     },
  *     "access" = "Drupal\commerce_recruiting\CampaignOptionAccessControlHandler",
+ *     "route_provider" = {
+ *       "html" = "Drupal\commerce_recruiting\CampaignOptionHtmlRouteProvider",
+ *     },
  *   },
  *   base_table = "commerce_recruiting_camp_option",
  *   translatable = FALSE,
@@ -47,6 +50,7 @@ use http\Exception\InvalidArgumentException;
  *     "langcode" = "langcode",
  *     "published" = "status",
  *   },
+ *   field_ui_base_route = "commerce_recruiting_camp_option.settings"
  * )
  */
 class CampaignOption extends ContentEntityBase implements CampaignOptionInterface {
@@ -73,11 +77,14 @@ class CampaignOption extends ContentEntityBase implements CampaignOptionInterfac
    * {@inheritdoc}
    */
   public function label() {
+    /** @var \CommerceGuys\Intl\Formatter\CurrencyFormatterInterface $formatter */
+    $formatter = \Drupal::service('commerce_price.currency_formatter');
     $label = 'Code: ' . $this->getCode() . ' ';
     $label .= $this->getProduct() != NULL ? '(Product: ' . $this->getProduct()
       ->label() . ')' : '';
+
     if ($this->getBonusMethod() == CampaignOptionInterface::RECRUIT_BONUS_METHOD_FIX) {
-      $bonus = $this->getBonus() != NULL ? $this->getBonus()->getNumber() . $this->getBonus()->getCurrencyCode() : '0';
+      $bonus = $this->getBonus() != NULL ? $formatter->format($this->getBonus()->getNumber(), $this->getBonus()->getCurrencyCode()) : '0';
       $label .= '- Bonus: ' . $bonus;
     }
     else {

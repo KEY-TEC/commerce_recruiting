@@ -260,9 +260,11 @@ class Campaign extends CommerceContentEntityBase implements CampaignInterface {
       ->setSetting('datetime_type', 'datetime')
       ->setDefaultValueCallback('Drupal\commerce_recruiting\Entity\Campaign::getDefaultStartDate')
       ->setDisplayOptions('form', [
-        'type' => 'datetime',
+        'type' => 'datetime_datelist',
         'weight' => 3,
-      ]);
+      ])
+      ->setDisplayConfigurable('form', TRUE);
+
 
     $fields['end_date'] = BaseFieldDefinition::create('datetime')
       ->setLabel(new TranslatableMarkup('End date'))
@@ -271,9 +273,10 @@ class Campaign extends CommerceContentEntityBase implements CampaignInterface {
       ->setSetting('datetime_type', 'datetime')
       ->setSetting('datetime_optional_label', t('Provide an end date'))
       ->setDisplayOptions('form', [
-        'type' => 'datetime',
+        'type' => 'datetime_datelist',
         'weight' => 3,
-      ]);
+      ])
+      ->setDisplayConfigurable('form', TRUE);
 
     $fields['status'] = BaseFieldDefinition::create('boolean')
       ->setLabel(new TranslatableMarkup('Status'))

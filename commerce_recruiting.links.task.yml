@@ -23,6 +23,10 @@ commerce_recruiting_campaign.settings_tab:
   title: 'Settings'
   base_route: commerce_recruiting_campaign.settings
 
+commerce_recruiting_camp_option.settings_tab:
+  route_name: commerce_recruiting_camp_option.settings
+  title: 'Settings'
+  base_route: commerce_recruiting_camp_option.settings
 
 commerce_recruiting_invoice.settings_tab:
   route_name: commerce_recruiting_invoice.settings
