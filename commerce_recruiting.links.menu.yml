@@ -30,7 +30,7 @@ entity.commerce_recruiting_invoice.collection:
   weight: 100
 
 commerce_recruiting.configuration:
-  title: 'Recruitment'
+  title: 'Recruiting'
   route_name: 'commerce_recruiting.configuration'
   parent: 'commerce.configuration'
 
@@ -38,6 +38,12 @@ commerce_recruiting_invoice.admin.structure.settings:
   title: 'Invoice settings'
   description: 'Configure Invoice entities'
   route_name: commerce_recruiting_invoice.settings
+  parent: commerce_recruiting.configuration
+
+commerce_recruiting.admin.structure.settings:
+  title: 'Recruiting settings'
+  description: 'Configure Recruiting entities'
+  route_name: commerce_recruiting.settings
   parent: commerce_recruiting.configuration
 
 commerce_recruiting_campaign.admin.structure.settings:
