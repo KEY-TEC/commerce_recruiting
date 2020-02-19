@@ -55,4 +55,10 @@ class InvoiceManager implements InvoiceManagerInterface {
     return $invoice;
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  public function findInvoices(User $recruiter) {
+    return $this->entityTypeManager->getStorage('commerce_recruiting_invoice')->loadByProperties(['user_id' => $recruiter->id()]);
+  }
 }

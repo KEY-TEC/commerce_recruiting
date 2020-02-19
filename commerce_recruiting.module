@@ -33,6 +33,13 @@ function commerce_recruiting_theme($existing, $type, $theme, $path) {
       'summaries' => [],
     ],
   ];
+  $theme['recruiting_invoices'] = [
+    'path' => $path . '/templates',
+    'template'  => 'recruiting-invoices',
+    'variables' => [
+      'invoices' => [],
+    ],
+  ];
   $theme['recruiting'] = [
     'render element' => 'elements',
     'file' => 'commerce_recruiting.page.inc',
@@ -44,4 +51,11 @@ function commerce_recruiting_theme($existing, $type, $theme, $path) {
     'file' => 'commerce_recruiting.page.inc',
   ];
   return $theme;
+}
+
+/**
+ * Implements hook_cron().
+ */
+function commerce_recruiting_cron() {
+  \Drupal::service('commerce_recruiting.manager')->applyTransitions('accept');
 }

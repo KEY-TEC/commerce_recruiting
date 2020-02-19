@@ -36,6 +36,14 @@ class RecruitingSummary {
   public function getCampaign() {
     return $this->campaign;
   }
+
+  /**
+   * @return string
+   */
+  public function hasResults() {
+    return count($this->results) != 0;
+  }
+
   /**
    * RecruitingSummary constructor.
    *
