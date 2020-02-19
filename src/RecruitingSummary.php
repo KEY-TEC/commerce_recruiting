@@ -24,16 +24,32 @@ class RecruitingSummary {
   private $results;
 
   /**
+   * The campaign.
+   *
+   * @var \Drupal\commerce_recruiting\Entity\CampaignInterface
+   */
+  private $campaign;
+
+  /**
+   * @return string
+   */
+  public function getCampaign() {
+    return $this->campaign;
+  }
+  /**
    * RecruitingSummary constructor.
    *
    * @param \Drupal\commerce_price\Price $total_price
    *   The total price.
+   * @param $campaign
+   *   The campaign.
    * @param array $results
    *   The results.
    */
-  public function __construct(Price $total_price, array $results = []) {
+  public function __construct(Price $total_price, $campaign, array $results = []) {
     $this->totalPrice = $total_price;
     $this->results = $results;
+    $this->campaign = $campaign;
   }
 
   /**

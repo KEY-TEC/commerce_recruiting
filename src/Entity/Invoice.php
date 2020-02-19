@@ -49,9 +49,9 @@ use Drupal\user\UserInterface;
  *   },
  *   links = {
  *     "canonical" =
- *   "/admin/commerce/recruiting/commerce_recruiting_invoice/{commerce_recruiting_invoice}",
+ *   "/user/invoice/{commerce_recruiting_invoice}",
  *     "add-form" =
- *   "/admin/commerce/recruiting/commerce_recruiting_invoice/add",
+ *   "/user/invoice/add",
  *     "edit-form" =
  *   "/admin/commerce/recruiting/commerce_recruiting_invoice/{commerce_recruiting_invoice}/edit",
  *     "delete-form" =

@@ -30,7 +30,7 @@ function commerce_recruiting_theme($existing, $type, $theme, $path) {
     'path' => $path . '/templates',
     'template'  => 'recruiting-summary',
     'variables' => [
-      'summary' => NULL,
+      'summaries' => [],
     ],
   ];
   $theme['recruiting'] = [

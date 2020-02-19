@@ -55,26 +55,30 @@ interface RecruitingManagerInterface {
    *
    * @param \Drupal\commerce_recruiting\Entity\CampaignInterface $campaign
    *   The campaign.
+   * @param \Drupal\user\Entity\User $recruiter
+   *   The recruiter.
    * @param string $state
    *   The stat of the recruiting.
    *
    * @return \Drupal\commerce_recruiting\Entity\RecruitingInterface[]
    *   The recruitings.
    */
-  public function findRecruitingByCampaign(CampaignInterface $campaign, $state);
+  public function findRecruitingByCampaign(CampaignInterface $campaign, User $recruiter = NULL, $state);
 
   /**
    * Finds recruiting by given campaign and state.
    *
    * @param \Drupal\commerce_recruiting\Entity\CampaignInterface $campaign
    *   The campaign.
+   * @param \Drupal\user\Entity\User $recruiter
+   *   The recruiter.
    * @param string $state
    *   The stat of the recruiting.
    *
    * @return \Drupal\commerce_recruiting\RecruitingSummary
    *   The recruiting summary.
    */
-  public function recruitingSummaryByCampaign(CampaignInterface $campaign, $state);
+  public function recruitingSummaryByCampaign(CampaignInterface $campaign, User $recruiter = NULL, $state);
 
   /**
    * Checks the order for recommend products in RecruitingSession.

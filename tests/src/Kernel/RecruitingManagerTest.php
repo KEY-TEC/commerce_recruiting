@@ -78,7 +78,7 @@ class RecruitingManagerTest extends CommerceRecruitingKernelTestBase {
     );
     $this->assertEqual(count($recrutings2), 3);
     $this->recruitingManager->applyTransitions("accept");
-    $summary = $this->recruitingManager->recruitingSummaryByCampaign($campaign, 'accepted');
+    $summary = $this->recruitingManager->recruitingSummaryByCampaign($campaign, $recruiter, 'accepted');
     $this->assertEqual(count($summary->getResults()), 3);
     $this->assertEqual($summary->getTotalPrice()->getNumber(), 30);
   }
@@ -105,7 +105,7 @@ class RecruitingManagerTest extends CommerceRecruitingKernelTestBase {
       [$productc21, $productc22, $productc23]
     );
     $this->assertEqual(count($recrutings), 3);
-    $found_recrutings = $this->recruitingManager->findRecruitingByCampaign($campaign, 'created');
+    $found_recrutings = $this->recruitingManager->findRecruitingByCampaign($campaign, $recruiter, 'created');
     $this->assertEqual(count($found_recrutings), 3);
   }
 

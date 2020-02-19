@@ -5,7 +5,10 @@ namespace Drupal\commerce_recruiting\Controller;
 use Drupal\commerce_recruiting\Entity\CampaignInterface;
 use Drupal\commerce_recruiting\InvoiceManagerInterface;
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Session\AccountProxy;
+use Drupal\user\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Class InvoiceController.
@@ -20,13 +23,19 @@ class InvoiceController extends ControllerBase {
   protected $invoiceManager;
 
   /**
+   * @var \Drupal\Core\Session\AccountProxy
+   */
+  private $accountProxy;
+
+  /**
    * Constructs a new InvoiceController object.
    *
    * @param \Drupal\commerce_recruiting\InvoiceManagerInterface $invoice_manager
    *   The invoice service.
    */
-  public function __construct(InvoiceManagerInterface $invoice_manager) {
+  public function __construct(InvoiceManagerInterface $invoice_manager, AccountProxy $account_proxy) {
     $this->invoiceManager = $invoice_manager;
+    $this->accountProxy = $account_proxy;
   }
 
   /**
@@ -34,7 +43,8 @@ class InvoiceController extends ControllerBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('commerce_recruiting.invoice_manager')
+      $container->get('commerce_recruiting.invoice_manager'),
+      $container->get('current_user')
     );
   }
 
@@ -44,10 +54,11 @@ class InvoiceController extends ControllerBase {
    * @return \Symfony\Component\HttpFoundation\RedirectResponse
    *   Redirect to product.
    */
-  public function createInvoice(CampaignInterface $campaign) {
+  public function createInvoice(CampaignInterface $commerce_recruiting_campaign) {
 
     try {
-      $invoice = $this->invoiceManager->createInvoice($campaign);
+      $user = User::load($this->accountProxy->id());
+      $invoice = $this->invoiceManager->createInvoice($commerce_recruiting_campaign, $user);
       return new RedirectResponse($invoice->toUrl(), 302);;
     }
     catch (\Throwable $e) {

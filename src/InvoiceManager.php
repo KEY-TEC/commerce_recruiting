@@ -5,6 +5,7 @@ namespace Drupal\commerce_recruiting;
 use Drupal\commerce_recruiting\Entity\CampaignInterface;
 use Drupal\commerce_recruiting\Entity\Invoice;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\user\Entity\User;
 
 /**
  * Class InvoiceManager.
@@ -41,10 +42,10 @@ class InvoiceManager implements InvoiceManagerInterface {
   /**
    * {@inheritDoc}
    */
-  public function createInvoice(CampaignInterface $campaign) {
+  public function createInvoice(CampaignInterface $campaign, User $recruiter) {
     /** @var \Drupal\commerce_recruiting\Entity\Invoice $invoice */
     $invoice = Invoice::create(['name' => $campaign->getName()]);
-    $recruitings = $this->recruitingManager->findRecruitingByCampaign($campaign, 'accepted');
+    $recruitings = $this->recruitingManager->findRecruitingByCampaign($campaign, $recruiter, 'accepted');
 
     /** @var \Drupal\commerce_recruiting\Entity\RecruitingInterface $recruiting */
     foreach ($recruitings as $recruiting) {
