@@ -131,7 +131,9 @@ class RecruitingSummaryBlock extends BlockBase implements ContainerFactoryPlugin
   private function findCampaigns() {
     if (empty($this->campaigns)) {
       $user = $this->getContextValue('user');
-      $this->campaigns = $this->campaignManager->findRecruiterCampaigns($user);
+      $global_campaigns = $this->campaignManager->findRecruiterCampaigns();
+      $assigned_campaigns = $this->campaignManager->findRecruiterCampaigns($user);
+      $this->campaigns = array_merge($global_campaigns, $assigned_campaigns);
     }
     return $this->campaigns;
   }
