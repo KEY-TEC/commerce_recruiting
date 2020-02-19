@@ -14,7 +14,7 @@ use Drupal\user\EntityOwnerTrait;
 use Drupal\user\UserInterface;
 
 /**
- * Defines the Recruiting entity entity.
+ * Defines the Recruiting entity.
  *
  * @ingroup commerce_recruiting
  *
@@ -39,9 +39,9 @@ use Drupal\user\UserInterface;
  *     },
  *   },
  *   base_table = "commerce_recruiting",
- *   data_table = "commerce_recruiting_field_data",
+ *   data_table = "commerce_rInvoiceHtmlRouteProviderecruiting_field_data",
  *   translatable = TRUE,
- *   admin_permission = "administer recruiting entity entities",
+ *   admin_permission = "administer recruiting entities",
  *   entity_keys = {
  *     "id" = "id",
  *     "label" = "name",
@@ -57,6 +57,7 @@ use Drupal\user\UserInterface;
  *     "delete-form" = "/admin/commerce/recruiting/recruiting/{commerce_recruiting}/delete",
  *     "collection" = "/admin/commerce/recruiting/recruiting",
  *   },
+ *   field_ui_base_route = "commerce_recruiting.settings"
  * )
  */
 class Recruiting extends ContentEntityBase implements RecruitingInterface {

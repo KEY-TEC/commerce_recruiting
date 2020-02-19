@@ -8,7 +8,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
 
 /**
- * Access controller for the Recruiting entity entity.
+ * Access controller for the Recruiting entity.
  *
  * @see \Drupal\commerce_recruiting\Entity\Recruiting.
  */

@@ -10,7 +10,7 @@ use Drupal\user\EntityOwnerInterface;
 use Drupal\user\UserInterface;
 
 /**
- * Provides an interface for defining recruiting entity entities.
+ * Provides an interface for defining recruiting entities.
  *
  * @ingroup commerce_recruiting
  */
@@ -21,21 +21,21 @@ interface CampaignInterface extends ContentEntityInterface, EntityChangedInterfa
    */
 
   /**
-   * Gets the recruiting entity name.
+   * Gets the recruiting name.
    *
    * @return string
-   *   Name of the recruiting entity.
+   *   Name of the recruiting.
    */
   public function getName();
 
   /**
-   * Sets the recruiting entity name.
+   * Sets the recruiting name.
    *
    * @param string $name
-   *   The recruiting entity name.
+   *   The recruiting name.
    *
    * @return \Drupal\commerce_recruiting\Entity\RecruitingInterface
-   *   The called recruiting entity entity.
+   *   The called recruiting entity.
    */
   public function setName($name);
 

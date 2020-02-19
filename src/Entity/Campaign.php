@@ -19,10 +19,10 @@ use Drupal\user\UserInterface;
  *
  * @ContentEntityType(
  *   id = "commerce_recruiting_campaign",
- *   label = @Translation("Recruiting Campaign Configuration"),
- *   label_collection = @Translation("Recruiting Campaign  configurations"),
- *   label_singular = @Translation("Recruiting Campaign configuration"),
- *   label_plural = @Translation("Recruiting Campaign configurations"),
+ *   label = @Translation("Campaign"),
+ *   label_collection = @Translation("Campaign"),
+ *   label_singular = @Translation("Campaign"),
+ *   label_plural = @Translation("Campaigns"),
  *   label_count = @PluralTranslation(
  *     singular = "@count config",
  *     plural = "@count configs",
@@ -44,7 +44,7 @@ use Drupal\user\UserInterface;
  *       "default" = "Drupal\entity\Menu\DefaultEntityLocalTaskProvider",
  *     },
  *     "route_provider" = {
- *       "default" = "Drupal\Core\Entity\Routing\AdminHtmlRouteProvider",
+ *       "html" = "Drupal\commerce_recruiting\CampaignHtmlRouteProvider",
  *     },
  *   },
  *   base_table = "commerce_recruiting_campaign",
@@ -70,6 +70,7 @@ use Drupal\user\UserInterface;
  *     "delete-multiple-form" = "/admin/commerce/recruiting/config/delete",
  *     "collection" = "/admin/commerce/recruiting/config",
  *   },
+ *   field_ui_base_route = "commerce_recruiting_campaign.settings"
  * )
  */
 class Campaign extends CommerceContentEntityBase implements CampaignInterface {
@@ -259,7 +260,7 @@ class Campaign extends CommerceContentEntityBase implements CampaignInterface {
       ->setSetting('datetime_type', 'datetime')
       ->setDefaultValueCallback('Drupal\commerce_recruiting\Entity\Campaign::getDefaultStartDate')
       ->setDisplayOptions('form', [
-        'type' => 'commerce_store_datetime',
+        'type' => 'datetime',
         'weight' => 3,
       ]);
 
@@ -270,7 +271,7 @@ class Campaign extends CommerceContentEntityBase implements CampaignInterface {
       ->setSetting('datetime_type', 'datetime')
       ->setSetting('datetime_optional_label', t('Provide an end date'))
       ->setDisplayOptions('form', [
-        'type' => 'commerce_store_datetime',
+        'type' => 'datetime',
         'weight' => 3,
       ]);
 

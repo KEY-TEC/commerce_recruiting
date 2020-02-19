@@ -36,7 +36,7 @@ interface CampaignOptionInterface extends ContentEntityInterface, EntityChangedI
    *   The recruiting code.
    *
    * @return \Drupal\commerce_recruiting\Entity\RecruitingInterface
-   *   The called recruiting entity entity.
+   *   The called recruiting entity.
    */
   public function setCode($code);
 

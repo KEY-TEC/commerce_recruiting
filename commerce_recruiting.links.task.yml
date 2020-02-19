@@ -16,6 +16,14 @@ entity.commerce_recruiting.delete_form:
   title: Delete
   weight: 10
 # Invoice routing definition
+
+# Invoice routing definition
+commerce_recruiting_campaign.settings_tab:
+  route_name: commerce_recruiting_campaign.settings
+  title: 'Settings'
+  base_route: commerce_recruiting_campaign.settings
+
+
 commerce_recruiting_invoice.settings_tab:
   route_name: commerce_recruiting_invoice.settings
   title: 'Settings'
