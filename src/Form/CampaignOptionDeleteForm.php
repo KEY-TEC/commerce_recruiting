@@ -5,7 +5,7 @@ namespace Drupal\commerce_recruiting\Form;
 use Drupal\Core\Entity\ContentEntityDeleteForm;
 
 /**
- * Provides a form for deleting Recruiting option entities.
+ * Provides a form for deleting campaign option entities.
  *
  * @ingroup commerce_recruiting
  */

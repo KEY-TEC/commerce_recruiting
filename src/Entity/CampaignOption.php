@@ -17,13 +17,13 @@ use Drupal\user\UserInterface;
 use http\Exception\InvalidArgumentException;
 
 /**
- * Defines the Recruiting option entity.
+ * Defines the campaign option entity.
  *
  * @ingroup commerce_recruiting
  *
  * @ContentEntityType(
- *   id = "commerce_recruiting_camp_option",
- *   label = @Translation("Recruiting option"),
+ *   id = "commerce_recruitment_camp_option",
+ *   label = @Translation("Campaign option"),
  *   handlers = {
  *     "view_builder" = "Drupal\Core\Entity\EntityViewBuilder",
  *     "views_data" =
@@ -39,9 +39,9 @@ use http\Exception\InvalidArgumentException;
  *       "html" = "Drupal\commerce_recruiting\CampaignOptionHtmlRouteProvider",
  *     },
  *   },
- *   base_table = "commerce_recruiting_camp_option",
+ *   base_table = "commerce_recruitment_camp_option",
  *   translatable = FALSE,
- *   admin_permission = "administer recruiting option entities",
+ *   admin_permission = "administer recruitment option entities",
  *   entity_keys = {
  *     "id" = "id",
  *     "label" = "code",
@@ -50,7 +50,7 @@ use http\Exception\InvalidArgumentException;
  *     "langcode" = "langcode",
  *     "published" = "status",
  *   },
- *   field_ui_base_route = "commerce_recruiting_camp_option.settings"
+ *   field_ui_base_route = "commerce_recruitment_camp_option.settings"
  * )
  */
 class CampaignOption extends ContentEntityBase implements CampaignOptionInterface {
@@ -179,12 +179,12 @@ class CampaignOption extends ContentEntityBase implements CampaignOptionInterfac
     $fields['campaign_id'] = BaseFieldDefinition::create('entity_reference')
       ->setLabel(t('Campaign'))
       ->setDescription(t('The parent campaign.'))
-      ->setSetting('target_type', 'commerce_recruiting_campaign')
+      ->setSetting('target_type', 'commerce_recruitment_campaign')
       ->setReadOnly(TRUE);
 
     $fields['user_id'] = BaseFieldDefinition::create('entity_reference')
       ->setLabel(t('Authored by'))
-      ->setDescription(t('The user ID of author of the Recruiting option entity.'))
+      ->setDescription(t('The user ID of author of the campaign option entity.'))
       ->setRevisionable(TRUE)
       ->setSetting('target_type', 'user')
       ->setSetting('handler', 'default')
@@ -206,7 +206,7 @@ class CampaignOption extends ContentEntityBase implements CampaignOptionInterfac
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 
-    $fields['status']->setDescription(t('A boolean indicating whether the Recruiting option is published.'))
+    $fields['status']->setDescription(t('A boolean indicating whether the campaign option is published.'))
       ->setDisplayOptions('form', [
         'type' => 'boolean_checkbox',
         'weight' => -3,

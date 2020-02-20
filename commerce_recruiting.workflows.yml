@@ -1,6 +1,6 @@
-recruiting_default:
-  id: Recruiting default
-  group: recruiting
+recruitment_default:
+  id: Recruitment default
+  group: recruitment
   label: 'Default'
   states:
     created:
@@ -32,8 +32,8 @@ recruiting_default:
       to: paid
 
 invoice_default:
-  id: Recruiting default
-  group: recruiting
+  id: Recruitment default
+  group: recruitment
   label: 'Default'
   states:
     paid_pending:

@@ -1,55 +1,55 @@
-# Recruiting entity routing definition
+# Recruitment entity routing definition
 
-entity.commerce_recruiting.canonical:
-  route_name: entity.commerce_recruiting.canonical
-  base_route: entity.commerce_recruiting.canonical
+entity.commerce_recruitment.canonical:
+  route_name: entity.commerce_recruitment.canonical
+  base_route: entity.commerce_recruitment.canonical
   title: 'View'
 
-entity.commerce_recruiting.edit_form:
-  route_name: entity.commerce_recruiting.edit_form
-  base_route: entity.commerce_recruiting.canonical
+entity.commerce_recruitment.edit_form:
+  route_name: entity.commerce_recruitment.edit_form
+  base_route: entity.commerce_recruitment.canonical
   title: 'Edit'
 
-entity.commerce_recruiting.delete_form:
-  route_name:  entity.commerce_recruiting.delete_form
-  base_route:  entity.commerce_recruiting.canonical
+entity.commerce_recruitment.delete_form:
+  route_name:  entity.commerce_recruitment.delete_form
+  base_route:  entity.commerce_recruitment.canonical
   title: Delete
   weight: 10
 # Invoice routing definition
 
 # Invoice routing definition
-commerce_recruiting_campaign.settings_tab:
-  route_name: commerce_recruiting_campaign.settings
+commerce_recruitment_campaign.settings_tab:
+  route_name: commerce_recruitment_campaign.settings
   title: 'Settings'
-  base_route: commerce_recruiting_campaign.settings
+  base_route: commerce_recruitment_campaign.settings
 
-commerce_recruiting_camp_option.settings_tab:
-  route_name: commerce_recruiting_camp_option.settings
+commerce_recruitment_camp_option.settings_tab:
+  route_name: commerce_recruitment_camp_option.settings
   title: 'Settings'
-  base_route: commerce_recruiting_camp_option.settings
+  base_route: commerce_recruitment_camp_option.settings
 
-commerce_recruiting.settings_tab:
-  route_name: commerce_recruiting.settings
+commerce_recruitment.settings_tab:
+  route_name: commerce_recruitment.settings
   title: 'Settings'
-  base_route: commerce_recruiting.settings
+  base_route: commerce_recruitment.settings
 
-commerce_recruiting_invoice.settings_tab:
-  route_name: commerce_recruiting_invoice.settings
+commerce_recruitment_invoice.settings_tab:
+  route_name: commerce_recruitment_invoice.settings
   title: 'Settings'
-  base_route: commerce_recruiting_invoice.settings
+  base_route: commerce_recruitment_invoice.settings
 
-entity.commerce_recruiting_invoice.canonical:
-  route_name: entity.commerce_recruiting_invoice.canonical
-  base_route: entity.commerce_recruiting_invoice.canonical
+entity.commerce_recruitment_invoice.canonical:
+  route_name: entity.commerce_recruitment_invoice.canonical
+  base_route: entity.commerce_recruitment_invoice.canonical
   title: 'View'
 
-entity.commerce_recruiting_invoice.edit_form:
-  route_name: entity.commerce_recruiting_invoice.edit_form
-  base_route: entity.commerce_recruiting_invoice.canonical
+entity.commerce_recruitment_invoice.edit_form:
+  route_name: entity.commerce_recruitment_invoice.edit_form
+  base_route: entity.commerce_recruitment_invoice.canonical
   title: 'Edit'
 
-entity.commerce_recruiting_invoice.delete_form:
-  route_name:  entity.commerce_recruiting_invoice.delete_form
-  base_route:  entity.commerce_recruiting_invoice.canonical
+entity.commerce_recruitment_invoice.delete_form:
+  route_name:  entity.commerce_recruitment_invoice.delete_form
+  base_route:  entity.commerce_recruitment_invoice.canonical
   title: Delete
   weight: 10

@@ -2,7 +2,7 @@
 
 namespace Drupal\Tests\commerce_recruiting\Kernel;
 
-use Drupal\Tests\commerce_recruiting\Traits\RecruitingEntityCreationTrait;
+use Drupal\Tests\commerce_recruiting\Traits\RecruitmentEntityCreationTrait;
 
 /**
  * InvoiceManager.
@@ -11,7 +11,7 @@ use Drupal\Tests\commerce_recruiting\Traits\RecruitingEntityCreationTrait;
  */
 class InvoiceManagerTest extends CommerceRecruitingKernelTestBase {
 
-  use RecruitingEntityCreationTrait;
+  use RecruitmentEntityCreationTrait;
 
   /**
    * Test testSessionMatch.
@@ -25,17 +25,17 @@ class InvoiceManagerTest extends CommerceRecruitingKernelTestBase {
     $products[] = $this->createProduct();
     $recrutings = $this->createRecrutings($campaign, $recruiter, $recruited, $products);
     $this->assertEqual(count($recrutings), 2);
-    $this->recruitingManager->applyTransitions('accept');
+    $this->recruitmentManager->applyTransitions('accept');
     $invoice = $this->invoiceManager->createInvoice($campaign);
-    $this->assertEqual(count($invoice->getRecruitings()), 2);
-    /** @var \Drupal\commerce_recruiting\Entity\RecruitingInterface $recruiting */
-    foreach ($invoice->getRecruitings() as $recruiting) {
-      $this->assertEqual($recruiting->getState()->getId(), 'paid_pending');
+    $this->assertEqual(count($invoice->getRecruitments()), 2);
+    /** @var \Drupal\commerce_recruiting\Entity\RecruitmentInterface $recruitment */
+    foreach ($invoice->getRecruitments() as $recruitment) {
+      $this->assertEqual($recruitment->getState()->getId(), 'paid_pending');
     }
     $invoice->setState('paid');
     $invoice->save();
-    foreach ($invoice->getRecruitings() as $recruiting) {
-      $this->assertEqual($recruiting->getState()->getId(), 'paid');
+    foreach ($invoice->getRecruitments() as $recruitment) {
+      $this->assertEqual($recruitment->getState()->getId(), 'paid');
     }
     $this->assertEqual(20.000000, $invoice->getPrice()->getNumber());
 

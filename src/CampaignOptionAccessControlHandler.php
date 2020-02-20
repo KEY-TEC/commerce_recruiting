@@ -8,7 +8,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
 
 /**
- * Access controller for the Recruiting option entity.
+ * Access controller for the campaign option entity.
  *
  * @see \Drupal\commerce_recruiting\Entity\CampaignOption.
  */
@@ -25,18 +25,18 @@ class CampaignOptionAccessControlHandler extends EntityAccessControlHandler {
       case 'view':
 
         if (!$entity->isPublished()) {
-          return AccessResult::allowedIfHasPermission($account, 'view unpublished recruiting option entities');
+          return AccessResult::allowedIfHasPermission($account, 'view unpublished campaign option entities');
         }
 
-        return AccessResult::allowedIfHasPermission($account, 'view published recruiting option entities');
+        return AccessResult::allowedIfHasPermission($account, 'view published campaign option entities');
 
       case 'update':
 
-        return AccessResult::allowedIfHasPermission($account, 'edit recruiting option entities');
+        return AccessResult::allowedIfHasPermission($account, 'edit campaign option entities');
 
       case 'delete':
 
-        return AccessResult::allowedIfHasPermission($account, 'delete recruiting option entities');
+        return AccessResult::allowedIfHasPermission($account, 'delete campaign option entities');
     }
 
     // Unknown operation, no opinion.
@@ -47,7 +47,7 @@ class CampaignOptionAccessControlHandler extends EntityAccessControlHandler {
    * {@inheritdoc}
    */
   protected function checkCreateAccess(AccountInterface $account, array $context, $entity_bundle = NULL) {
-    return AccessResult::allowedIfHasPermission($account, 'add recruiting option entities');
+    return AccessResult::allowedIfHasPermission($account, 'add campaign option entities');
   }
 
 }

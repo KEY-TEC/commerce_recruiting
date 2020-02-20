@@ -5,7 +5,7 @@ namespace Drupal\commerce_recruiting;
 use Drupal\views\EntityViewsData;
 
 /**
- * Provides Views data for Recruiting entities.
+ * Provides Views data for campaign entities.
  */
 class CampaignViewsData extends EntityViewsData {
 

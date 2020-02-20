@@ -16,7 +16,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @Block(
  *  id = "commerce_recruiting_recruiter",
- *  admin_label = @Translation("Product influencer block"),
+ *  admin_label = @Translation("Recruiter campaigns sharing link block"),
  *  context = {
  *    "user" = @ContextDefinition("entity:user", required = FALSE)
  *  }
@@ -57,7 +57,7 @@ class RecruiterBlock extends BlockBase implements ContainerFactoryPluginInterfac
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The language manager.
    * @param \Drupal\commerce_recruiting\CampaignManagerInterface $campaign_manager
-   *   The recruiting manager.
+   *   The campaign manager.
    */
   public function __construct(array $configuration, $plugin_id, $plugin_definition, LanguageManagerInterface $language_manager, CampaignManagerInterface $campaign_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
@@ -79,7 +79,7 @@ class RecruiterBlock extends BlockBase implements ContainerFactoryPluginInterfac
   }
 
   /**
-   * Returns the block build array with a encrypted recruiting code.
+   * Returns the block build array campaigns of the current user.
    *
    * @return array
    *   The build array.

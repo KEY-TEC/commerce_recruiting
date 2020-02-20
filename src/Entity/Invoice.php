@@ -18,7 +18,7 @@ use Drupal\user\UserInterface;
  * @ingroup commerce_recruiting
  *
  * @ContentEntityType(
- *   id = "commerce_recruiting_invoice",
+ *   id = "commerce_recruitment_invoice",
  *   label = @Translation("Invoice"),
  *   handlers = {
  *     "view_builder" = "Drupal\Core\Entity\EntityViewBuilder",
@@ -36,7 +36,7 @@ use Drupal\user\UserInterface;
  *     },
  *     "access" = "Drupal\commerce_recruiting\InvoiceAccessControlHandler",
  *   },
- *   base_table = "commerce_recruiting_invoice",
+ *   base_table = "commerce_recruitment_invoice",
  *   translatable = FALSE,
  *   admin_permission = "administer invoice entities",
  *   entity_keys = {
@@ -49,16 +49,16 @@ use Drupal\user\UserInterface;
  *   },
  *   links = {
  *     "canonical" =
- *   "/user/invoice/{commerce_recruiting_invoice}",
+ *   "/user/invoice/{commerce_recruitment_invoice}",
  *     "add-form" =
  *   "/user/invoice/add",
  *     "edit-form" =
- *   "/admin/commerce/recruiting/commerce_recruiting_invoice/{commerce_recruiting_invoice}/edit",
+ *   "/admin/commerce/recruitment/invoice/{commerce_recruitment_invoice}/edit",
  *     "delete-form" =
- *   "/admin/commerce/recruiting/commerce_recruiting_invoice/{commerce_recruiting_invoice}/delete",
- *     "collection" = "/admin/commerce/recruiting/commerce_recruiting_invoice",
+ *   "/admin/commerce/recruitment/invoice/{commerce_recruitment_invoice}/delete",
+ *     "collection" = "/admin/commerce/recruitment/invoice",
  *   },
- *   field_ui_base_route = "commerce_recruiting_invoice.settings"
+ *   field_ui_base_route = "commerce_recruitment_invoice.settings"
  * )
  */
 class Invoice extends ContentEntityBase implements InvoiceInterface {
@@ -170,39 +170,39 @@ class Invoice extends ContentEntityBase implements InvoiceInterface {
   /**
    * {@inheritdoc}
    */
-  public function getRecruitings() {
-    return $this->get('recruitings')->referencedEntities();
+  public function getRecruitments() {
+    return $this->get('recruitments')->referencedEntities();
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getFirstRecruiting() {
-    $recrutings = $this->get('recruitings')->referencedEntities();
-    return current($recrutings);
+  public function getFirstRecruitment() {
+    $recruitments = $this->get('recruitments')->referencedEntities();
+    return current($recruitments);
   }
 
   /**
    * {@inheritdoc}
    */
-  public function setRecruitings(array $recrutings) {
-    $this->set('recruitings', $recrutings);
+  public function setRecruitments(array $recruitments) {
+    $this->set('recruitments', $recruitments);
     return $this;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function hasRecruitings() {
-    return !$this->get('recruitings')->isEmpty();
+  public function hasRecruitments() {
+    return !$this->get('recruitments')->isEmpty();
   }
 
   /**
    * {@inheritdoc}
    */
-  public function addRecruiting(RecruitingInterface $recruting) {
-    if (!$this->hasRecruiting($recruting)) {
-      $this->get('recruitings')->appendItem($recruting);
+  public function addRecruitment(RecruitmentInterface $recruitment) {
+    if (!$this->hasRecruitment($recruitment)) {
+      $this->get('recruitments')->appendItem($recruitment);
     }
     return $this;
   }
@@ -210,10 +210,10 @@ class Invoice extends ContentEntityBase implements InvoiceInterface {
   /**
    * {@inheritdoc}
    */
-  public function removeRecruiting(RecruitingInterface $recruting) {
-    $index = $this->getRecruitingIndex($recruting);
+  public function removeRecruitment(RecruitmentInterface $recruitment) {
+    $index = $this->getRecruitmentIndex($recruitment);
     if ($index !== FALSE) {
-      $this->get('recruitings')->offsetUnset($index);
+      $this->get('recruitments')->offsetUnset($index);
     }
     return $this;
   }
@@ -221,26 +221,26 @@ class Invoice extends ContentEntityBase implements InvoiceInterface {
   /**
    * {@inheritdoc}
    */
-  public function hasRecruiting(RecruitingInterface $recruting) {
-    return $this->getRecruitingIndex($recruting) !== FALSE;
+  public function hasRecruitment(RecruitmentInterface $recruitment) {
+    return $this->getRecruitmentIndex($recruitment) !== FALSE;
   }
 
   /**
    * Gets the index of the given order item.
    *
-   * @param \Drupal\commerce_recruiting\Entity\RecruitingInterface $recruting
+   * @param \Drupal\commerce_recruiting\Entity\RecruitmentInterface $recruitment
    *   The order item.
    *
    * @return int|bool
    *   The index of the given order item, or FALSE if not found.
    */
-  protected function getRecruitingIndex(RecruitingInterface $recruting) {
-    $values = $this->get('recruitings')->getValue();
-    $recruting_ids = array_map(function ($value) {
+  protected function getRecruitmentIndex(RecruitmentInterface $recruitment) {
+    $values = $this->get('recruitments')->getValue();
+    $recruitment_ids = array_map(function ($value) {
       return $value['target_id'];
     }, $values);
 
-    return array_search($recruting->id(), $recruting_ids);
+    return array_search($recruitment->id(), $recruitment_ids);
   }
 
   /**
@@ -297,12 +297,12 @@ class Invoice extends ContentEntityBase implements InvoiceInterface {
       ->setDisplayConfigurable('view', TRUE)
       ->setRequired(TRUE);
 
-    $fields['recruitings'] = BaseFieldDefinition::create('entity_reference')
-      ->setLabel(t('Invoiced recruitings'))
-      ->setDescription(t('The Invoiced recruitings.'))
+    $fields['recruitments'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(t('Invoiced recruitments'))
+      ->setDescription(t('The invoiced recruitments.'))
       ->setRequired(TRUE)
       ->setCardinality(BaseFieldDefinition::CARDINALITY_UNLIMITED)
-      ->setSetting('target_type', 'commerce_recruiting')
+      ->setSetting('target_type', 'commerce_recruitment')
       ->setSetting('handler', 'default')
       ->setDisplayOptions('form', [
         'type' => 'inline_entity_form_complex',
@@ -310,7 +310,7 @@ class Invoice extends ContentEntityBase implements InvoiceInterface {
         'settings' => [
           'override_labels' => TRUE,
           'label_singular' => t('option'),
-          'label_plural' => t('recruitings'),
+          'label_plural' => t('recruitments'),
         ],
       ])
       ->setDisplayConfigurable('form', TRUE)
@@ -334,7 +334,7 @@ class Invoice extends ContentEntityBase implements InvoiceInterface {
 
     $fields['state'] = BaseFieldDefinition::create('state')
       ->setLabel(t('State'))
-      ->setDescription(t('The recruiting state.'))
+      ->setDescription(t('The recruitment state.'))
       ->setRequired(TRUE)
       ->setSetting('max_length', 255)
       ->setSetting('workflow', 'invoice_default')
@@ -346,7 +346,7 @@ class Invoice extends ContentEntityBase implements InvoiceInterface {
       ->setDisplayConfigurable('view', TRUE)
       ->setDisplayConfigurable('form', TRUE);
 
-    $fields['status']->setDescription(t('A boolean indicating whether the Invoice is published.'))
+    $fields['status']->setDescription(t('A boolean indicating whether the invoice is published.'))
       ->setDisplayOptions('form', [
         'type' => 'boolean_checkbox',
         'weight' => -3,
@@ -370,14 +370,14 @@ class Invoice extends ContentEntityBase implements InvoiceInterface {
     /** @var \Drupal\commerce_price\Price $price */
     $price = NULL;
 
-    /** @var \Drupal\commerce_recruiting\Entity\Recruiting $recruiting */
-    foreach ($this->getRecruitings() as $recruiting) {
+    /** @var \Drupal\commerce_recruiting\Entity\Recruitment $recruitment */
+    foreach ($this->getRecruitments() as $recruitment) {
       if ($price == NULL) {
-        $price = new Price($recruiting->getBonus()
-          ->getNumber(), $recruiting->getBonus()->getCurrencyCode());
+        $price = new Price($recruitment->getBonus()
+          ->getNumber(), $recruitment->getBonus()->getCurrencyCode());
       }
       else {
-        $price = $price->add($recruiting->getBonus());
+        $price = $price->add($recruitment->getBonus());
       }
     }
     if ($price != NULL) {
@@ -394,10 +394,10 @@ class Invoice extends ContentEntityBase implements InvoiceInterface {
     /** @var \Drupal\commerce_price\Price $price */
     $price = NULL;
 
-    /** @var \Drupal\commerce_recruiting\Entity\Recruiting $recruiting */
-    foreach ($this->getRecruitings() as $recruiting) {
-      $recruiting->setState($this->getState()->getId());
-      $recruiting->save();
+    /** @var \Drupal\commerce_recruiting\Entity\Recruitment $recruitment */
+    foreach ($this->getRecruitments() as $recruitment) {
+      $recruitment->setState($this->getState()->getId());
+      $recruitment->save();
     }
   }
 

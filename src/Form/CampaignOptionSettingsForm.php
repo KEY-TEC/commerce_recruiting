@@ -6,7 +6,7 @@ use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Class RecruitingOptionSettingsForm.
+ * Class CampaignOptionSettingsForm.
  *
  * @ingroup commerce_recruiting
  */
@@ -19,7 +19,7 @@ class CampaignOptionSettingsForm extends FormBase {
    *   The unique string identifying the form.
    */
   public function getFormId() {
-    return 'recruitingoption_settings';
+    return 'campaign_option_settings';
   }
 
   /**
@@ -35,7 +35,7 @@ class CampaignOptionSettingsForm extends FormBase {
   }
 
   /**
-   * Defines the settings form for Recruiting option entities.
+   * Defines the settings form for campaign option entities.
    *
    * @param array $form
    *   An associative array containing the structure of the form.
@@ -46,7 +46,7 @@ class CampaignOptionSettingsForm extends FormBase {
    *   Form definition array.
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $form['recruitingoption_settings']['#markup'] = 'Settings form for Recruiting option entities. Manage field settings here.';
+    $form['campaign_option_settings']['#markup'] = 'Settings form for campaign option entities. Manage field settings here.';
     return $form;
   }
 

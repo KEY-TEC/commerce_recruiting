@@ -17,7 +17,7 @@ interface CampaignManagerInterface {
    *   The recruiter.
    *
    * @return \Drupal\commerce_recruiting\Entity\CampaignInterface[]
-   *   The found recruiting campaign option.
+   *   List of campaigns.
    */
   public function findRecruiterCampaigns(AccountInterface $recruiter = NULL);
 
@@ -30,18 +30,18 @@ interface CampaignManagerInterface {
    *   Optional filter configs by product.
    *
    * @return \Drupal\commerce_recruiting\Entity\CampaignInterface[]
-   *   The found recruiting campaign option.
+   *   List of campaigns.
    */
   public function findNoRecruiterCampaigns(EntityInterface $product = NULL);
 
   /**
-   * Returns recruiting info from code.
+   * Returns a campaign option from code.
    *
    * @param \Drupal\commerce_recruiting\Code $code
-   *   The recruiting code.
+   *   The recruitment code.
    *
    * @return \Drupal\commerce_recruiting\Entity\CampaignOptionInterface
-   *   The campaignOption
+   *   The campaign option.
    */
   public function findCampaignOptionFromCode(Code $code);
 
@@ -60,14 +60,14 @@ interface CampaignManagerInterface {
   public function getRecruiterFromCode(Code $code);
 
   /**
-   * Saves and returns a recruiting session from code.
+   * Saves and returns a recruitment session from code.
    *
    * @param \Drupal\commerce_recruiting\Code $code
-   *   The recruiting code.
+   *   The recruitment code.
    *
-   * @return \Drupal\commerce_recruiting\RecruitingSessionInterface
+   * @return \Drupal\commerce_recruiting\RecruitmentSessionInterface
    *   The session service.
    */
-  public function saveRecruitingSession(Code $code);
+  public function saveRecruitmentSession(Code $code);
 
 }

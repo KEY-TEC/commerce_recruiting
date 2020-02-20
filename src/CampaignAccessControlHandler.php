@@ -8,9 +8,9 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
 
 /**
- * Access controller for the Recruiting entity.
+ * Access controller for the campaign entity.
  *
- * @see \Drupal\commerce_recruiting\Entity\Recruiting.
+ * @see \Drupal\commerce_recruiting\Entity\Recruitment.
  */
 class CampaignAccessControlHandler extends EntityAccessControlHandler {
 
@@ -18,19 +18,19 @@ class CampaignAccessControlHandler extends EntityAccessControlHandler {
    * {@inheritdoc}
    */
   protected function checkAccess(EntityInterface $entity, $operation, AccountInterface $account) {
-    /** @var \Drupal\commerce_recruiting\Entity\RecruitingInterface $entity */
+    /** @var \Drupal\commerce_recruiting\Entity\RecruitmentInterface $entity */
     switch ($operation) {
       case 'view':
         if (!$entity->isPublished()) {
-          return AccessResult::allowedIfHasPermission($account, 'view unpublished recruiting campaign entities');
+          return AccessResult::allowedIfHasPermission($account, 'view unpublished campaign entities');
         }
-        return AccessResult::allowedIfHasPermission($account, 'view published recruiting campaign entities');
+        return AccessResult::allowedIfHasPermission($account, 'view published campaign entities');
 
       case 'update':
-        return AccessResult::allowedIfHasPermission($account, 'edit recruiting campaign entities');
+        return AccessResult::allowedIfHasPermission($account, 'edit campaign entities');
 
       case 'delete':
-        return AccessResult::allowedIfHasPermission($account, 'delete recruiting campaign entities');
+        return AccessResult::allowedIfHasPermission($account, 'delete campaign entities');
     }
 
     // Unknown operation, no opinion.
@@ -41,7 +41,7 @@ class CampaignAccessControlHandler extends EntityAccessControlHandler {
    * {@inheritdoc}
    */
   protected function checkCreateAccess(AccountInterface $account, array $context, $entity_bundle = NULL) {
-    return AccessResult::allowedIfHasPermission($account, 'add recruiting campaign entities');
+    return AccessResult::allowedIfHasPermission($account, 'add campaign entities');
   }
 
 }

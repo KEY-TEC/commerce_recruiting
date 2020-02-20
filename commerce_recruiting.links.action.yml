@@ -1,17 +1,17 @@
-entity.commerce_recruiting.add_form:
-  route_name: entity.commerce_recruiting.add_form
-  title: 'Add Recruiting'
+entity.commerce_recruitment.add_form:
+  route_name: entity.commerce_recruitment.add_form
+  title: 'Add Recruitment'
   appears_on:
-    - entity.commerce_recruiting.collection
+    - entity.commerce_recruitment.collection
 
-entity.commerce_recruiting_campaign.add_form:
-  route_name: entity.commerce_recruiting_campaign.add_form
+entity.commerce_recruitment_campaign.add_form:
+  route_name: entity.commerce_recruitment_campaign.add_form
   title: 'Add Campaign'
   appears_on:
-    - entity.commerce_recruiting_campaign.collection
+    - entity.commerce_recruitment_campaign.collection
 
-entity.commerce_recruiting_invoice.add_form:
-  route_name: entity.commerce_recruiting_invoice.add_form
+entity.commerce_recruitment_invoice.add_form:
+  route_name: entity.commerce_recruitment_invoice.add_form
   title: 'Add Invoice'
   appears_on:
-    - entity.commerce_recruiting_invoice.collection
+    - entity.commerce_recruitment_invoice.collection

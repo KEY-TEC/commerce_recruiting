@@ -1,59 +1,59 @@
-commerce_recruiting.collections:
-  title: 'Recruiting'
-  route_name: 'commerce_recruiting.collections'
-  description: 'Manage recruiting.'
+commerce_recruitment.collections:
+  title: 'Recruitments'
+  route_name: 'commerce_recruitment.collections'
+  description: 'Manage recruitment.'
   parent: 'commerce.admin_commerce'
   weight: 0
 
-# Recruiting entity menu items definition
-entity.commerce_recruiting.collection:
-  title: 'Recruiting'
-  route_name: entity.commerce_recruiting.collection
-  description: 'List of recruitment'
-  parent: 'commerce_recruiting.collections'
+# Recruitment entity menu items definition
+entity.commerce_recruitment.collection:
+  title: 'Recruitments'
+  route_name: entity.commerce_recruitment.collection
+  description: 'List of recruitments'
+  parent: 'commerce_recruitment.collections'
   weight: 100
 
-# Recruiting entity type menu items definition
-entity.commerce_recruiting_campaign.collection:
+# Recruitment entity type menu items definition
+entity.commerce_recruitment_campaign.collection:
   title: 'Campaigns'
-  route_name: entity.commerce_recruiting_campaign.collection
+  route_name: entity.commerce_recruitment_campaign.collection
   description: 'List of Campaigns'
-  parent: 'commerce_recruiting.collections'
+  parent: 'commerce_recruitment.collections'
   weight: 99
 
 # Invoice menu items definition
-entity.commerce_recruiting_invoice.collection:
+entity.commerce_recruitment_invoice.collection:
   title: 'Invoice list'
-  route_name: entity.commerce_recruiting_invoice.collection
+  route_name: entity.commerce_recruitment_invoice.collection
   description: 'List Invoices'
-  parent: commerce_recruiting.collections
+  parent: commerce_recruitment.collections
   weight: 100
 
-commerce_recruiting.configuration:
-  title: 'Recruiting'
-  route_name: 'commerce_recruiting.configuration'
+commerce_recruitment.configuration:
+  title: 'Recruitment'
+  route_name: 'commerce_recruitment.configuration'
   parent: 'commerce.configuration'
 
-commerce_recruiting_invoice.admin.structure.settings:
+commerce_recruitment_invoice.admin.structure.settings:
   title: 'Invoice settings'
   description: 'Configure Invoice entities'
-  route_name: commerce_recruiting_invoice.settings
-  parent: commerce_recruiting.configuration
+  route_name: commerce_recruitment_invoice.settings
+  parent: commerce_recruitment.configuration
 
-commerce_recruiting.admin.structure.settings:
-  title: 'Recruiting settings'
-  description: 'Configure Recruiting entities'
-  route_name: commerce_recruiting.settings
-  parent: commerce_recruiting.configuration
+commerce_recruitment.admin.structure.settings:
+  title: 'Recruitment settings'
+  description: 'Configure Recruitment entities'
+  route_name: commerce_recruitment.settings
+  parent: commerce_recruitment.configuration
 
-commerce_recruiting_campaign.admin.structure.settings:
+commerce_recruitment_campaign.admin.structure.settings:
   title: 'Campaign settings'
   description: 'Configure Campaign entities'
-  route_name: commerce_recruiting_campaign.settings
-  parent: commerce_recruiting.configuration
+  route_name: commerce_recruitment_campaign.settings
+  parent: commerce_recruitment.configuration
 
-commerce_recruiting_camp_option.admin.structure.settings:
+commerce_recruitment_camp_option.admin.structure.settings:
   title: 'Campaign Option settings'
   description: 'Configure Campaign option entities'
-  route_name: commerce_recruiting_camp_option.settings
-  parent: commerce_recruiting.configuration
+  route_name: commerce_recruitment_camp_option.settings
+  parent: commerce_recruitment.configuration

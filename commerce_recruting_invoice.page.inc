@@ -12,16 +12,16 @@ use Drupal\Core\Render\Element;
 /**
  * Prepares variables for Invoice templates.
  *
- * Default template: commerce_recruiting_invoice.html.twig.
+ * Default template: commerce_recruitment_invoice.html.twig.
  *
  * @param array $variables
  *   An associative array containing:
  *   - elements: An associative array containing the user information and any
  *   - attributes: HTML attributes for the containing element.
  */
-function template_preprocess_commerce_recruiting_invoice(array &$variables) {
+function template_preprocess_commerce_recruitment_invoice(array &$variables) {
   // Fetch Invoice Entity Object.
-  $commerce_recruiting_invoice = $variables['elements']['#commerce_recruiting_invoice'];
+  $commerce_recruitment_invoice = $variables['elements']['#commerce_recruitment_invoice'];
 
   // Helpful $content variable for templates.
   foreach (Element::children($variables['elements']) as $key) {

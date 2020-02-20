@@ -26,26 +26,26 @@ function commerce_recruiting_theme($existing, $type, $theme, $path) {
       'campaigns' => [],
     ],
   ];
-  $theme['recruiting_summary'] = [
+  $theme['recruitment_summary'] = [
     'path' => $path . '/templates',
-    'template'  => 'recruiting-summary',
+    'template'  => 'recruitment-summary',
     'variables' => [
       'summaries' => [],
     ],
   ];
-  $theme['recruiting_invoices'] = [
+  $theme['recruitment_invoices'] = [
     'path' => $path . '/templates',
-    'template'  => 'recruiting-invoices',
+    'template'  => 'recruitment-invoices',
     'variables' => [
       'invoices' => [],
     ],
   ];
-  $theme['recruiting'] = [
+  $theme['recruitment'] = [
     'render element' => 'elements',
     'file' => 'commerce_recruiting.page.inc',
-    'template' => 'recruiting',
+    'template' => 'recruitment',
   ];
-  $theme['recruiting_content_add_list'] = [
+  $theme['recruitment_content_add_list'] = [
     'render element' => 'content',
     'variables' => ['content' => NULL],
     'file' => 'commerce_recruiting.page.inc',
@@ -57,5 +57,5 @@ function commerce_recruiting_theme($existing, $type, $theme, $path) {
  * Implements hook_cron().
  */
 function commerce_recruiting_cron() {
-  \Drupal::service('commerce_recruiting.manager')->applyTransitions('accept');
+  \Drupal::service('commerce_recruiting.recruitment_manager')->applyTransitions('accept');
 }

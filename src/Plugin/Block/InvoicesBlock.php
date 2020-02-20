@@ -4,7 +4,6 @@ namespace Drupal\commerce_recruiting\Plugin\Block;
 
 use Drupal\commerce_recruiting\CampaignManagerInterface;
 use Drupal\commerce_recruiting\InvoiceManagerInterface;
-use Drupal\commerce_recruiting\RecruitingManagerInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Language\LanguageManagerInterface;
@@ -14,11 +13,11 @@ use Drupal\Core\Session\AccountInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Provides a 'Recruiting Invoices' block.
+ * Provides a 'Recruitment Invoices' block.
  *
  * @Block(
  *  id = "commerce_recruiting_invoices",
- *  admin_label = @Translation("Recruiting Invoices block"),
+ *  admin_label = @Translation("Recruitment Invoices block"),
  *  context = {
  *    "user" = @ContextDefinition("entity:user", required = FALSE)
  *  }
@@ -56,14 +55,14 @@ class InvoicesBlock extends BlockBase implements ContainerFactoryPluginInterface
   private $invoices = NULL;
 
   /**
-   * The recruiting manager.
+   * The invoice manager.
    *
    * @var \Drupal\commerce_recruiting\InvoiceManagerInterface
    */
   private $invoiceManager;
 
   /**
-   * Constructs a new CartBlock.
+   * Constructs a new InvoicesBlock.
    *
    * @param array $configuration
    *   A configuration array containing information about the plugin instance.
@@ -78,7 +77,7 @@ class InvoicesBlock extends BlockBase implements ContainerFactoryPluginInterface
    * @param \Drupal\commerce_recruiting\CampaignManagerInterface $campaign_manager
    *   The campaign manager.
    * @param \Drupal\commerce_recruiting\InvoiceManagerInterface $invoice_manager
-   *   The recruiting manager.
+   *   The invoice manager.
    */
   public function __construct(array $configuration, $plugin_id, $plugin_definition, LanguageManagerInterface $language_manager, RouteMatchInterface $route, CampaignManagerInterface $campaign_manager, InvoiceManagerInterface $invoice_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
@@ -104,19 +103,18 @@ class InvoicesBlock extends BlockBase implements ContainerFactoryPluginInterface
   }
 
   /**
-   * Returns the block build array with a recruiting url to share.
+   * Returns the invoice block build.
    *
    * @return array
    *   The build array.
    */
   public function build() {
     $invoices = $this->findInvoices();
-    return  ['#theme' => 'recruiting_invoices', '#invoices' => $invoices];;
+    return  ['#theme' => 'recruitment_invoices', '#invoices' => $invoices];;
   }
 
 
   private function findInvoices() {
-
     if ($this->invoices !== NULL) {
       return $this->invoices;
     }
@@ -125,7 +123,6 @@ class InvoicesBlock extends BlockBase implements ContainerFactoryPluginInterface
       $this->invoices = $this->invoiceManager->findInvoices($user);
       return $this->invoices;
     }
-
   }
 
   /**

@@ -1,33 +1,35 @@
 services:
   logger.channel.common_recruit_a_friend:
     parent: logger.channel_base
-    arguments: ['commerce_recruiting']
-  commerce_recruiting.manager:
-    class: Drupal\commerce_recruiting\RecruitingManager
-    arguments: ['@current_user', '@language_manager', '@entity_type.manager','@commerce_recruiting.recruiting_session']
+    arguments: ['commerce_recruitment']
+
+  commerce_recruiting.recruitment_manager:
+    class: Drupal\commerce_recruiting\RecruitmentManager
+    arguments: ['@current_user', '@language_manager', '@entity_type.manager','@commerce_recruiting.recruitment_session']
+
   commerce_recruiting.campaign_manager:
     class: Drupal\commerce_recruiting\CampaignManager
-    arguments: ['@language_manager', '@entity_type.manager','@commerce_recruiting.recruiting_session']
+    arguments: ['@language_manager', '@entity_type.manager','@commerce_recruiting.recruitment_session']
 
-  commerce_recruiting.recruiting_checkout_subscriber:
-    class: Drupal\commerce_recruiting\EventSubscriber\RecruitingCheckoutSubscriber
-    arguments: ['@current_user', '@messenger', '@commerce_recruiting.manager']
+  commerce_recruiting.recruitment_checkout_subscriber:
+    class: Drupal\commerce_recruiting\EventSubscriber\RecruitmentCheckoutSubscriber
+    arguments: ['@current_user', '@messenger', '@commerce_recruiting.recruitment_manager']
     tags:
       - { name: event_subscriber }
-  commerce_recruiting.recruiting_session:
-    class: Drupal\commerce_recruiting\RecruitingSession
+  commerce_recruiting.recruitment_session:
+    class: Drupal\commerce_recruiting\RecruitmentSession
     arguments: ['@session', '@entity_type.manager']
 
-  commerce_recruiting.recruiting_guard:
+  commerce_recruiting.recruitment_guard:
     class: Drupal\commerce_recruiting\Guard\RecrutingGuard
     arguments: ['@current_user', '@plugin.manager.workflow']
     tags:
-      - { name: state_machine.guard, group: recruiting }
+      - { name: state_machine.guard, group: recruitment }
 
-  logger.channel.commerce_recruiting:
+  logger.channel.commerce_recruitment:
     parent: logger.channel_base
-    arguments: ['commerce_recruiting']
+    arguments: ['commerce_recruitment']
 
   commerce_recruiting.invoice_manager:
     class: Drupal\commerce_recruiting\InvoiceManager
-    arguments: ['@entity_type.manager','@commerce_recruiting.manager']
+    arguments: ['@entity_type.manager','@commerce_recruiting.recruitment_manager']

@@ -49,19 +49,22 @@ class InvoiceController extends ControllerBase {
   }
 
   /**
-   * Decrypt recruiting url and redirect to product.
+   * Creates an invoice for recruitments of the given campaign.
+   *
+   * @param \Drupal\commerce_recruiting\Entity\CampaignInterface $campaign
+   *   The recruitment campaign.
    *
    * @return \Symfony\Component\HttpFoundation\RedirectResponse
    *   Redirect to product.
    */
-  public function createInvoice(CampaignInterface $commerce_recruiting_campaign) {
+  public function createInvoice(CampaignInterface $campaign) {
     try {
       $user = User::load($this->accountProxy->id());
-      $invoice = $this->invoiceManager->createInvoice($commerce_recruiting_campaign, $user);
+      $invoice = $this->invoiceManager->createInvoice($campaign, $user);
       return new RedirectResponse($invoice->toUrl()->toString(), 302);;
     }
     catch (\Throwable $e) {
-      $this->getLogger('commerce_recruiting')->error($e->getMessage());
+      $this->getLogger('commerce_recruitment')->error($e->getMessage());
       $this->messenger()
         ->addError($this->t("Error while creating invoice. Please contact us."));
       return $this->redirect('<front>');

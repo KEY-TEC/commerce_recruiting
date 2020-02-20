@@ -1,0 +1,21 @@
+{#
+/**
+ * @file campaign_option.html.twig
+ * Default theme implementation to present campaign option data.
+ *
+ * This template is used when viewing campaign option pages.
+ *
+ * Available variables:
+ * - content: A list of content items. Use 'content' to print all content, or
+ * - attributes: HTML attributes for the container element.
+ *
+ * @see template_preprocess_campaign_option()
+ *
+ * @ingroup themeable
+ */
+#}
+<div{{ attributes.addClass('campaign_option') }}>
+  {% if content %}
+    {{- content -}}
+  {% endif %}
+</div>

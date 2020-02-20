@@ -30,8 +30,8 @@ class InvoiceListBuilder extends EntityListBuilder {
     $row['id'] = $entity->id();
     $row['name'] = Link::createFromRoute(
       $entity->label(),
-      'entity.commerce_recruiting_invoice.edit_form',
-      ['commerce_recruiting_invoice' => $entity->id()]
+      'entity.commerce_recruitment_invoice.edit_form',
+      ['commerce_recruitment_invoice' => $entity->id()]
     );
     return $row + parent::buildRow($entity);
   }

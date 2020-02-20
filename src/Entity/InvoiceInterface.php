@@ -79,7 +79,7 @@ interface InvoiceInterface extends ContentEntityInterface, EntityChangedInterfac
    * Gets the invoice state.
    *
    * @return \Drupal\state_machine\Plugin\Field\FieldType\StateItemInterface
-   *   The recruiting state.
+   *   The invoice state.
    */
   public function getState();
 
@@ -96,28 +96,28 @@ interface InvoiceInterface extends ContentEntityInterface, EntityChangedInterfac
   /**
    * Gets the recrutings.
    *
-   * @return \Drupal\commerce_recruiting\Entity\RecruitingInterface[]
+   * @return \Drupal\commerce_recruiting\Entity\RecruitmentInterface[]
    *   The recrutings.
    */
-  public function getRecruitings();
+  public function getRecruitments();
 
   /**
    * Gets the first recruting.
    *
-   * @return \Drupal\commerce_recruiting\Entity\RecruitingInterface
+   * @return \Drupal\commerce_recruiting\Entity\RecruitmentInterface
    *   The recruting.
    */
-  public function getFirstRecruiting();
+  public function getFirstRecruitment();
 
   /**
    * Sets the recrutings.
    *
-   * @param \Drupal\commerce_recruiting\Entity\RecruitingInterface[] $recrutings
+   * @param \Drupal\commerce_recruiting\Entity\RecruitmentInterface[] $recruitments
    *   The recrutings.
    *
    * @return $this
    */
-  public function setRecruitings(array $recrutings);
+  public function setRecruitments(array $recruitments);
 
   /**
    * Gets whether the campaign has recrutings.
@@ -125,37 +125,37 @@ interface InvoiceInterface extends ContentEntityInterface, EntityChangedInterfac
    * @return bool
    *   TRUE if the recruting has recrutings, FALSE otherwise.
    */
-  public function hasRecruitings();
+  public function hasRecruitments();
 
   /**
    * Adds an order item.
    *
-   * @param \Drupal\commerce_recruiting\Entity\RecruitingInterface $recruting
+   * @param \Drupal\commerce_recruiting\Entity\RecruitmentInterface $recruitment
    *   The recruting.
    *
    * @return $this
    */
-  public function addRecruiting(RecruitingInterface $recruting);
+  public function addRecruitment(RecruitmentInterface $recruitment);
 
   /**
    * Removes an recruting.
    *
-   * @param \Drupal\commerce_recruiting\Entity\RecruitingInterface $recruting
+   * @param \Drupal\commerce_recruiting\Entity\RecruitmentInterface $recruitment
    *   The recruting.
    *
    * @return $this
    */
-  public function removeRecruiting(RecruitingInterface $recruting);
+  public function removeRecruitment(RecruitmentInterface $recruitment);
 
   /**
    * Checks whether the order has a given recruting.
    *
-   * @param \Drupal\commerce_recruiting\Entity\RecruitingInterface $recruting
+   * @param \Drupal\commerce_recruiting\Entity\RecruitmentInterface $recruitment
    *   The recruting.
    *
    * @return bool
    *   TRUE if the recruting was found, FALSE otherwise.
    */
-  public function hasRecruiting(RecruitingInterface $recruting);
+  public function hasRecruitment(RecruitmentInterface $recruitment);
 
 }

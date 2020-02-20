@@ -6,10 +6,10 @@
 ## - fin run_tests --filter 'MyTest'
 ##
 ## Test calls:
-## - fin run_tests --filter 'EventSubscriber\\RecruitingCheckoutSubscriberTest'
+## - fin run_tests --filter 'EventSubscriber\\RecruitmentCheckoutSubscriberTest'
 ## - fin run_tests --filter 'Kernel\\CampaignManagerTest'
-## - fin run_tests --filter 'Kernel\\RecruitingManagerTest'
-## - fin run_tests --filter 'Kernel\\RecruitingSessionTest'
+## - fin run_tests --filter 'Kernel\\RecruitmentManagerTest'
+## - fin run_tests --filter 'Kernel\\RecruitmentSessionTest'
 ## - fin run_tests --filter 'Unit\\EncryptionTest'
 
 set -e

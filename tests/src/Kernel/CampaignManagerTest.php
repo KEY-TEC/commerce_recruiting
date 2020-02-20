@@ -3,7 +3,7 @@
 namespace Drupal\Tests\commerce_recruiting\Kernel;
 
 use Drupal\commerce_recruiting\Code;
-use Drupal\Tests\commerce_recruiting\Traits\RecruitingEntityCreationTrait;
+use Drupal\Tests\commerce_recruiting\Traits\RecruitmentEntityCreationTrait;
 
 /**
  * CampaignManager.
@@ -12,7 +12,7 @@ use Drupal\Tests\commerce_recruiting\Traits\RecruitingEntityCreationTrait;
  */
 class CampaignManagerTest extends CommerceRecruitingKernelTestBase {
 
-  use RecruitingEntityCreationTrait;
+  use RecruitmentEntityCreationTrait;
 
   /**
    * Test testFindNoRecruiterCampaigns.
@@ -60,7 +60,7 @@ class CampaignManagerTest extends CommerceRecruitingKernelTestBase {
     $friend_recruiter = $this->createUser();
     $code_string = $friend_campaign->getFirstOption()->getCode();
     $code = Code::createFromCode($code_string . '--' . $friend_recruiter->id());
-    $session = $this->campaignManager->saveRecruitingSession($code);
+    $session = $this->campaignManager->saveRecruitmentSession($code);
     $this->assertEqual($session->getRecruiter()->id(), $friend_recruiter->id());
     $this->assertEqual($session->getCampaignOption()->id(), $friend_campaign->getFirstOption()->id());
 
@@ -68,16 +68,16 @@ class CampaignManagerTest extends CommerceRecruitingKernelTestBase {
     $recruiter_campaign = $this->createCampaign($recruiter_recruiter);
     $code_string = $recruiter_campaign->getFirstOption()->getCode();
     $code = Code::createFromCode($code_string);
-    $recruiter_session = $this->campaignManager->saveRecruitingSession($code);
+    $recruiter_session = $this->campaignManager->saveRecruitmentSession($code);
     $this->assertEqual($recruiter_session->getRecruiter()->id(), $recruiter_campaign->getRecruiter()->id());
     $this->assertEqual($recruiter_session->getCampaignOption()->id(), $recruiter_campaign->getFirstOption()->id());
 
   }
 
   /**
-   * Test testGetRecruitingUrl.
+   * Test getRecruitmentInfoFromCode.
    */
-  public function testGetRecruitingInfoFromCode() {
+  public function testGetRecruitmentInfoFromCode() {
     $campaign = $this->createCampaign($this->drupalCreateUser());
     $code_string = $campaign->getFirstOption()->getCode();
     $code = Code::createFromCode($code_string);

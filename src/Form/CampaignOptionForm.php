@@ -7,7 +7,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Form controller for Recruiting option edit forms.
+ * Form controller for campaign option edit forms.
  *
  * @ingroup commerce_recruiting
  */
@@ -50,17 +50,17 @@ class CampaignOptionForm extends ContentEntityForm {
 
     switch ($status) {
       case SAVED_NEW:
-        $this->messenger()->addMessage($this->t('Created the %label Recruiting option.', [
+        $this->messenger()->addMessage($this->t('Created the %label campaign option.', [
           '%label' => $entity->label(),
         ]));
         break;
 
       default:
-        $this->messenger()->addMessage($this->t('Saved the %label Recruiting option.', [
+        $this->messenger()->addMessage($this->t('Saved the %label campaign option.', [
           '%label' => $entity->label(),
         ]));
     }
-    $form_state->setRedirect('entity.commerce_recruiting_camp_option.canonical', ['commerce_recruiting_camp_option' => $entity->id()]);
+    $form_state->setRedirect('entity.commerce_recruitment_camp_option.canonical', ['commerce_recruitment_camp_option' => $entity->id()]);
   }
 
 }

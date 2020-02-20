@@ -27,26 +27,26 @@ class CampaignManager implements CampaignManagerInterface {
   protected $entityTypeManager;
 
   /**
-   * The recruiting session.
+   * The recruitment session.
    *
-   * @var \Drupal\commerce_recruiting\RecruitingSessionInterface
+   * @var \Drupal\commerce_recruiting\RecruitmentSessionInterface
    */
-  private $recruitingSession;
+  private $recruitmentSession;
 
   /**
-   * RecruitingManager constructor.
+   * CampaignManager constructor.
    *
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The language manager.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
-   * @param \Drupal\commerce_recruiting\RecruitingSessionInterface $recruiting_session
-   *   The recruiting session.
+   * @param \Drupal\commerce_recruiting\RecruitmentSessionInterface $recruitment_session
+   *   The recruitment session.
    */
-  public function __construct(LanguageManagerInterface $language_manager, EntityTypeManagerInterface $entity_type_manager, RecruitingSessionInterface $recruiting_session) {
+  public function __construct(LanguageManagerInterface $language_manager, EntityTypeManagerInterface $entity_type_manager, RecruitmentSessionInterface $recruitment_session) {
     $this->languageManager = $language_manager;
     $this->entityTypeManager = $entity_type_manager;
-    $this->recruitingSession = $recruiting_session;
+    $this->recruitmentSession = $recruitment_session;
   }
 
   /**
@@ -68,7 +68,7 @@ class CampaignManager implements CampaignManagerInterface {
   /**
    * {@inheritDoc}
    */
-  public function saveRecruitingSession(Code $code) {
+  public function saveRecruitmentSession(Code $code) {
     $option = $this->findCampaignOptionFromCode($code);
     $recruiter = $this->getRecruiterFromCode($code);
 
@@ -76,21 +76,21 @@ class CampaignManager implements CampaignManagerInterface {
       throw new \InvalidArgumentException("No valid code");
     }
 
-    $this->recruitingSession->setRecruiter($recruiter);
-    $this->recruitingSession->setRecruitingCampaignOption($option);
+    $this->recruitmentSession->setRecruiter($recruiter);
+    $this->recruitmentSession->setCampaignOption($option);
 
-    return $this->recruitingSession;
+    return $this->recruitmentSession;
   }
 
   /**
    * {@inheritDoc}
    */
   public function findNoRecruiterCampaigns(EntityInterface $product = NULL) {
-    $query = $this->entityTypeManager->getStorage('commerce_recruiting_campaign')
+    $query = $this->entityTypeManager->getStorage('commerce_recruitment_campaign')
       ->getQuery();
 
     $query->condition('status', 1);
-    $options_query = $this->entityTypeManager->getStorage('commerce_recruiting_camp_option')
+    $options_query = $this->entityTypeManager->getStorage('commerce_recruitment_camp_option')
       ->getQuery();
 
     if ($product !== NULL) {
@@ -110,7 +110,7 @@ class CampaignManager implements CampaignManagerInterface {
     }
 
     $rcids = $query->execute();
-    return $this->entityTypeManager->getStorage('commerce_recruiting_campaign')
+    return $this->entityTypeManager->getStorage('commerce_recruitment_campaign')
       ->loadMultiple($rcids);
   }
 
@@ -118,7 +118,7 @@ class CampaignManager implements CampaignManagerInterface {
    * {@inheritDoc}
    */
   public function findRecruiterCampaigns(AccountInterface $recruiter = NULL) {
-    $query = $this->entityTypeManager->getStorage('commerce_recruiting_campaign')
+    $query = $this->entityTypeManager->getStorage('commerce_recruitment_campaign')
       ->getQuery();
     $query->condition('status', 1);
 
@@ -132,7 +132,7 @@ class CampaignManager implements CampaignManagerInterface {
     }
 
     $rcids = $query->execute();
-    return $this->entityTypeManager->getStorage('commerce_recruiting_campaign')
+    return $this->entityTypeManager->getStorage('commerce_recruitment_campaign')
       ->loadMultiple($rcids);
   }
 
@@ -140,7 +140,7 @@ class CampaignManager implements CampaignManagerInterface {
    * {@inheritDoc}
    */
   public function findCampaignOptionFromCode(Code $code) {
-    $query = $this->entityTypeManager->getStorage('commerce_recruiting_camp_option')
+    $query = $this->entityTypeManager->getStorage('commerce_recruitment_camp_option')
       ->getQuery();
 
     $query->condition('status', 1);
@@ -149,7 +149,7 @@ class CampaignManager implements CampaignManagerInterface {
     $rcids = $query->execute();
     $cid = current($rcids);
     if (!empty($cid)) {
-      return $this->entityTypeManager->getStorage('commerce_recruiting_camp_option')
+      return $this->entityTypeManager->getStorage('commerce_recruitment_camp_option')
         ->load($cid);
     }
   }

@@ -1,61 +1,62 @@
-add recruiting entities:
-  title: 'Create new recruiting entities'
+add recruitment entities:
+  title: 'Create new recruitment entities'
 
-administer recruiting entities:
-  title: 'Administer recruiting entities'
-  description: 'Allow to access the administration form to configure recruiting entities.'
+administer recruitment entities:
+  title: 'Administer recruitment entities'
+  description: 'Allow to access the administration form to configure recruitment entities.'
   restrict access: true
 
-delete recruiting entities:
-  title: 'Delete recruiting entities'
+delete recruitment entities:
+  title: 'Delete recruitment entities'
 
-edit recruiting entities:
-  title: 'Edit recruiting entities'
+edit recruitment entities:
+  title: 'Edit recruitment entities'
 
-view published recruiting entities:
-  title: 'View published recruiting entities'
+view published recruitment entities:
+  title: 'View published recruitment entities'
 
-view unpublished recruiting entities:
-  title: 'View unpublished recruiting entities'
+view unpublished recruitment entities:
+  title: 'View unpublished recruitment entities'
 
-add recruiting campaign entities:
-  title: 'Create new recruiting campaign entities'
+add recruitment campaign entities:
+  title: 'Create new recruitment campaign entities'
 
-administer recruiting campaign entities:
-  title: 'Administer recruiting campaign entities'
-  description: 'Allow to access the administration form to configure recruiting campaign entities.'
+administer recruitment campaign entities:
+  title: 'Administer recruitment campaign entities'
+  description: 'Allow to access the administration form to configure recruitment campaign entities.'
   restrict access: true
 
-delete recruiting campaign entities:
-  title: 'Delete recruiting campaign entities'
+delete recruitment campaign entities:
+  title: 'Delete campaign entities'
 
-edit recruiting campaign entities:
-  title: 'Edit recruiting campaign entities'
+edit recruitment campaign entities:
+  title: 'Edit campaign entities'
 
-view published recruiting campaign entities:
-  title: 'View published recruiting campaign entities'
+view published recruitment campaign entities:
+  title: 'View published campaign entities'
 
-view unpublished recruiting campaign entities:
-  title: 'View unpublished recruiting campaign entities'
-add recruiting option entities:
-  title: 'Create new Recruiting option entities'
+view unpublished recruitment campaign entities:
+  title: 'View unpublished campaign entities'
 
-administer recruiting option entities:
-  title: 'Administer Recruiting option entities'
-  description: 'Allow to access the administration form to configure Recruiting option entities.'
+add campaign option entities:
+  title: 'Create new campaign option entities'
+
+administer campaign option entities:
+  title: 'Administer campaign option entities'
+  description: 'Allow to access the administration form to configure campaign option entities.'
   restrict access: true
 
-delete recruiting option entities:
-  title: 'Delete Recruiting option entities'
+delete campaign option entities:
+  title: 'Delete campaign option entities'
 
-edit recruiting option entities:
-  title: 'Edit Recruiting option entities'
+edit campaign option entities:
+  title: 'Edit campaign option entities'
 
-view published recruiting option entities:
-  title: 'View published Recruiting option entities'
+view published campaign option entities:
+  title: 'View published campaign option entities'
 
-view unpublished recruiting option entities:
-  title: 'View unpublished Recruiting option entities'
+view unpublished campaign option entities:
+  title: 'View unpublished campaign option entities'
 
 add invoice entities:
   title: 'Create new Invoice entities'

@@ -1,31 +1,23 @@
-commerce_recruiting.collections:
-  path: '/admin/commerce/recruiting'
+commerce_recruitment.collections:
+  path: '/admin/commerce/recruitment'
   defaults:
     _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
     _title: 'Recruitment'
   requirements:
-    _permission: 'administer recruiting entities'
+    _permission: 'administer recruitment entities'
 
-commerce_recruiting.recruiting_url:
+commerce_recruitment.recruitment_url:
   path: '/code/{campaign_code}'
   defaults:
-    _controller: '\Drupal\commerce_recruiting\Controller\RecruitingCodeController::code'
-    _title: 'redirectFromRecruitingUrl'
+    _controller: '\Drupal\commerce_recruiting\Controller\RecruitmentCodeController::code'
+    _title: 'redirectFromRecruitmentUrl'
   requirements:
     _permission: 'access content'
 
-commerce_recruiting.invoice:
-  path: '/user/rewards/invoice/{commerce_recruiting_campaign}'
+commerce_recruitment.invoice:
+  path: '/user/rewards/invoice/{commerce_recruitment_campaign}'
   defaults:
     _controller: '\Drupal\commerce_recruiting\Controller\InvoiceController::createInvoice'
     _title: 'Invoice'
   requirements:
     _permission: 'access content'
-
-commerce_recruiting.configuration:
-  path: '/admin/commerce/config/recruiting'
-  defaults:
-    _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
-    _title: 'Recruiting'
-  requirements:
-    _permission: 'access commerce administration pages'

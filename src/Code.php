@@ -66,7 +66,7 @@ class Code {
     if ($this->recruiterId != NULL) {
       $code .= '--' . $this->recruiterId;
     }
-    return Url::fromRoute('commerce_recruiting.recruiting_url', ['campaign_code' => $code], ['absolute' => TRUE]);
+    return Url::fromRoute('commerce_recruitment.recruitment_url', ['campaign_code' => $code], ['absolute' => TRUE]);
   }
 
   /**

@@ -100,7 +100,7 @@ function commerce_recruiting_test_install() {
     $bundles[] = $bundle;
   }
 
-  // Create a general recruiting campaign...
+  // Create a general recruitment campaign...
   // Applies for any product ("recruit a friend")
   $campaign = Campaign::create([
     'name' => 'general',
@@ -116,7 +116,7 @@ function commerce_recruiting_test_install() {
   $campaign->addOption($option);
   $campaign->save();
 
-  // Create a product specific recruiting campaign...
+  // Create a product specific recruitment campaign...
   $campaign = Campaign::create([
     'name' => 'product',
     'status' => 1,
@@ -135,7 +135,7 @@ function commerce_recruiting_test_install() {
   $campaign->addOption($option);
   $campaign->save();
 
-  // Create a user specific recruiting campaign...
+  // Create a user specific recruitment campaign...
   // Applies for any product but will benefit this user.
   $campaign = Campaign::create([
     'name' => 'user',
@@ -152,7 +152,7 @@ function commerce_recruiting_test_install() {
   $campaign->addOption($option);
   $campaign->save();
 
-  // Create a product-user specific recruiting campaign...
+  // Create a product-user specific recruitment campaign...
   $campaign = Campaign::create([
     'name' => 'user_product',
     'status' => 1,

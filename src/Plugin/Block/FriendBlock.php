@@ -92,7 +92,7 @@ class FriendBlock extends BlockBase implements ContainerFactoryPluginInterface {
   }
 
   /**
-   * Returns the block build array with a recruiting url to share.
+   * Returns the block build array with a recruitment url to share.
    *
    * @return array
    *   The build array.
@@ -135,9 +135,12 @@ class FriendBlock extends BlockBase implements ContainerFactoryPluginInterface {
       if (!empty($entity)) {
         $campaigns = $this->campaignManager->findNoRecruiterCampaigns($entity);
       }
-      if (empty($campaigns)) {
+
+      // @todo: campaigns need at least one option with product. A general solution is not supported at this point.
+      /*if (empty($campaigns)) {
         $campaigns = $this->campaignManager->findNoRecruiterCampaigns();
-      }
+      }*/
+
       if (!empty($campaigns)) {
         $this->campaign = current($campaigns);
       }

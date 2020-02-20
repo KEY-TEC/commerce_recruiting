@@ -2,7 +2,6 @@
 
 namespace Drupal\commerce_recruiting\Entity;
 
-use Drupal\commerce_promotion\Entity\PromotionInterface;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityChangedInterface;
@@ -10,7 +9,7 @@ use Drupal\user\EntityOwnerInterface;
 use Drupal\user\UserInterface;
 
 /**
- * Provides an interface for defining recruiting entities.
+ * Provides an interface for defining campaign entities.
  *
  * @ingroup commerce_recruiting
  */
@@ -21,55 +20,54 @@ interface CampaignInterface extends ContentEntityInterface, EntityChangedInterfa
    */
 
   /**
-   * Gets the recruiting name.
+   * Gets the campaign name.
    *
    * @return string
-   *   Name of the recruiting.
+   *   Name of the campaign.
    */
   public function getName();
 
   /**
-   * Sets the recruiting name.
+   * Sets the campaign name.
    *
    * @param string $name
-   *   The recruiting name.
+   *   The campaign name.
    *
-   * @return \Drupal\commerce_recruiting\Entity\RecruitingInterface
-   *   The called recruiting entity.
+   * @return $this
    */
   public function setName($name);
 
   /**
-   * Get whether the recruiting is enabled.
+   * Get whether the campaign is enabled.
    *
    * @return bool
-   *   TRUE if the recruiting is enabled, FALSE otherwise.
+   *   TRUE if the campaign is enabled, FALSE otherwise.
    */
   public function isEnabled();
 
   /**
-   * Sets whether the recruiting is enabled.
+   * Sets whether the campaign is enabled.
    *
    * @param bool $enabled
-   *   Whether the recruiting is enabled.
+   *   Whether the campaign is enabled.
    *
    * @return $this
    */
   public function setEnabled($enabled);
 
   /**
-   * Gets the recruiting campaign description description.
+   * Gets the campaign description.
    *
    * @return string
-   *   The recruiting description.
+   *   The campaign description.
    */
   public function getDescription();
 
   /**
-   * Sets the recruiting campaign description.
+   * Sets the campaign description.
    *
    * @param string $description
-   *   The config description.
+   *   The description.
    *
    * @return $this
    */
@@ -94,60 +92,42 @@ interface CampaignInterface extends ContentEntityInterface, EntityChangedInterfa
   public function setRecruiter(UserInterface $account);
 
   /**
-   * Returns the promotion entity.
-   *
-   * @return \Drupal\commerce_promotion\Entity\PromotionInterface
-   *   The promotion entity.
-   */
-  public function getPromotion();
-
-  /**
-   * Sets the promotion entity.
-   *
-   * @param \Drupal\commerce_promotion\Entity\PromotionInterface $promotion
-   *   The promotion entity.
-   *
-   * @return $this
-   */
-  public function setPromotion(PromotionInterface $promotion);
-
-  /**
-   * Gets the recruiting start date/time.
+   * Gets the campaign start date/time.
    *
    * @param string $store_timezone
    *   The store timezone. E.g. "Europe/Berlin".
    *
    * @return \Drupal\Core\Datetime\DrupalDateTime
-   *   The recruiting start date/time.
+   *   The campaign start date/time.
    */
   public function getStartDate($store_timezone = 'UTC');
 
   /**
-   * Sets the recruiting start date/time.
+   * Sets the campaign start date/time.
    *
    * @param \Drupal\Core\Datetime\DrupalDateTime $start_date
-   *   The recruiting start date/time.
+   *   The campaign start date/time.
    *
    * @return $this
    */
   public function setStartDate(DrupalDateTime $start_date);
 
   /**
-   * Gets the recruiting end date/time.
+   * Gets the campaign end date/time.
    *
    * @param string $store_timezone
    *   The store timezone. E.g. "Europe/Berlin".
    *
    * @return \Drupal\Core\Datetime\DrupalDateTime
-   *   The recruiting end date/time.
+   *   The campaign end date/time.
    */
   public function getEndDate($store_timezone = 'UTC');
 
   /**
-   * Sets the recruiting end date/time.
+   * Sets the campaign end date/time.
    *
    * @param \Drupal\Core\Datetime\DrupalDateTime $end_date
-   *   The recruiting end date/time.
+   *   The campaign end date/time.
    *
    * @return $this
    */

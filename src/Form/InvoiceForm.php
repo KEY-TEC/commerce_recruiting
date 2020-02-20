@@ -60,7 +60,7 @@ class InvoiceForm extends ContentEntityForm {
           '%label' => $entity->label(),
         ]));
     }
-    $form_state->setRedirect('entity.commerce_recruiting_invoice.canonical', ['commerce_recruiting_invoice' => $entity->id()]);
+    $form_state->setRedirect('entity.commerce_recruitment_invoice.canonical', ['commerce_recruitment_invoice' => $entity->id()]);
   }
 
 }

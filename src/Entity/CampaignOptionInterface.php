@@ -11,7 +11,7 @@ use Drupal\Core\Entity\EntityPublishedInterface;
 use Drupal\user\EntityOwnerInterface;
 
 /**
- * Provides an interface for defining Recruiting option entities.
+ * Provides an interface for defining campaign option entities.
  *
  * @ingroup commerce_recruiting
  */
@@ -22,44 +22,39 @@ interface CampaignOptionInterface extends ContentEntityInterface, EntityChangedI
   const RECRUIT_BONUS_METHOD_PERCENT = 'percent';
 
   /**
-   * Gets the recruiting code.
+   * Gets the recruitment code.
    *
    * @return string
-   *   Code of the recruiting option.
+   *   Code of the recruitment option.
    */
   public function getCode();
 
   /**
-   * Sets the recruiting entity name.
+   * Sets the recruitment code.
    *
    * @param string $code
-   *   The recruiting code.
+   *   The recruitment code.
    *
-   * @return \Drupal\commerce_recruiting\Entity\RecruitingInterface
-   *   The called recruiting entity.
+   * @return $this
    */
   public function setCode($code);
 
   /**
-   * Add get/set methods for your configuration properties here.
-   */
-
-  /**
-   * Gets the Recruiting option creation timestamp.
+   * Gets the campaign option creation timestamp.
    *
    * @return int
-   *   Creation timestamp of the Recruiting option.
+   *   Creation timestamp of the campaign option.
    */
   public function getCreatedTime();
 
   /**
-   * Sets the Recruiting option creation timestamp.
+   * Sets the campaign option creation timestamp.
    *
    * @param int $timestamp
-   *   The Recruiting option creation timestamp.
+   *   The campaign option creation timestamp.
    *
    * @return \Drupal\commerce_recruiting\Entity\CampaignOptionInterface
-   *   The called Recruiting option entity.
+   *   The called campaign option entity.
    */
   public function setCreatedTime($timestamp);
 

@@ -11,9 +11,9 @@ use Drupal\state_machine\Plugin\Workflow\WorkflowInterface;
 use Drupal\state_machine\WorkflowManagerInterface;
 
 /**
- * Access controller for the Recruiting entity entity.
+ * Access controller for the recruitment entity.
  *
- * @see \Drupal\commerce_recruiting\Entity\Recruiting.
+ * @see \Drupal\commerce_recruiting\Entity\Recruitment.
  */
 class RecrutingGuard implements GuardInterface {
 
@@ -48,11 +48,11 @@ class RecrutingGuard implements GuardInterface {
    * {@inheritdoc}
    */
   public function allowed(WorkflowTransition $transition, WorkflowInterface $workflow, EntityInterface $entity) {
-    /** @var \Drupal\commerce_recruiting\Entity\Recruiting $recruiting */
-    $recruiting = $entity;
+    /** @var \Drupal\commerce_recruiting\Entity\RecruitmentInterface $recruitment */
+    $recruitment = $entity;
     if ($transition->getToState()->getId() == 'accepted') {
-      if ($recruiting->getOrder() != NULL && $recruiting->getOrder()->getState()->getId() != 'completed'
-        && $recruiting->getProduct() instanceof ProductVariation
+      if ($recruitment->getOrder() != NULL && $recruitment->getOrder()->getState()->getId() != 'completed'
+        && $recruitment->getProduct() instanceof ProductVariation
       ) {
         return FALSE;
       }

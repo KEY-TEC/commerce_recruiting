@@ -3,7 +3,7 @@
 namespace Drupal\commerce_recruiting;
 
 use Drupal\commerce_recruiting\Entity\CampaignInterface;
-use Drupal\user\Entity\User;
+use Drupal\Core\Session\AccountInterface;
 
 /**
  * Interface InvoiceManagerInterface.
@@ -15,23 +15,23 @@ interface InvoiceManagerInterface {
    *
    * @param \Drupal\commerce_recruiting\Entity\CampaignInterface $campaign
    *   The campaign.
-   * @param \Drupal\user\Entity\User $recruiter
+   * @param \Drupal\Core\Session\AccountInterface $recruiter
    *   The recruiter.
    *
    * @return \Drupal\commerce_recruiting\Entity\InvoiceInterface
    *   The created invoice.
    */
-  public function createInvoice(CampaignInterface $campaign, User $recruiter);
+  public function createInvoice(CampaignInterface $campaign, AccountInterface $recruiter);
 
   /**
    * Find invoices.
    *
-   * @param \Drupal\user\Entity\User $recruiter
+   * @param \Drupal\Core\Session\AccountInterface $recruiter
    *   The recruiter
    *
    * @return \Drupal\commerce_recruiting\Entity\InvoiceInterface
    *   The invoices.
    */
-  public function findInvoices(User $recruiter);
+  public function findInvoices(AccountInterface $recruiter);
 
 }

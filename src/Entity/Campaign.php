@@ -3,26 +3,26 @@
 namespace Drupal\commerce_recruiting\Entity;
 
 use Drupal\commerce\Entity\CommerceContentEntityBase;
-use Drupal\commerce_promotion\Entity\PromotionInterface;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Entity\EntityChangedTrait;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\datetime\Plugin\Field\FieldType\DateTimeItem;
 use Drupal\user\EntityOwnerTrait;
 use Drupal\user\UserInterface;
 
 /**
- * Defines the recruiting campaign entity class.
+ * Defines the recruitment campaign entity class.
  *
  * @ContentEntityType(
- *   id = "commerce_recruiting_campaign",
- *   label = @Translation("Campaign"),
- *   label_collection = @Translation("Campaign"),
- *   label_singular = @Translation("Campaign"),
- *   label_plural = @Translation("Campaigns"),
+ *   id = "commerce_recruitment_campaign",
+ *   label = @Translation("Recruitment campaign"),
+ *   label_collection = @Translation("Recruitment campaign"),
+ *   label_singular = @Translation("Recruitment campaign"),
+ *   label_plural = @Translation("Recruitment campaigns"),
  *   label_count = @PluralTranslation(
  *     singular = "@count config",
  *     plural = "@count configs",
@@ -47,9 +47,9 @@ use Drupal\user\UserInterface;
  *       "html" = "Drupal\commerce_recruiting\CampaignHtmlRouteProvider",
  *     },
  *   },
- *   base_table = "commerce_recruiting_campaign",
- *   data_table = "commerce_recruiting_campaign_field_data",
- *   admin_permission = "administer recruiting campaign entities",
+ *   base_table = "commerce_recruitment_campaign",
+ *   data_table = "commerce_recruitment_campaign_field_data",
+ *   admin_permission = "administer recruitment campaign entities",
  *   translatable = TRUE,
  *   entity_keys = {
  *     "id" = "id",
@@ -61,16 +61,16 @@ use Drupal\user\UserInterface;
  *   },
  *   links = {
  *     "canonical" =
- *   "/admin/commerce/recruiting/config/{commerce_recruiting_campaign}",
- *     "add-form" = "/admin/commerce/recruiting/config/add",
+ *   "/admin/commerce/recruitment/campaigns/{commerce_recruitment_campaign}",
+ *     "add-form" = "/admin/commerce/recruitment/campaigns/add",
  *     "edit-form" =
- *   "/admin/commerce/recruiting/config/{commerce_recruiting_campaign}/edit",
+ *   "/admin/commerce/recruitment/campaigns/{commerce_recruitment_campaign}/edit",
  *     "delete-form" =
- *   "/admin/commerce/recruiting/config/{commerce_recruiting_campaign}/delete",
- *     "delete-multiple-form" = "/admin/commerce/recruiting/config/delete",
- *     "collection" = "/admin/commerce/recruiting/config",
+ *   "/admin/commerce/recruitment/campaigns/{commerce_recruitnebt_campaign}/delete",
+ *     "delete-multiple-form" = "/admin/commerce/recruitment/campaigns/delete",
+ *     "collection" = "/admin/commerce/recruitment/campaigns",
  *   },
- *   field_ui_base_route = "commerce_recruiting_campaign.settings"
+ *   field_ui_base_route = "commerce_recruitment_campaign.settings"
  * )
  */
 class Campaign extends CommerceContentEntityBase implements CampaignInterface {
@@ -135,21 +135,6 @@ class Campaign extends CommerceContentEntityBase implements CampaignInterface {
    */
   public function setRecruiter(UserInterface $account) {
     $this->set('recruiter', $account);
-    return $this;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getPromotion() {
-    return $this->get('promotion')->entity;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function setPromotion(PromotionInterface $promotion) {
-    $this->set('promotion', $promotion);
     return $this;
   }
 
@@ -226,7 +211,7 @@ class Campaign extends CommerceContentEntityBase implements CampaignInterface {
 
     $fields['name'] = BaseFieldDefinition::create('string')
       ->setLabel(new TranslatableMarkup('Name'))
-      ->setDescription(new TranslatableMarkup('The recruiting campaign name.'))
+      ->setDescription(new TranslatableMarkup('The campaign name.'))
       ->setRequired(TRUE)
       ->setTranslatable(TRUE)
       ->setSettings([
@@ -242,7 +227,7 @@ class Campaign extends CommerceContentEntityBase implements CampaignInterface {
 
     $fields['description'] = BaseFieldDefinition::create('string_long')
       ->setLabel(new TranslatableMarkup('Description'))
-      ->setDescription(new TranslatableMarkup('Additional information about the recruiting.'))
+      ->setDescription(new TranslatableMarkup('Additional information about the campaign.'))
       ->setTranslatable(TRUE)
       ->setDisplayOptions('form', [
         'type' => 'string_textarea',
@@ -256,7 +241,7 @@ class Campaign extends CommerceContentEntityBase implements CampaignInterface {
 
     $fields['start_date'] = BaseFieldDefinition::create('datetime')
       ->setLabel(new TranslatableMarkup('Start date'))
-      ->setDescription(new TranslatableMarkup('The date the recruiting becomes available.'))
+      ->setDescription(new TranslatableMarkup('The date the campaign becomes available.'))
       ->setSetting('datetime_type', 'datetime')
       ->setDefaultValueCallback('Drupal\commerce_recruiting\Entity\Campaign::getDefaultStartDate')
       ->setDisplayOptions('form', [
@@ -268,7 +253,7 @@ class Campaign extends CommerceContentEntityBase implements CampaignInterface {
 
     $fields['end_date'] = BaseFieldDefinition::create('datetime')
       ->setLabel(new TranslatableMarkup('End date'))
-      ->setDescription(new TranslatableMarkup('The date after which the recruiting is unavailable.'))
+      ->setDescription(new TranslatableMarkup('The date after which the campaign is unavailable.'))
       ->setRequired(FALSE)
       ->setSetting('datetime_type', 'datetime')
       ->setSetting('datetime_optional_label', t('Provide an end date'))
@@ -280,13 +265,14 @@ class Campaign extends CommerceContentEntityBase implements CampaignInterface {
 
     $fields['status'] = BaseFieldDefinition::create('boolean')
       ->setLabel(new TranslatableMarkup('Status'))
-      ->setDescription(new TranslatableMarkup('Whether the recruiting campaign is enabled.'))
+      ->setDescription(new TranslatableMarkup('Whether the campaign is enabled.'))
       ->setDefaultValue(TRUE)
       ->setRequired(TRUE);
 
     $fields['recruiter'] = BaseFieldDefinition::create('entity_reference')
       ->setLabel(new TranslatableMarkup('Recruiter'))
       ->setDescription(new TranslatableMarkup('The recruiter.'))
+      ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
       ->setSetting('target_type', 'user')
       ->setTranslatable($entity_type->isTranslatable())
       ->setDisplayOptions('view', [
@@ -307,35 +293,12 @@ class Campaign extends CommerceContentEntityBase implements CampaignInterface {
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 
-    $fields['promotion'] = BaseFieldDefinition::create('entity_reference')
-      ->setLabel(new TranslatableMarkup('Promotion'))
-      ->setDescription(new TranslatableMarkup('The user needs to use a coupon code from this promotion to apply.'))
-      ->setSetting('target_type', 'commerce_promotion')
-      ->setSetting('handler', 'default')
-      ->setDisplayOptions('view', [
-        'label' => 'hidden',
-        'type' => 'entity_reference_label',
-        'weight' => 0,
-      ])
-      ->setDisplayOptions('form', [
-        'type' => 'entity_reference_autocomplete',
-        'weight' => 5,
-        'settings' => [
-          'match_operator' => 'CONTAINS',
-          'size' => '60',
-          'autocomplete_type' => 'tags',
-          'placeholder' => '',
-        ],
-      ])
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', TRUE);
-
     $fields['options'] = BaseFieldDefinition::create('entity_reference')
       ->setLabel(t('Campaign options'))
       ->setDescription(t('The campaign option.'))
       ->setRequired(TRUE)
       ->setCardinality(BaseFieldDefinition::CARDINALITY_UNLIMITED)
-      ->setSetting('target_type', 'commerce_recruiting_camp_option')
+      ->setSetting('target_type', 'commerce_recruitment_camp_option')
       ->setSetting('handler', 'default')
       ->setDisplayOptions('form', [
         'type' => 'inline_entity_form_complex',
