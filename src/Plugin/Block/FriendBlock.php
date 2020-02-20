@@ -6,8 +6,10 @@ use Drupal\commerce_recruiting\CampaignManagerInterface;
 use Drupal\commerce_recruiting\Code;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Render\Markup;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -92,6 +94,31 @@ class FriendBlock extends BlockBase implements ContainerFactoryPluginInterface {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function blockForm($form, FormStateInterface $form_state) {
+    $build = parent:: blockForm($form, $form_state);
+
+    $config = $this->getConfiguration();
+
+    $build['block_description'] = [
+      '#type' => 'text_format',
+      '#title' => $this->t('Description text'),
+      '#default_value' => isset($config['block_description']) ? $config['block_description']['value'] : '',
+    ];
+    return $build;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function blockSubmit($form, FormStateInterface $form_state) {
+    parent::blockSubmit($form, $form_state);
+    $values = $form_state->getValues();
+    $this->setConfigurationValue('block_description', $values['block_description']);
+  }
+
+  /**
    * Returns the block build array with a recruiting url to share.
    *
    * @return array
@@ -108,12 +135,15 @@ class FriendBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
     /* @var \Drupal\Core\Entity\EntityInterface $entity */
     $entity = $this->getContextValue('entity');
+    $config = $this->getConfiguration();
     foreach ($campaign->getOptions() as $option) {
       /* @var \Drupal\commerce_recruiting\Entity\CampaignOptionInterface $option */
       if ($option->getProduct()->id() == $entity->id() && $option->getProduct()->getEntityTypeId() == $entity->getEntityTypeId()) {
         $url = Code::create($option->getCode(), $this->getContextValue('user')->id())->url()->toString();
         $build['#theme'] = 'friend_share_block';
         $build['#share_link'] = $url;
+        $build['#block_headline'] = $this->label();
+        $build['#block_description'] = Markup::create(check_markup($config['block_description']['value'], $config['block_description']['format']));
         return $build;
       }
     }
