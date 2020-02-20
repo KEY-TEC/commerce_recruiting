@@ -212,7 +212,7 @@ class Recruitment extends ContentEntityBase implements RecruitmentInterface {
     $fields['campaign_option'] = BaseFieldDefinition::create('entity_reference')
       ->setLabel(new TranslatableMarkup('Campaign option'))
       ->setDescription(t('The campaign option.'))
-      ->setSetting('target_type', 'commerce_recruitment_campaign')
+      ->setSetting('target_type', 'commerce_recruitment_camp_option')
       ->setSetting('handler', 'default')
       ->setDisplayOptions('view', [
         'label' => 'hidden',
