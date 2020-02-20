@@ -9,82 +9,76 @@ use Drupal\Core\Entity\EntityPublishedInterface;
 use Drupal\user\EntityOwnerInterface;
 
 /**
- * Provides an interface for defining Invoice entities.
+ * Provides an interface for defining reward entities.
  *
  * @ingroup commerce_recruiting
  */
-interface InvoiceInterface extends ContentEntityInterface, EntityChangedInterface, EntityPublishedInterface, EntityOwnerInterface {
+interface RewardInterface extends ContentEntityInterface, EntityChangedInterface, EntityPublishedInterface, EntityOwnerInterface {
 
   /**
-   * Add get/set methods for your configuration properties here.
-   */
-
-  /**
-   * Gets the Invoice name.
+   * Gets the reward name.
    *
    * @return string
-   *   Name of the Invoice.
+   *   Name of the reward.
    */
   public function getName();
 
   /**
-   * Sets the Invoice name.
+   * Sets the reward name.
    *
    * @param string $name
-   *   The Invoice name.
+   *   The reward name.
    *
-   * @return \Drupal\commerce_recruiting\Entity\InvoiceInterface
-   *   The called Invoice entity.
+   * @return $this
    */
   public function setName($name);
 
   /**
-   * Gets the Invoice creation timestamp.
+   * Gets the reward creation timestamp.
    *
    * @return int
-   *   Creation timestamp of the Invoice.
+   *   Creation timestamp of the reward.
    */
   public function getCreatedTime();
 
   /**
-   * Sets the Invoice creation timestamp.
+   * Sets the reward creation timestamp.
    *
    * @param int $timestamp
-   *   The Invoice creation timestamp.
+   *   The reward creation timestamp.
    *
-   * @return \Drupal\commerce_recruiting\Entity\InvoiceInterface
-   *   The called Invoice entity.
+   * @return $this
    */
   public function setCreatedTime($timestamp);
 
   /**
-   * Returns the invoice price entity.
+   * Returns the reward price entity.
    *
    * @return \Drupal\commerce_price\Price
-   *   The bonus price entity.
+   *   The reward price entity.
    */
   public function getPrice();
 
   /**
-   * Sets the invoice price entity.
+   * Sets the reward price entity.
    *
    * @param \Drupal\commerce_price\Price $price
-   *   The bonus price entity.
+   *   The reward price entity.
    *
    * @return $this
    */
   public function setPrice(Price $price);
 
   /**
-   * Gets the invoice state.
+   * Gets the reward state.
    *
    * @return \Drupal\state_machine\Plugin\Field\FieldType\StateItemInterface
-   *   The invoice state.
+   *   The reward state.
    */
   public function getState();
 
   /**
-   * Sets the invoice state.
+   * Sets the reward state.
    *
    * @param string $state_id
    *   The new state ID.
@@ -94,36 +88,36 @@ interface InvoiceInterface extends ContentEntityInterface, EntityChangedInterfac
   public function setState($state_id);
 
   /**
-   * Gets the recrutings.
+   * Gets the recruitments.
    *
    * @return \Drupal\commerce_recruiting\Entity\RecruitmentInterface[]
-   *   The recrutings.
+   *   The recruitments.
    */
   public function getRecruitments();
 
   /**
-   * Gets the first recruting.
+   * Gets the first recruitment.
    *
    * @return \Drupal\commerce_recruiting\Entity\RecruitmentInterface
-   *   The recruting.
+   *   The recruitment.
    */
   public function getFirstRecruitment();
 
   /**
-   * Sets the recrutings.
+   * Sets the recruitments.
    *
    * @param \Drupal\commerce_recruiting\Entity\RecruitmentInterface[] $recruitments
-   *   The recrutings.
+   *   List of recruitment entities.
    *
    * @return $this
    */
   public function setRecruitments(array $recruitments);
 
   /**
-   * Gets whether the campaign has recrutings.
+   * Checks if recruitments are set.
    *
    * @return bool
-   *   TRUE if the recruting has recrutings, FALSE otherwise.
+   *   TRUE if the reward has recruitments, FALSE otherwise.
    */
   public function hasRecruitments();
 
@@ -131,30 +125,30 @@ interface InvoiceInterface extends ContentEntityInterface, EntityChangedInterfac
    * Adds an order item.
    *
    * @param \Drupal\commerce_recruiting\Entity\RecruitmentInterface $recruitment
-   *   The recruting.
+   *   The recruitment.
    *
    * @return $this
    */
   public function addRecruitment(RecruitmentInterface $recruitment);
 
   /**
-   * Removes an recruting.
+   * Removes an recruitment.
    *
    * @param \Drupal\commerce_recruiting\Entity\RecruitmentInterface $recruitment
-   *   The recruting.
+   *   The recruitment.
    *
    * @return $this
    */
   public function removeRecruitment(RecruitmentInterface $recruitment);
 
   /**
-   * Checks whether the order has a given recruting.
+   * Checks whether the order has a given recruitment.
    *
    * @param \Drupal\commerce_recruiting\Entity\RecruitmentInterface $recruitment
-   *   The recruting.
+   *   The recruitment.
    *
    * @return bool
-   *   TRUE if the recruting was found, FALSE otherwise.
+   *   TRUE if the recruitment was found, FALSE otherwise.
    */
   public function hasRecruitment(RecruitmentInterface $recruitment);
 

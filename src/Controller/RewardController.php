@@ -3,7 +3,7 @@
 namespace Drupal\commerce_recruiting\Controller;
 
 use Drupal\commerce_recruiting\Entity\CampaignInterface;
-use Drupal\commerce_recruiting\InvoiceManagerInterface;
+use Drupal\commerce_recruiting\RewardManagerInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Session\AccountProxy;
 use Drupal\user\Entity\User;
@@ -11,16 +11,16 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
- * Class InvoiceController.
+ * Class RewardController.
  */
-class InvoiceController extends ControllerBase {
+class RewardController extends ControllerBase {
 
   /**
-   * The invoice manager.
+   * The reward manager.
    *
-   * @var \Drupal\commerce_recruiting\InvoiceManagerInterface
+   * @var \Drupal\commerce_recruiting\RewardManagerInterface
    */
-  protected $invoiceManager;
+  protected $rewardManager;
 
   /**
    * @var \Drupal\Core\Session\AccountProxy
@@ -28,13 +28,13 @@ class InvoiceController extends ControllerBase {
   private $accountProxy;
 
   /**
-   * Constructs a new InvoiceController object.
+   * Constructs a new RewardController object.
    *
-   * @param \Drupal\commerce_recruiting\InvoiceManagerInterface $invoice_manager
-   *   The invoice service.
+   * @param \Drupal\commerce_recruiting\RewardManagerInterface $reward_manager
+   *   The reward service.
    */
-  public function __construct(InvoiceManagerInterface $invoice_manager, AccountProxy $account_proxy) {
-    $this->invoiceManager = $invoice_manager;
+  public function __construct(RewardManagerInterface $reward_manager, AccountProxy $account_proxy) {
+    $this->rewardManager = $reward_manager;
     $this->accountProxy = $account_proxy;
   }
 
@@ -43,13 +43,13 @@ class InvoiceController extends ControllerBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('commerce_recruiting.invoice_manager'),
+      $container->get('commerce_recruiting.reward_manager'),
       $container->get('current_user')
     );
   }
 
   /**
-   * Creates an invoice for recruitments of the given campaign.
+   * Creates a reward for recruitments of the given campaign.
    *
    * @param \Drupal\commerce_recruiting\Entity\CampaignInterface $campaign
    *   The recruitment campaign.
@@ -57,16 +57,16 @@ class InvoiceController extends ControllerBase {
    * @return \Symfony\Component\HttpFoundation\RedirectResponse
    *   Redirect to product.
    */
-  public function createInvoice(CampaignInterface $campaign) {
+  public function createReward(CampaignInterface $campaign) {
     try {
       $user = User::load($this->accountProxy->id());
-      $invoice = $this->invoiceManager->createInvoice($campaign, $user);
-      return new RedirectResponse($invoice->toUrl()->toString(), 302);;
+      $reward = $this->rewardManager->createReward($campaign, $user);
+      return new RedirectResponse($reward->toUrl()->toString(), 302);;
     }
     catch (\Throwable $e) {
       $this->getLogger('commerce_recruitment')->error($e->getMessage());
       $this->messenger()
-        ->addError($this->t("Error while creating invoice. Please contact us."));
+        ->addError($this->t("Error while creating reward. Please contact us."));
       return $this->redirect('<front>');
     }
   }

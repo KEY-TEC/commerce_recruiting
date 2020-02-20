@@ -5,9 +5,9 @@ namespace Drupal\commerce_recruiting\Entity;
 use Drupal\views\EntityViewsData;
 
 /**
- * Provides Views data for Invoice entities.
+ * Provides Views data for reward entities.
  */
-class InvoiceViewsData extends EntityViewsData {
+class RewardViewsData extends EntityViewsData {
 
   /**
    * {@inheritdoc}

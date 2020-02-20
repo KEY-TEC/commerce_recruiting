@@ -58,23 +58,23 @@ view published campaign option entities:
 view unpublished campaign option entities:
   title: 'View unpublished campaign option entities'
 
-add invoice entities:
-  title: 'Create new Invoice entities'
+add reward entities:
+  title: 'Create new reward entities'
 
-administer invoice entities:
-  title: 'Administer Invoice entities'
-  description: 'Allow to access the administration form to configure Invoice entities.'
+administer reward entities:
+  title: 'Administer reward entities'
+  description: 'Allow to access the administration form to configure reward entities.'
   restrict access: true
 
-delete invoice entities:
-  title: 'Delete Invoice entities'
+delete reward entities:
+  title: 'Delete reward entities'
 
-edit invoice entities:
-  title: 'Edit Invoice entities'
+edit reward entities:
+  title: 'Edit reward entities'
 
-view published invoice entities:
-  title: 'View published Invoice entities'
+view published reward entities:
+  title: 'View published reward entities'
 
-view unpublished invoice entities:
-  title: 'View unpublished Invoice entities'
+view unpublished reward entities:
+  title: 'View unpublished reward entities'
 

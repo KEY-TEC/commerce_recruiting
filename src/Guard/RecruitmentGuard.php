@@ -15,7 +15,7 @@ use Drupal\state_machine\WorkflowManagerInterface;
  *
  * @see \Drupal\commerce_recruiting\Entity\Recruitment.
  */
-class RecrutingGuard implements GuardInterface {
+class RecruitmentGuard implements GuardInterface {
 
   /**
    * The current user.

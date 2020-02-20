@@ -33,11 +33,11 @@ function commerce_recruiting_theme($existing, $type, $theme, $path) {
       'summaries' => [],
     ],
   ];
-  $theme['recruitment_invoices'] = [
+  $theme['recruitment_rewards'] = [
     'path' => $path . '/templates',
-    'template'  => 'recruitment-invoices',
+    'template'  => 'recruitment-rewards',
     'variables' => [
-      'invoices' => [],
+      'rewards' => [],
     ],
   ];
   $theme['recruitment'] = [

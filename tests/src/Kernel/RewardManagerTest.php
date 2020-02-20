@@ -5,39 +5,39 @@ namespace Drupal\Tests\commerce_recruiting\Kernel;
 use Drupal\Tests\commerce_recruiting\Traits\RecruitmentEntityCreationTrait;
 
 /**
- * InvoiceManager.
+ * RewardManagerTest.
  *
  * @group commerce_recruiting
  */
-class InvoiceManagerTest extends CommerceRecruitingKernelTestBase {
+class RewardManagerTest extends CommerceRecruitingKernelTestBase {
 
   use RecruitmentEntityCreationTrait;
 
   /**
-   * Test testSessionMatch.
+   * Test createReward.
    */
-  public function testCreateInvoice() {
+  public function testCreateReward() {
     $recruiter = $this->createUser();
     $campaign = $this->createCampaign($recruiter);
     $recruited = $this->createUser();
     $products = [];
     $products[] = $this->createProduct();
     $products[] = $this->createProduct();
-    $recrutings = $this->createRecrutings($campaign, $recruiter, $recruited, $products);
-    $this->assertEqual(count($recrutings), 2);
+    $recruitments = $this->createRecruitings($campaign, $recruiter, $recruited, $products);
+    $this->assertEqual(count($recruitments), 2);
     $this->recruitmentManager->applyTransitions('accept');
-    $invoice = $this->invoiceManager->createInvoice($campaign);
-    $this->assertEqual(count($invoice->getRecruitments()), 2);
+    $reward = $this->rewardManager->createReward($campaign);
+    $this->assertEqual(count($reward->getRecruitments()), 2);
     /** @var \Drupal\commerce_recruiting\Entity\RecruitmentInterface $recruitment */
-    foreach ($invoice->getRecruitments() as $recruitment) {
+    foreach ($reward->getRecruitments() as $recruitment) {
       $this->assertEqual($recruitment->getState()->getId(), 'paid_pending');
     }
-    $invoice->setState('paid');
-    $invoice->save();
-    foreach ($invoice->getRecruitments() as $recruitment) {
+    $reward->setState('paid');
+    $reward->save();
+    foreach ($reward->getRecruitments() as $recruitment) {
       $this->assertEqual($recruitment->getState()->getId(), 'paid');
     }
-    $this->assertEqual(20.000000, $invoice->getPrice()->getNumber());
+    $this->assertEqual(20.000000, $reward->getPrice()->getNumber());
 
   }
 

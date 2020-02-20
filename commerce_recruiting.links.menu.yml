@@ -21,11 +21,11 @@ entity.commerce_recruitment_campaign.collection:
   parent: 'commerce_recruitment.collections'
   weight: 99
 
-# Invoice menu items definition
-entity.commerce_recruitment_invoice.collection:
-  title: 'Invoice list'
-  route_name: entity.commerce_recruitment_invoice.collection
-  description: 'List Invoices'
+# Reward menu items definition
+entity.commerce_recruitment_reward.collection:
+  title: 'Reward list'
+  route_name: entity.commerce_recruitment_reward.collection
+  description: 'List Rewards'
   parent: commerce_recruitment.collections
   weight: 100
 
@@ -34,10 +34,10 @@ commerce_recruitment.configuration:
   route_name: 'commerce_recruitment.configuration'
   parent: 'commerce.configuration'
 
-commerce_recruitment_invoice.admin.structure.settings:
-  title: 'Invoice settings'
-  description: 'Configure Invoice entities'
-  route_name: commerce_recruitment_invoice.settings
+commerce_recruitment_reward.admin.structure.settings:
+  title: 'Reward settings'
+  description: 'Configure Reward entities'
+  route_name: commerce_recruitment_reward.settings
   parent: commerce_recruitment.configuration
 
 commerce_recruitment.admin.structure.settings:

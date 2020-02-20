@@ -13,32 +13,32 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\user\UserInterface;
 
 /**
- * Defines the Invoice entity.
+ * Defines the reward entity.
  *
  * @ingroup commerce_recruiting
  *
  * @ContentEntityType(
- *   id = "commerce_recruitment_invoice",
- *   label = @Translation("Invoice"),
+ *   id = "commerce_recruitment_reward",
+ *   label = @Translation("Reward"),
  *   handlers = {
  *     "view_builder" = "Drupal\Core\Entity\EntityViewBuilder",
- *     "list_builder" = "Drupal\commerce_recruiting\InvoiceListBuilder",
- *     "views_data" = "Drupal\commerce_recruiting\Entity\InvoiceViewsData",
+ *     "list_builder" = "Drupal\commerce_recruiting\RewardListBuilder",
+ *     "views_data" = "Drupal\commerce_recruiting\Entity\RewardViewsData",
  *
  *     "form" = {
- *       "default" = "Drupal\commerce_recruiting\Form\InvoiceForm",
- *       "add" = "Drupal\commerce_recruiting\Form\InvoiceForm",
- *       "edit" = "Drupal\commerce_recruiting\Form\InvoiceForm",
- *       "delete" = "Drupal\commerce_recruiting\Form\InvoiceDeleteForm",
+ *       "default" = "Drupal\commerce_recruiting\Form\RewardForm",
+ *       "add" = "Drupal\commerce_recruiting\Form\RewardForm",
+ *       "edit" = "Drupal\commerce_recruiting\Form\RewardForm",
+ *       "delete" = "Drupal\commerce_recruiting\Form\RewardDeleteForm",
  *     },
  *     "route_provider" = {
- *       "html" = "Drupal\commerce_recruiting\InvoiceHtmlRouteProvider",
+ *       "html" = "Drupal\commerce_recruiting\RewardHtmlRouteProvider",
  *     },
- *     "access" = "Drupal\commerce_recruiting\InvoiceAccessControlHandler",
+ *     "access" = "Drupal\commerce_recruiting\RewardAccessControlHandler",
  *   },
- *   base_table = "commerce_recruitment_invoice",
+ *   base_table = "commerce_recruitment_reward",
  *   translatable = FALSE,
- *   admin_permission = "administer invoice entities",
+ *   admin_permission = "administer reward entities",
  *   entity_keys = {
  *     "id" = "id",
  *     "label" = "name",
@@ -49,19 +49,19 @@ use Drupal\user\UserInterface;
  *   },
  *   links = {
  *     "canonical" =
- *   "/user/invoice/{commerce_recruitment_invoice}",
+ *   "/user/rewards/{commerce_recruitment_reward}",
  *     "add-form" =
- *   "/user/invoice/add",
+ *   "/user/rewards/add",
  *     "edit-form" =
- *   "/admin/commerce/recruitment/invoice/{commerce_recruitment_invoice}/edit",
+ *   "/admin/commerce/recruitment/rewards/{commerce_recruitment_reward}/edit",
  *     "delete-form" =
- *   "/admin/commerce/recruitment/invoice/{commerce_recruitment_invoice}/delete",
- *     "collection" = "/admin/commerce/recruitment/invoice",
+ *   "/admin/commerce/recruitment/rewards/{commerce_recruitment_reward}/delete",
+ *     "collection" = "/admin/commerce/recruitment/rewards",
  *   },
- *   field_ui_base_route = "commerce_recruitment_invoice.settings"
+ *   field_ui_base_route = "commerce_recruitment_reward.settings"
  * )
  */
-class Invoice extends ContentEntityBase implements InvoiceInterface {
+class Reward extends ContentEntityBase implements RewardInterface {
 
   use EntityChangedTrait;
   use EntityPublishedTrait;
@@ -254,7 +254,7 @@ class Invoice extends ContentEntityBase implements InvoiceInterface {
 
     $fields['user_id'] = BaseFieldDefinition::create('entity_reference')
       ->setLabel(t('Authored by'))
-      ->setDescription(t('The user ID of author of the Invoice entity.'))
+      ->setDescription(t('The user ID of author of the reward entity.'))
       ->setRevisionable(TRUE)
       ->setSetting('target_type', 'user')
       ->setSetting('handler', 'default')
@@ -278,7 +278,7 @@ class Invoice extends ContentEntityBase implements InvoiceInterface {
 
     $fields['name'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Name'))
-      ->setDescription(t('The name of the Invoice entity.'))
+      ->setDescription(t('The name of the reward entity.'))
       ->setSettings([
         'max_length' => 50,
         'text_processing' => 0,
@@ -298,8 +298,8 @@ class Invoice extends ContentEntityBase implements InvoiceInterface {
       ->setRequired(TRUE);
 
     $fields['recruitments'] = BaseFieldDefinition::create('entity_reference')
-      ->setLabel(t('Invoiced recruitments'))
-      ->setDescription(t('The invoiced recruitments.'))
+      ->setLabel(t('Rewarded recruitments'))
+      ->setDescription(t('The rewarded recruitments.'))
       ->setRequired(TRUE)
       ->setCardinality(BaseFieldDefinition::CARDINALITY_UNLIMITED)
       ->setSetting('target_type', 'commerce_recruitment')
@@ -337,7 +337,7 @@ class Invoice extends ContentEntityBase implements InvoiceInterface {
       ->setDescription(t('The recruitment state.'))
       ->setRequired(TRUE)
       ->setSetting('max_length', 255)
-      ->setSetting('workflow', 'invoice_default')
+      ->setSetting('workflow', 'reward_default')
       ->setDisplayOptions('view', [
         'label' => 'hidden',
         'type' => 'list_default',
@@ -346,7 +346,7 @@ class Invoice extends ContentEntityBase implements InvoiceInterface {
       ->setDisplayConfigurable('view', TRUE)
       ->setDisplayConfigurable('form', TRUE);
 
-    $fields['status']->setDescription(t('A boolean indicating whether the invoice is published.'))
+    $fields['status']->setDescription(t('A boolean indicating whether the reward is published.'))
       ->setDisplayOptions('form', [
         'type' => 'boolean_checkbox',
         'weight' => -3,

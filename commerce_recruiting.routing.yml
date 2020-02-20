@@ -14,10 +14,10 @@ commerce_recruitment.recruitment_url:
   requirements:
     _permission: 'access content'
 
-commerce_recruitment.invoice:
-  path: '/user/rewards/invoice/{commerce_recruitment_campaign}'
+commerce_recruitment.create_reward:
+  path: '/user/rewards/collect/{commerce_recruitment_campaign}'
   defaults:
-    _controller: '\Drupal\commerce_recruiting\Controller\InvoiceController::createInvoice'
-    _title: 'Invoice'
+    _controller: '\Drupal\commerce_recruiting\Controller\RewardController::createReward'
+    _title: 'Collect reward'
   requirements:
     _permission: 'access content'

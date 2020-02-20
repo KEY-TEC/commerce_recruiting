@@ -8,35 +8,30 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
 
 /**
- * Access controller for the Invoice entity.
+ * Access controller for the reward entity.
  *
- * @see \Drupal\commerce_recruiting\Entity\Invoice.
+ * @see \Drupal\commerce_recruiting\Entity\Reward.
  */
-class InvoiceAccessControlHandler extends EntityAccessControlHandler {
+class RewardAccessControlHandler extends EntityAccessControlHandler {
 
   /**
    * {@inheritdoc}
    */
   protected function checkAccess(EntityInterface $entity, $operation, AccountInterface $account) {
-    /** @var \Drupal\commerce_recruiting\Entity\InvoiceInterface $entity */
+    /** @var \Drupal\commerce_recruiting\Entity\RewardInterface $entity */
 
     switch ($operation) {
-
       case 'view':
-
         if (!$entity->isPublished()) {
-          return AccessResult::allowedIfHasPermission($account, 'view unpublished invoice entities');
+          return AccessResult::allowedIfHasPermission($account, 'view unpublished reward entities');
         }
-
-        return AccessResult::allowedIfHasPermission($account, 'view published invoice entities');
+        return AccessResult::allowedIfHasPermission($account, 'view published reward entities');
 
       case 'update':
-
-        return AccessResult::allowedIfHasPermission($account, 'edit invoice entities');
+        return AccessResult::allowedIfHasPermission($account, 'edit reward entities');
 
       case 'delete':
-
-        return AccessResult::allowedIfHasPermission($account, 'delete invoice entities');
+        return AccessResult::allowedIfHasPermission($account, 'delete reward entities');
     }
 
     // Unknown operation, no opinion.
@@ -47,7 +42,7 @@ class InvoiceAccessControlHandler extends EntityAccessControlHandler {
    * {@inheritdoc}
    */
   protected function checkCreateAccess(AccountInterface $account, array $context, $entity_bundle = NULL) {
-    return AccessResult::allowedIfHasPermission($account, 'add invoice entities');
+    return AccessResult::allowedIfHasPermission($account, 'add reward entities');
   }
 
 }

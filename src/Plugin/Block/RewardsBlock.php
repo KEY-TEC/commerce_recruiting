@@ -3,7 +3,7 @@
 namespace Drupal\commerce_recruiting\Plugin\Block;
 
 use Drupal\commerce_recruiting\CampaignManagerInterface;
-use Drupal\commerce_recruiting\InvoiceManagerInterface;
+use Drupal\commerce_recruiting\RewardManagerInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Language\LanguageManagerInterface;
@@ -13,17 +13,17 @@ use Drupal\Core\Session\AccountInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Provides a 'Recruitment Invoices' block.
+ * Provides a 'Recruitment Rewards' block.
  *
  * @Block(
- *  id = "commerce_recruiting_invoices",
- *  admin_label = @Translation("Recruitment Invoices block"),
+ *  id = "commerce_recruiting_rewards",
+ *  admin_label = @Translation("Recruitment Rewards block"),
  *  context = {
  *    "user" = @ContextDefinition("entity:user", required = FALSE)
  *  }
  * )
  */
-class InvoicesBlock extends BlockBase implements ContainerFactoryPluginInterface {
+class RewardsBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
   /**
    * The language manager.
@@ -50,19 +50,19 @@ class InvoicesBlock extends BlockBase implements ContainerFactoryPluginInterface
   /**
    * Loaded campaign.
    *
-   * @var \Drupal\commerce_recruiting\Entity\CampaignInterface[]
+   * @var \Drupal\commerce_recruiting\Entity\RewardInterface[]
    */
-  private $invoices = NULL;
+  private $rewards = [];
 
   /**
-   * The invoice manager.
+   * The reward manager.
    *
-   * @var \Drupal\commerce_recruiting\InvoiceManagerInterface
+   * @var \Drupal\commerce_recruiting\RewardManagerInterface
    */
-  private $invoiceManager;
+  private $rewardManager;
 
   /**
-   * Constructs a new InvoicesBlock.
+   * Constructs a new RewardsBlock.
    *
    * @param array $configuration
    *   A configuration array containing information about the plugin instance.
@@ -76,15 +76,15 @@ class InvoicesBlock extends BlockBase implements ContainerFactoryPluginInterface
    *   The current route.
    * @param \Drupal\commerce_recruiting\CampaignManagerInterface $campaign_manager
    *   The campaign manager.
-   * @param \Drupal\commerce_recruiting\InvoiceManagerInterface $invoice_manager
-   *   The invoice manager.
+   * @param \Drupal\commerce_recruiting\RewardManagerInterface $reward_manager
+   *   The reward manager.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, LanguageManagerInterface $language_manager, RouteMatchInterface $route, CampaignManagerInterface $campaign_manager, InvoiceManagerInterface $invoice_manager) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, LanguageManagerInterface $language_manager, RouteMatchInterface $route, CampaignManagerInterface $campaign_manager, RewardManagerInterface $reward_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->languageManager = $language_manager;
     $this->campaignManager = $campaign_manager;
     $this->route = $route;
-    $this->invoiceManager = $invoice_manager;
+    $this->rewardManager = $reward_manager;
   }
 
   /**
@@ -98,30 +98,37 @@ class InvoicesBlock extends BlockBase implements ContainerFactoryPluginInterface
       $container->get('language_manager'),
       $container->get('current_route_match'),
       $container->get('commerce_recruiting.campaign_manager'),
-      $container->get('commerce_recruiting.invoice_manager')
+      $container->get('commerce_recruiting.reward_manager')
     );
   }
 
   /**
-   * Returns the invoice block build.
+   * Returns the rewards block build.
    *
    * @return array
    *   The build array.
    */
   public function build() {
-    $invoices = $this->findInvoices();
-    return  ['#theme' => 'recruitment_invoices', '#invoices' => $invoices];;
+    $rewards = $this->findRewards();
+    return  ['#theme' => 'recruitment_rewards', '#rewards' => $rewards];;
   }
 
-
-  private function findInvoices() {
-    if ($this->invoices !== NULL) {
-      return $this->invoices;
+  /**
+   * Helper method to lazy load rewards by current user.
+   *
+   * @return \Drupal\commerce_recruiting\Entity\RewardInterface|\Drupal\commerce_recruiting\Entity\RewardInterface[]
+   *   List of rewards.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\PluginException
+   */
+  private function findRewards() {
+    if (empty($this->rewards)) {
+      return $this->rewards;
     }
     else {
       $user = $this->getContextValue('user');
-      $this->invoices = $this->invoiceManager->findInvoices($user);
-      return $this->invoices;
+      $this->rewards = $this->rewardManager->findRewards($user);
+      return $this->rewards;
     }
   }
 
@@ -142,7 +149,7 @@ class InvoicesBlock extends BlockBase implements ContainerFactoryPluginInterface
     if ($user->isAnonymous()) {
       return AccessResult::forbidden();
     }
-    if (count($this->findInvoices()) === 0) {
+    if (count($this->findRewards()) === 0) {
       return AccessResult::forbidden();
     }
     return parent::blockAccess($account);

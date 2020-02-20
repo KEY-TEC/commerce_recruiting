@@ -21,7 +21,7 @@ services:
     arguments: ['@session', '@entity_type.manager']
 
   commerce_recruiting.recruitment_guard:
-    class: Drupal\commerce_recruiting\Guard\RecrutingGuard
+    class: Drupal\commerce_recruiting\Guard\RecruitmentGuard
     arguments: ['@current_user', '@plugin.manager.workflow']
     tags:
       - { name: state_machine.guard, group: recruitment }
@@ -30,6 +30,6 @@ services:
     parent: logger.channel_base
     arguments: ['commerce_recruitment']
 
-  commerce_recruiting.invoice_manager:
-    class: Drupal\commerce_recruiting\InvoiceManager
+  commerce_recruiting.reward_manager:
+    class: Drupal\commerce_recruiting\RewardManager
     arguments: ['@entity_type.manager','@commerce_recruiting.recruitment_manager']

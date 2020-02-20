@@ -6,11 +6,11 @@ use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Class InvoiceSettingsForm.
+ * Class RewardSettingsForm.
  *
  * @ingroup commerce_recruiting
  */
-class InvoiceSettingsForm extends FormBase {
+class RewardSettingsForm extends FormBase {
 
   /**
    * Returns a unique string identifying the form.
@@ -19,7 +19,7 @@ class InvoiceSettingsForm extends FormBase {
    *   The unique string identifying the form.
    */
   public function getFormId() {
-    return 'invoice_settings';
+    return 'reward_settings';
   }
 
   /**
@@ -35,7 +35,7 @@ class InvoiceSettingsForm extends FormBase {
   }
 
   /**
-   * Defines the settings form for Invoice entities.
+   * Defines the settings form for reward entities.
    *
    * @param array $form
    *   An associative array containing the structure of the form.
@@ -46,7 +46,7 @@ class InvoiceSettingsForm extends FormBase {
    *   Form definition array.
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $form['invoice_settings']['#markup'] = 'Settings form for Invoice entities. Manage field settings here.';
+    $form['reward_settings']['#markup'] = 'Settings form for reward entities. Manage field settings here.';
     return $form;
   }
 

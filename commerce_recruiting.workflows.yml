@@ -31,9 +31,9 @@ recruitment_default:
       from: [paid_pending]
       to: paid
 
-invoice_default:
-  id: Recruitment default
-  group: recruitment
+reward_default:
+  id: Reward default
+  group: reward
   label: 'Default'
   states:
     paid_pending:

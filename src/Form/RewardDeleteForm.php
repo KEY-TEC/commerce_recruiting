@@ -5,11 +5,11 @@ namespace Drupal\commerce_recruiting\Form;
 use Drupal\Core\Entity\ContentEntityDeleteForm;
 
 /**
- * Provides a form for deleting Invoice entities.
+ * Provides a form for deleting reward entities.
  *
  * @ingroup commerce_recruiting
  */
-class InvoiceDeleteForm extends ContentEntityDeleteForm {
+class RewardDeleteForm extends ContentEntityDeleteForm {
 
 
 }

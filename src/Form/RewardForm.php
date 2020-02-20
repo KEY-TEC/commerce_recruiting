@@ -7,11 +7,11 @@ use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Form controller for Invoice edit forms.
+ * Form controller for reward edit forms.
  *
  * @ingroup commerce_recruiting
  */
-class InvoiceForm extends ContentEntityForm {
+class RewardForm extends ContentEntityForm {
 
   /**
    * The current user account.
@@ -34,7 +34,7 @@ class InvoiceForm extends ContentEntityForm {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    /* @var \Drupal\commerce_recruiting\Entity\Invoice $entity */
+    /* @var \Drupal\commerce_recruiting\Entity\Reward $entity */
     $form = parent::buildForm($form, $form_state);
 
     return $form;
@@ -50,17 +50,17 @@ class InvoiceForm extends ContentEntityForm {
 
     switch ($status) {
       case SAVED_NEW:
-        $this->messenger()->addMessage($this->t('Created the %label Invoice.', [
+        $this->messenger()->addMessage($this->t('Created the %label reward.', [
           '%label' => $entity->label(),
         ]));
         break;
 
       default:
-        $this->messenger()->addMessage($this->t('Saved the %label Invoice.', [
+        $this->messenger()->addMessage($this->t('Saved the %label reward.', [
           '%label' => $entity->label(),
         ]));
     }
-    $form_state->setRedirect('entity.commerce_recruitment_invoice.canonical', ['commerce_recruitment_invoice' => $entity->id()]);
+    $form_state->setRedirect('entity.commerce_recruitment_reward.canonical', ['commerce_recruitment_reward' => $entity->id()]);
   }
 
 }

@@ -47,9 +47,9 @@ class RecruitmentManagerTest extends CommerceRecruitingKernelTestBase {
     $products[] = $this->createProduct();
     $products[] = $this->createProduct();
 
-    $recrutings = $this->createRecrutings($campaign, $recruiter, $recruited, $products, 'draft');
+    $recruitments = $this->createRecruitings($campaign, $recruiter, $recruited, $products, 'draft');
 
-    $this->assertEqual(count($recrutings), 2);
+    $this->assertEqual(count($recruitments), 2);
     $this->recruitmentManager->applyTransitions("accept");
     $items = $this->entityTypeManager->getStorage('commerce_recruitment')->loadByProperties(['state' => 'accepted']);
     $this->assertEqual(count($items), 0);
@@ -70,13 +70,13 @@ class RecruitmentManagerTest extends CommerceRecruitingKernelTestBase {
     $productc22 = $this->createProduct();
     $productc23 = $this->createProduct();
 
-    $this->createRecrutings($campaign, $recruiter, $recruited,
+    $this->createRecruitings($campaign, $recruiter, $recruited,
       [$product1, $product2, $product3]
     );
-    $recrutings2 = $this->createRecrutings($campaign2, $recruiter, $recruited,
+    $recruitments2 = $this->createRecruitings($campaign2, $recruiter, $recruited,
       [$productc21, $productc22, $productc23]
     );
-    $this->assertEqual(count($recrutings2), 3);
+    $this->assertEqual(count($recruitments2), 3);
     $this->recruitmentManager->applyTransitions("accept");
     $summary = $this->recruitmentManager->getRecruitmentSummaryByCampaign($campaign, $recruiter, 'accepted');
     $this->assertEqual(count($summary->getResults()), 3);
@@ -98,15 +98,15 @@ class RecruitmentManagerTest extends CommerceRecruitingKernelTestBase {
     $productc22 = $this->createProduct();
     $productc23 = $this->createProduct();
 
-    $recrutings = $this->createRecrutings($campaign, $recruiter, $recruited,
+    $recruitments = $this->createRecruitings($campaign, $recruiter, $recruited,
       [$product1, $product2, $product3]
     );
-    $recrutings2 = $this->createRecrutings($campaign2, $recruiter, $recruited,
+    $recruitments2 = $this->createRecruitings($campaign2, $recruiter, $recruited,
       [$productc21, $productc22, $productc23]
     );
-    $this->assertEqual(count($recrutings), 3);
-    $found_recrutings = $this->recruitmentManager->findRecruitmentsByCampaign($campaign, 'created', $recruiter);
-    $this->assertEqual(count($found_recrutings), 3);
+    $this->assertEqual(count($recruitments), 3);
+    $found_recruitments = $this->recruitmentManager->findRecruitmentsByCampaign($campaign, 'created', $recruiter);
+    $this->assertEqual(count($found_recruitments), 3);
   }
 
 }

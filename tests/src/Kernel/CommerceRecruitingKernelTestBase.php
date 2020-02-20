@@ -46,11 +46,11 @@ class CommerceRecruitingKernelTestBase extends CommerceKernelTestBase {
   ];
 
   /**
-   * The Invoice manager.
+   * The reward manager.
    *
-   * @var \Drupal\commerce_recruiting\InvoiceManagerInterface
+   * @var \Drupal\commerce_recruiting\RewardManagerInterface
    */
-  protected $invoiceManager;
+  protected $rewardManager;
 
   /**
    * The campaign manager.
@@ -198,20 +198,20 @@ class CommerceRecruitingKernelTestBase extends CommerceKernelTestBase {
   /**
    * Create test recruitments.
    */
-  protected function createRecrutings(CampaignInterface $campaign, User $recruiter, User $recruited, $products, $order_state = 'completed') {
+  protected function createRecruitings(CampaignInterface $campaign, User $recruiter, User $recruited, $products, $order_state = 'completed') {
     $order = $this->createOrder($products, $order_state);
     foreach ($order->getItems() as $item) {
       $this->assertNotEqual($item->getOrder(), NULL);
       $this->assertTrue($item->getPurchasedEntity() instanceof ProductVariation);
-      $recruting = $this->recruitmentManager->createRecruitment($item, $recruiter, $recruited, $campaign->getFirstOption(), new Price("10", "USD"));
-      $recruting->save();
-      $this->assertNotEqual($recruting->getOrder(), NULL);
-      $this->assertNotEqual($recruting->getProduct(), NULL);
-      $this->assertNotNull($recruting->getProduct());
-      $this->assertTrue($recruting->product->entity instanceof ProductVariation, get_class($recruting->product->entity));
-      $recrutings[] = $recruting;
+      $recruitment = $this->recruitmentManager->createRecruitment($item, $recruiter, $recruited, $campaign->getFirstOption(), new Price("10", "USD"));
+      $recruitment->save();
+      $this->assertNotEqual($recruitment->getOrder(), NULL);
+      $this->assertNotEqual($recruitment->getProduct(), NULL);
+      $this->assertNotNull($recruitment->getProduct());
+      $this->assertTrue($recruitment->product->entity instanceof ProductVariation, get_class($recruitment->product->entity));
+      $recrutments[] = $recruitment;
     }
-    return $recrutings;
+    return $recrutments;
   }
 
   /**
@@ -230,7 +230,7 @@ class CommerceRecruitingKernelTestBase extends CommerceKernelTestBase {
     $this->installEntitySchema('commerce_recruitment_campaign');
     $this->installEntitySchema('commerce_recruitment_camp_option');
     $this->installEntitySchema('commerce_recruitment');
-    $this->installEntitySchema('commerce_recruitment_invoice');
+    $this->installEntitySchema('commerce_recruitment_reward');
 
     $user = $this->createUser();
     $this->user = $this->reloadEntity($user);
@@ -238,7 +238,7 @@ class CommerceRecruitingKernelTestBase extends CommerceKernelTestBase {
 
     $this->recruitmentManager = $this->container->get('commerce_recruiting.recruitment_manager');
     $this->campaignManager = $this->container->get('commerce_recruiting.campaign_manager');
-    $this->invoiceManager = \Drupal::service('commerce_recruiting.invoice_manager');
+    $this->rewardManager = \Drupal::service('commerce_recruiting.reward_manager');
     $this->installCommerceCart();
 
     $order_type = OrderType::create([

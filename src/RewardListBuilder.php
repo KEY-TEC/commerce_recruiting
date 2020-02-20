@@ -7,17 +7,17 @@ use Drupal\Core\Entity\EntityListBuilder;
 use Drupal\Core\Link;
 
 /**
- * Defines a class to build a listing of Invoice entities.
+ * Defines a class to build a listing of reward entities.
  *
  * @ingroup commerce_recruiting
  */
-class InvoiceListBuilder extends EntityListBuilder {
+class RewardListBuilder extends EntityListBuilder {
 
   /**
    * {@inheritdoc}
    */
   public function buildHeader() {
-    $header['id'] = $this->t('Invoice ID');
+    $header['id'] = $this->t('Reward ID');
     $header['name'] = $this->t('Name');
     return $header + parent::buildHeader();
   }
@@ -26,12 +26,12 @@ class InvoiceListBuilder extends EntityListBuilder {
    * {@inheritdoc}
    */
   public function buildRow(EntityInterface $entity) {
-    /* @var \Drupal\commerce_recruiting\Entity\Invoice $entity */
+    /* @var \Drupal\commerce_recruiting\Entity\Reward $entity */
     $row['id'] = $entity->id();
     $row['name'] = Link::createFromRoute(
       $entity->label(),
-      'entity.commerce_recruitment_invoice.edit_form',
-      ['commerce_recruitment_invoice' => $entity->id()]
+      'entity.commerce_recruitment_reward.edit_form',
+      ['commerce_recruitment_reward' => $entity->id()]
     );
     return $row + parent::buildRow($entity);
   }
