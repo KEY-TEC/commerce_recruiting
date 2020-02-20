@@ -21,17 +21,17 @@ class RecruitmentManagerTest extends CommerceRecruitingKernelTestBase {
     $recruiter = $this->createUser();
     $product1 = $this->createProduct();
     $product2 = $this->createProduct();
-    $oder = $this->createOrder([$product1]);
-    $oder2 = $this->createOrder([$product2]);
+    $order = $this->createOrder([$product1]);
+    $order2 = $this->createOrder([$product2]);
     $prophecy = $this->prophesize(RecruitmentSession::CLASS);
     $session_config = $this->createCampaign($recruiter, $product1);
     $prophecy->getCampaignOption()->willReturn($session_config->getFirstOption());
     $prophecy->getRecruiter()->willReturn($recruiter);
     \Drupal::getContainer()->set('commerce_recruiting.recruitment_session', $prophecy->reveal());
     $this->recruitmentManager = $this->container->get('commerce_recruiting.recruitment_manager');
-    $matches = $this->recruitmentManager->sessionMatch($oder);
+    $matches = $this->recruitmentManager->sessionMatch($order);
     $this->assertEqual(count($matches), 1);
-    $matches = $this->recruitmentManager->sessionMatch($oder2);
+    $matches = $this->recruitmentManager->sessionMatch($order2);
     $this->assertEqual(count($matches), 0);
   }
 
@@ -78,7 +78,7 @@ class RecruitmentManagerTest extends CommerceRecruitingKernelTestBase {
     );
     $this->assertEqual(count($recruitments2), 3);
     $this->recruitmentManager->applyTransitions("accept");
-    $summary = $this->recruitmentManager->getRecruitmentSummaryByCampaign($campaign, $recruiter, 'accepted');
+    $summary = $this->recruitmentManager->getRecruitmentSummaryByCampaign($campaign,'accepted', $recruiter);
     $this->assertEqual(count($summary->getResults()), 3);
     $this->assertEqual($summary->getTotalPrice()->getNumber(), 30);
   }

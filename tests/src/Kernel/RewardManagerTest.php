@@ -26,7 +26,7 @@ class RewardManagerTest extends CommerceRecruitingKernelTestBase {
     $recruitments = $this->createRecruitings($campaign, $recruiter, $recruited, $products);
     $this->assertEqual(count($recruitments), 2);
     $this->recruitmentManager->applyTransitions('accept');
-    $reward = $this->rewardManager->createReward($campaign);
+    $reward = $this->rewardManager->createReward($campaign, $recruiter);
     $this->assertEqual(count($reward->getRecruitments()), 2);
     /** @var \Drupal\commerce_recruiting\Entity\RecruitmentInterface $recruitment */
     foreach ($reward->getRecruitments() as $recruitment) {

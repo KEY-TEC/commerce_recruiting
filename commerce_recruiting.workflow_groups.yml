@@ -1,3 +1,7 @@
 recruitment:
   label: Recruitment
   entity_type: commerce_recruitment
+
+reward:
+  label: Reward
+  entity_type: commerce_recruitment_reward

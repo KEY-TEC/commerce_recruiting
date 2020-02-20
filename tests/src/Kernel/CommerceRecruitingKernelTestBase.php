@@ -80,7 +80,6 @@ class CommerceRecruitingKernelTestBase extends CommerceKernelTestBase {
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
   protected function createOrder(array $products = [], $state = 'completed') {
-
     $order = Order::create([
       'type' => 'default',
       'state' => $state,
@@ -91,7 +90,6 @@ class CommerceRecruitingKernelTestBase extends CommerceKernelTestBase {
 
     /** @var \Drupal\commerce_product\Entity\Product $product */
     foreach ($products as $product) {
-
       /** @var \Drupal\commerce_order\Entity\OrderItemInterface $order_item */
       $order_item = OrderItem::create([
         'type' => 'test',
@@ -99,7 +97,9 @@ class CommerceRecruitingKernelTestBase extends CommerceKernelTestBase {
       ]);
       $order_item->save();
 
-      $this->assertTrue($order_item->getPurchasedEntity() instanceof ProductVariation);
+      $product_variation = $order_item->getPurchasedEntity();
+      $this->assertNotEmpty($product_variation, 'Purchased entity is not empty.');
+      $this->assertTrue($product_variation instanceof ProductVariation, 'Purchased entity is product variation.');
       $order_item->setTitle('My order item');
       $this->assertEquals('My order item', $order_item->getTitle());
       $this->assertEquals(1, $order_item->getQuantity());
@@ -209,9 +209,9 @@ class CommerceRecruitingKernelTestBase extends CommerceKernelTestBase {
       $this->assertNotEqual($recruitment->getProduct(), NULL);
       $this->assertNotNull($recruitment->getProduct());
       $this->assertTrue($recruitment->product->entity instanceof ProductVariation, get_class($recruitment->product->entity));
-      $recrutments[] = $recruitment;
+      $recruitments[] = $recruitment;
     }
-    return $recrutments;
+    return $recruitments;
   }
 
   /**
