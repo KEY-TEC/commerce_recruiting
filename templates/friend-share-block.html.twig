@@ -16,9 +16,9 @@
  */
 #}
 <div class="friend-sharing-block">
-  <h2 class="friend-sharing-block__headline">{{ block_headline }}</h2>
+  <h2 class="friend-sharing-block__headline">{{ block_headline|default("Recommend this product and get great rewards!"|t) }}</h2>
   {% include "@commerce_recruiting/sharing-link.html.twig" with {
     "share_link": share_link
   } only %}
-  <p class="friend-sharing-block__description">{{ block_description }}</p>
+  <p class="friend-sharing-block__description">{{ block_description|default("Copy your personal referral link and send it to a friend. We'll give you a great bonus for every purchase you make."|t) }}</p>
 </div>
