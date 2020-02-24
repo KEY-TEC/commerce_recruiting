@@ -5,6 +5,10 @@
  * Contains commerce_recruiting.module.
  */
 
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+
 /**
  * Implements hook_theme().
  */
@@ -58,4 +62,30 @@ function commerce_recruiting_theme($existing, $type, $theme, $path) {
  */
 function commerce_recruiting_cron() {
   \Drupal::service('commerce_recruiting.recruitment_manager')->applyTransitions('accept');
+}
+
+/**
+ * Implements hook_entity_base_field_info().
+ */
+function commerce_recruiting_entity_base_field_info(EntityTypeInterface $entity_type) {
+  if ($entity_type->id() == 'user') {
+    $fields['code'] = BaseFieldDefinition::create('string')
+      ->setLabel(new TranslatableMarkup('Code'))
+      ->setDescription(new TranslatableMarkup('Your personal recommendation code.'))
+      ->setTranslatable(FALSE)
+      ->setSettings([
+        'default_value' => '',
+        'max_length' => 50,
+      ])
+      ->setDisplayOptions('form', [
+        'type' => 'string_textfield',
+        'weight' => 1,
+      ])
+      ->setDisplayConfigurable('view', TRUE)
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDefaultValueCallback('Drupal\commerce_recruiting\Entity\CampaignOption::getDefaultCode')
+      ->addConstraint('CodeUnique');
+
+    return $fields;
+  }
 }

@@ -113,7 +113,7 @@ class RecruitmentSummaryBlock extends BlockBase implements ContainerFactoryPlugi
     $user = $this->getContextValue('user');
     $summaries = [];
     foreach ($campaigns as $campaign) {
-      $summary = $this->recruitmentManager->getRecruitmentSummaryByCampaign($campaign, $user, 'accepted');
+      $summary = $this->recruitmentManager->getRecruitmentSummaryByCampaign($campaign, 'accepted', $user);
 
       $summaries[] = $summary;
     }

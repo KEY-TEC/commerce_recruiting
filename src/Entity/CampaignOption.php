@@ -173,7 +173,8 @@ class CampaignOption extends ContentEntityBase implements CampaignOptionInterfac
       ])
       ->setDisplayConfigurable('view', TRUE)
       ->setDisplayConfigurable('form', TRUE)
-      ->setDefaultValueCallback('Drupal\commerce_recruiting\Entity\CampaignOption::getDefaultCode');
+      ->setDefaultValueCallback('Drupal\commerce_recruiting\Entity\CampaignOption::getDefaultCode')
+      ->addConstraint('CodeUnique');
 
     // The order backreference, populated by Order::postSave().
     $fields['campaign_id'] = BaseFieldDefinition::create('entity_reference')
@@ -328,12 +329,28 @@ class CampaignOption extends ContentEntityBase implements CampaignOptionInterfac
    * Default value callback for 'code' base field definition.
    *
    * @return string
-   *   A short Id generated.
+   *   A generated short ID.
+   *
    * @see https://github.com/crisu83/php-shortid
    */
   public static function getDefaultCode() {
     $shortid = ShortId::create();
-    return $shortid->generate();
+    $isCodeUnique = FALSE;
+    do {
+      $code = $shortid->generate();
+      $query = \Drupal::entityTypeManager()->getStorage('commerce_recruitment_camp_option')
+        ->getQuery();
+      $query->condition('status', 1);
+      $query->condition('code', $code);
+      $rcoids = $query->execute();
+
+      if (empty($rcoids)) {
+        $isCodeUnique = TRUE;
+      }
+    }
+    while (!$isCodeUnique);
+
+    return $code;
   }
 
   /**

@@ -302,7 +302,7 @@ class Campaign extends CommerceContentEntityBase implements CampaignInterface {
       ->setSetting('handler', 'default')
       ->setDisplayOptions('form', [
         'type' => 'inline_entity_form_complex',
-        'weight' => 0,
+        'weight' => 2,
         'settings' => [
           'override_labels' => TRUE,
           'label_singular' => t('option'),

@@ -15,9 +15,13 @@ commerce_recruitment.recruitment_url:
     _permission: 'access content'
 
 commerce_recruitment.create_reward:
-  path: '/user/rewards/collect/{commerce_recruitment_campaign}'
+  path: '/user/rewards/collect/{campaign}'
   defaults:
     _controller: '\Drupal\commerce_recruiting\Controller\RewardController::createReward'
     _title: 'Collect reward'
   requirements:
     _permission: 'access content'
+  options:
+    parameters:
+      campaign:
+        type: 'entity:commerce_recruitment_campaign'
