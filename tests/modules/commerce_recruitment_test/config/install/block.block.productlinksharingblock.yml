@@ -17,5 +17,6 @@ settings:
   provider: commerce_recruiting
   label_display: '0'
   context_mapping:
+    entity: '@commerce_product.product_route_context:commerce_product'
     user: '@user.current_user_context:current_user'
 visibility: {  }

@@ -66,7 +66,7 @@ use Drupal\user\UserInterface;
  *     "edit-form" =
  *   "/admin/commerce/recruitment/campaigns/{commerce_recruitment_campaign}/edit",
  *     "delete-form" =
- *   "/admin/commerce/recruitment/campaigns/{commerce_recruitnebt_campaign}/delete",
+ *   "/admin/commerce/recruitment/campaigns/{commerce_recruitment_campaign}/delete",
  *     "delete-multiple-form" = "/admin/commerce/recruitment/campaigns/delete",
  *     "collection" = "/admin/commerce/recruitment/campaigns",
  *   },

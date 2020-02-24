@@ -35,7 +35,7 @@ use Drupal\user\UserInterface;
  *       "delete" = "Drupal\commerce_recruiting\Form\RecruitmentDeleteForm",
  *     },
  *     "route_provider" = {
- *       "html" = "Drupal\commerce_recruiting\RecruitmehrHtmlRouteProvider",
+ *       "html" = "Drupal\commerce_recruiting\RecruitmentHtmlRouteProvider",
  *     },
  *   },
  *   base_table = "commerce_recruitment",

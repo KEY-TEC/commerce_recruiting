@@ -28,32 +28,3 @@ entity.commerce_recruitment_reward.collection:
   description: 'List Rewards'
   parent: commerce_recruitment.collections
   weight: 100
-
-commerce_recruitment.configuration:
-  title: 'Recruitment'
-  route_name: 'commerce_recruitment.configuration'
-  parent: 'commerce.configuration'
-
-commerce_recruitment_reward.admin.structure.settings:
-  title: 'Reward settings'
-  description: 'Configure Reward entities'
-  route_name: commerce_recruitment_reward.settings
-  parent: commerce_recruitment.configuration
-
-commerce_recruitment.admin.structure.settings:
-  title: 'Recruitment settings'
-  description: 'Configure Recruitment entities'
-  route_name: commerce_recruitment.settings
-  parent: commerce_recruitment.configuration
-
-commerce_recruitment_campaign.admin.structure.settings:
-  title: 'Campaign settings'
-  description: 'Configure Campaign entities'
-  route_name: commerce_recruitment_campaign.settings
-  parent: commerce_recruitment.configuration
-
-commerce_recruitment_camp_option.admin.structure.settings:
-  title: 'Campaign Option settings'
-  description: 'Configure Campaign option entities'
-  route_name: commerce_recruitment_camp_option.settings
-  parent: commerce_recruitment.configuration
