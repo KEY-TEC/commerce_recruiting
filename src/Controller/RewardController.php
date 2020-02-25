@@ -5,10 +5,14 @@ namespace Drupal\commerce_recruiting\Controller;
 use Drupal\commerce_recruiting\Entity\CampaignInterface;
 use Drupal\commerce_recruiting\RewardManagerInterface;
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\Routing\RedirectDestinationInterface;
 use Drupal\Core\Session\AccountProxy;
+use Drupal\Core\Url;
 use Drupal\user\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Class RewardController.
@@ -23,9 +27,25 @@ class RewardController extends ControllerBase {
   protected $rewardManager;
 
   /**
+   * The current account.
+   *
    * @var \Drupal\Core\Session\AccountProxy
    */
-  private $accountProxy;
+  protected $accountProxy;
+
+  /**
+   * The language manager.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
+
+  /**
+   * The request.
+   *
+   * @var \Symfony\Component\HttpFoundation\RequestStack
+   */
+  protected $request;
 
   /**
    * Constructs a new RewardController object.
@@ -33,9 +53,11 @@ class RewardController extends ControllerBase {
    * @param \Drupal\commerce_recruiting\RewardManagerInterface $reward_manager
    *   The reward service.
    */
-  public function __construct(RewardManagerInterface $reward_manager, AccountProxy $account_proxy) {
+  public function __construct(RewardManagerInterface $reward_manager, AccountProxy $account_proxy, LanguageManagerInterface $language_manager, RequestStack $request_stack) {
     $this->rewardManager = $reward_manager;
     $this->accountProxy = $account_proxy;
+    $this->languageManager = $language_manager;
+    $this->request = $request_stack;
   }
 
   /**
@@ -44,7 +66,9 @@ class RewardController extends ControllerBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('commerce_recruiting.reward_manager'),
-      $container->get('current_user')
+      $container->get('current_user'),
+      $container->get('language_manager'),
+      $container->get('request_stack')
     );
   }
 
@@ -61,7 +85,18 @@ class RewardController extends ControllerBase {
     try {
       $user = User::load($this->accountProxy->id());
       $reward = $this->rewardManager->createReward($campaign, $user);
-      return new RedirectResponse($reward->toUrl()->toString(), 302);;
+
+      $query = $this->request->getCurrentRequest()->query;
+      if ($query->has('destination')) {
+        $redirect = $query->get('destination');
+        $destination = Url::fromUserInput($redirect);
+        if ($destination->isRouted()) {
+          // Valid internal path.
+          return $this->redirect($destination->getRouteName());
+        }
+      }
+
+      return new RedirectResponse($reward->toUrl('canonical', ['language' => $this->languageManager->getCurrentLanguage()])->toString(), 302);;
     }
     catch (\Throwable $e) {
       $this->getLogger('commerce_recruitment')->error($e->getMessage());

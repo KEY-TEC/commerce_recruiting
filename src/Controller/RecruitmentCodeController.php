@@ -63,7 +63,7 @@ class RecruitmentCodeController extends ControllerBase {
   }
 
   /**
-   * Page callback for route commerce_recruitment.recruitment_url.
+   * Page callback for route commerce_recruiting.recruitment_url.
    *
    * Decrypts a recruitment url to save the recruitment session
    * and redirects to the product.

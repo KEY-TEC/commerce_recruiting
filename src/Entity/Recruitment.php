@@ -27,7 +27,8 @@ use Drupal\user\UserInterface;
  *     "views_data" = "Drupal\views\EntityViewsData",
  *     "list_builder" = "Drupal\commerce_recruiting\RecruitmentListBuilder",
  *     "translation" = "Drupal\content_translation\ContentTranslationHandler",
- *     "access" = "Drupal\commerce_recruiting\RecruitmentAccessControlHandler",
+ *     "permission_provider" = "Drupal\entity\EntityPermissionProvider",
+ *     "access" = "Drupal\entity\EntityAccessControlHandler",
  *     "form" = {
  *       "default" = "Drupal\commerce_recruiting\Form\RecruitmentForm",
  *       "add" = "Drupal\commerce_recruiting\Form\RecruitmentForm",

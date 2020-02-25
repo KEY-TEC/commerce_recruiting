@@ -24,7 +24,8 @@ use Drupal\user\UserInterface;
  *     "view_builder" = "Drupal\Core\Entity\EntityViewBuilder",
  *     "views_data" = "Drupal\views\EntityViewsData",
  *     "list_builder" = "Drupal\commerce_recruiting\RewardListBuilder",
- *     "access" = "Drupal\commerce_recruiting\RewardAccessControlHandler",
+ *     "permission_provider" = "Drupal\entity\UncacheableEntityPermissionProvider",
+ *     "access" = "Drupal\entity\UncacheableEntityAccessControlHandler",
  *     "form" = {
  *       "default" = "Drupal\commerce_recruiting\Form\RecruitmentForm",
  *       "add" = "Drupal\commerce_recruiting\Form\RecruitmentForm",
@@ -36,7 +37,7 @@ use Drupal\user\UserInterface;
  *     },
  *   },
  *   base_table = "commerce_recruitment_reward",
- *   translatable = FALSE,
+ *   translatable = TRUE,
  *   admin_permission = "administer reward entities",
  *   entity_keys = {
  *     "id" = "id",

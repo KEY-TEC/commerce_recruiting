@@ -27,7 +27,8 @@ use http\Exception\InvalidArgumentException;
  *   handlers = {
  *     "view_builder" = "Drupal\Core\Entity\EntityViewBuilder",
  *     "views_data" = "Drupal\views\EntityViewsData",
- *     "access" = "Drupal\commerce_recruiting\CampaignOptionAccessControlHandler",
+ *     "permission_provider" = "Drupal\entity\EntityPermissionProvider",
+ *     "access" = "Drupal\entity\EntityAccessControlHandler",
  *     "form" = {
  *       "default" = "Drupal\commerce_recruiting\Form\RecruitmentForm",
  *       "add" = "Drupal\commerce_recruiting\Form\RecruitmentForm",
@@ -145,6 +146,58 @@ class CampaignOption extends ContentEntityBase implements CampaignOptionInterfac
    */
   public function setOwner(UserInterface $account) {
     $this->set('user_id', $account->id());
+    return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCampaign() {
+    return $this->get('campaign_id')->entity;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getProduct() {
+    return $this->get('product')->entity;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getBonusPercent() {
+    return $this->get('bonus_percent')->value;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getBonus() {
+    if (!$this->get('bonus')->isEmpty()) {
+      return $this->get('bonus')->first()->toPrice();
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setBonus(Price $price) {
+    return $this->set('bonus', $price);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getBonusMethod() {
+    return $this->get('bonus_method')->value;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setProduct(EntityInterface $product) {
+    $this->set('product', $product);
     return $this;
   }
 
@@ -311,20 +364,6 @@ class CampaignOption extends ContentEntityBase implements CampaignOptionInterfac
   }
 
   /**
-   * {@inheritdoc}
-   */
-  public function getCampaign() {
-    return $this->get('campaign_id')->entity;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getProduct() {
-    return $this->get('product')->entity;
-  }
-
-  /**
    * Default value callback for 'code' base field definition.
    *
    * @return string
@@ -334,7 +373,6 @@ class CampaignOption extends ContentEntityBase implements CampaignOptionInterfac
    */
   public static function getDefaultCode() {
     $shortid = ShortId::create();
-    $isCodeUnique = FALSE;
     do {
       $code = $shortid->generate();
       $query = \Drupal::entityTypeManager()->getStorage('commerce_recruitment_camp_option')
@@ -342,12 +380,8 @@ class CampaignOption extends ContentEntityBase implements CampaignOptionInterfac
       $query->condition('status', 1);
       $query->condition('code', $code);
       $rcoids = $query->execute();
-
-      if (empty($rcoids)) {
-        $isCodeUnique = TRUE;
-      }
     }
-    while (!$isCodeUnique);
+    while (!empty($rcoids));
 
     return $code;
   }
@@ -367,44 +401,6 @@ class CampaignOption extends ContentEntityBase implements CampaignOptionInterfac
     else {
       throw new InvalidArgumentException("No valid bonus method selected. Method: '" . $this->getBonusMethod() . "'");
     }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getBonusPercent() {
-    return $this->get('bonus_percent')->value;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getBonus() {
-    if (!$this->get('bonus')->isEmpty()) {
-      return $this->get('bonus')->first()->toPrice();
-    }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function setBonus(Price $price) {
-    return $this->set('bonus', $price);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getBonusMethod() {
-    return $this->get('bonus_method')->value;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function setProduct(EntityInterface $product) {
-    $this->set('product', $product);
-    return $this;
   }
 
 }
