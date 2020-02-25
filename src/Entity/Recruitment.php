@@ -24,15 +24,15 @@ use Drupal\user\UserInterface;
  *   bundle_label = @Translation("Recruitments"),
  *   handlers = {
  *     "view_builder" = "Drupal\Core\Entity\EntityViewBuilder",
+ *     "views_data" = "Drupal\views\EntityViewsData",
  *     "list_builder" = "Drupal\commerce_recruiting\RecruitmentListBuilder",
- *     "views_data" = "Drupal\commerce_recruiting\RecruitmentViewsData",
- *     "translation" = "Drupal\commerce_recruiting\RecruitmentTranslationHandler",
+ *     "translation" = "Drupal\content_translation\ContentTranslationHandler",
  *     "access" = "Drupal\commerce_recruiting\RecruitmentAccessControlHandler",
  *     "form" = {
  *       "default" = "Drupal\commerce_recruiting\Form\RecruitmentForm",
  *       "add" = "Drupal\commerce_recruiting\Form\RecruitmentForm",
  *       "edit" = "Drupal\commerce_recruiting\Form\RecruitmentForm",
- *       "delete" = "Drupal\commerce_recruiting\Form\RecruitmentDeleteForm",
+ *       "delete" = "Drupal\Core\Entity\ContentEntityDeleteForm",
  *     },
  *     "route_provider" = {
  *       "html" = "Drupal\commerce_recruiting\RecruitmentHtmlRouteProvider",

@@ -2,13 +2,8 @@
 
 namespace Drupal\commerce_recruiting\Form;
 
-use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Entity\ContentEntityForm;
-use Drupal\Core\Entity\EntityRepositoryInterface;
-use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Session\AccountProxyInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Form controller for recruitment edit forms.
@@ -16,44 +11,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @ingroup commerce_recruiting
  */
 class RecruitmentForm extends ContentEntityForm {
-
-  /**
-   * The current user account.
-   *
-   * @var \Drupal\Core\Session\AccountProxyInterface
-   */
-  protected $account;
-
-  /**
-   * Constructs a new RecruitmentForm.
-   *
-   * @param \Drupal\Core\Session\AccountProxyInterface $account
-   *   The current user account.
-   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
-   *   The entity repository service.
-   * @param \Drupal\Core\Entity\EntityTypeBundleInfoInterface $entity_type_bundle_info
-   *   The entity type bundle service.
-   * @param \Drupal\Component\Datetime\TimeInterface $time
-   *   The time service.
-   */
-  public function __construct(AccountProxyInterface $account, EntityRepositoryInterface $entity_repository, EntityTypeBundleInfoInterface $entity_type_bundle_info = NULL, TimeInterface $time = NULL) {
-    parent::__construct($entity_repository, $entity_type_bundle_info, $time);
-
-    $this->account = $account;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    // Instantiates this form class.
-    return new static(
-      $container->get('current_user'),
-      $container->get('entity.repository'),
-      $container->get('entity_type.bundle.info'),
-      $container->get('datetime.time')
-    );
-  }
 
   /**
    * {@inheritdoc}
@@ -75,17 +32,17 @@ class RecruitmentForm extends ContentEntityForm {
 
     switch ($status) {
       case SAVED_NEW:
-        $this->messenger()->addMessage($this->t('Created new %label recruitment.', [
+        $this->messenger()->addMessage($this->t('Created %label.', [
           '%label' => $entity->label(),
         ]));
         break;
 
       default:
-        $this->messenger()->addMessage($this->t('Saved %label recruitment.', [
+        $this->messenger()->addMessage($this->t('Saved %label.', [
           '%label' => $entity->label(),
         ]));
     }
-    $form_state->setRedirect('entity.commerce_recruitment.canonical', ['commerce_recruitment' => $entity->id()]);
+    $form_state->setRedirect('entity.' . $entity->getEntityTypeId() . '.canonical', [$entity->getEntityTypeId() => $entity->id()]);
   }
 
 }

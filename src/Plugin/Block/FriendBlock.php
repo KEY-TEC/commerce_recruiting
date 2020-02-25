@@ -10,6 +10,7 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\user\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -106,12 +107,18 @@ class FriendBlock extends BlockBase implements ContainerFactoryPluginInterface {
       return [];
     }
 
+    $recruiter_code = $this->getContextValue('user')->id();
+    $user = User::load($recruiter_code);
+    if ($user->hasField('code') && !empty($user->code->value)) {
+      $recruiter_code = $user->code->value;
+    }
+
     /* @var \Drupal\Core\Entity\EntityInterface $entity */
     $entity = $this->getContextValue('entity');
     foreach ($campaign->getOptions() as $option) {
       /* @var \Drupal\commerce_recruiting\Entity\CampaignOptionInterface $option */
       if ($option->getProduct()->id() == $entity->id() && $option->getProduct()->getEntityTypeId() == $entity->getEntityTypeId()) {
-        $url = Code::create($option->getCode(), $this->getContextValue('user')->id())->url()->toString();
+        $url = Code::create($option->getCode(), $recruiter_code)->url()->toString();
         $build['#theme'] = 'friend_share_block';
         $build['#share_link'] = $url;
         return $build;

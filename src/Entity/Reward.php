@@ -22,19 +22,18 @@ use Drupal\user\UserInterface;
  *   label = @Translation("Reward"),
  *   handlers = {
  *     "view_builder" = "Drupal\Core\Entity\EntityViewBuilder",
+ *     "views_data" = "Drupal\views\EntityViewsData",
  *     "list_builder" = "Drupal\commerce_recruiting\RewardListBuilder",
- *     "views_data" = "Drupal\commerce_recruiting\Entity\RewardViewsData",
- *
+ *     "access" = "Drupal\commerce_recruiting\RewardAccessControlHandler",
  *     "form" = {
- *       "default" = "Drupal\commerce_recruiting\Form\RewardForm",
- *       "add" = "Drupal\commerce_recruiting\Form\RewardForm",
- *       "edit" = "Drupal\commerce_recruiting\Form\RewardForm",
- *       "delete" = "Drupal\commerce_recruiting\Form\RewardDeleteForm",
+ *       "default" = "Drupal\commerce_recruiting\Form\RecruitmentForm",
+ *       "add" = "Drupal\commerce_recruiting\Form\RecruitmentForm",
+ *       "edit" = "Drupal\commerce_recruiting\Form\RecruitmentForm",
+ *       "delete" = "Drupal\Core\Entity\ContentEntityDeleteForm",
  *     },
  *     "route_provider" = {
- *       "html" = "Drupal\commerce_recruiting\RewardHtmlRouteProvider",
+ *       "html" = "Drupal\commerce_recruiting\RecruitmentHtmlRouteProvider",
  *     },
- *     "access" = "Drupal\commerce_recruiting\RewardAccessControlHandler",
  *   },
  *   base_table = "commerce_recruitment_reward",
  *   translatable = FALSE,

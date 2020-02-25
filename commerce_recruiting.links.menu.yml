@@ -1,6 +1,6 @@
-commerce_recruitment.collections:
+commerce_recruiting.collections:
   title: 'Recruitments'
-  route_name: 'commerce_recruitment.collections'
+  route_name: 'commerce_recruiting.collections'
   description: 'Manage recruitment.'
   parent: 'commerce.admin_commerce'
   weight: 0
@@ -10,7 +10,7 @@ entity.commerce_recruitment.collection:
   title: 'Recruitments'
   route_name: entity.commerce_recruitment.collection
   description: 'List of recruitments'
-  parent: 'commerce_recruitment.collections'
+  parent: 'commerce_recruiting.collections'
   weight: 100
 
 # Recruitment entity type menu items definition
@@ -18,7 +18,7 @@ entity.commerce_recruitment_campaign.collection:
   title: 'Campaigns'
   route_name: entity.commerce_recruitment_campaign.collection
   description: 'List of Campaigns'
-  parent: 'commerce_recruitment.collections'
+  parent: 'commerce_recruiting.collections'
   weight: 99
 
 # Reward menu items definition
@@ -26,5 +26,35 @@ entity.commerce_recruitment_reward.collection:
   title: 'Reward list'
   route_name: entity.commerce_recruitment_reward.collection
   description: 'List Rewards'
-  parent: commerce_recruitment.collections
+  parent: commerce_recruiting.collections
   weight: 100
+
+commerce_recruiting.configuration:
+  title: 'Recruiting'
+  route_name: 'commerce_recruiting.configuration'
+  parent: 'commerce.configuration'
+
+commerce_recruiting_reward.admin.structure.settings:
+  title: 'Reward settings'
+  description: 'Configure Reward entities'
+  route_name: commerce_recruitment_reward.settings
+  parent: commerce_recruiting.configuration
+
+commerce_recruiting.admin.structure.settings:
+  title: 'Recruitment settings'
+  description: 'Configure Recruitment entities'
+  route_name: commerce_recruitment.settings
+  parent: commerce_recruiting.configuration
+
+commerce_recruiting_campaign.admin.structure.settings:
+  title: 'Campaign settings'
+  description: 'Configure Campaign entities'
+  route_name: commerce_recruitment_campaign.settings
+  parent: commerce_recruiting.configuration
+
+commerce_recruiting_camp_option.admin.structure.settings:
+  title: 'Campaign Option settings'
+  description: 'Configure Campaign option entities'
+  route_name: commerce_recruitment_camp_option.settings
+  parent: commerce_recruiting.configuration
+

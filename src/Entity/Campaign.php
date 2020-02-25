@@ -29,22 +29,22 @@ use Drupal\user\UserInterface;
  *   ),
  *   handlers = {
  *     "view_builder" = "Drupal\Core\Entity\EntityViewBuilder",
+ *     "views_data" = "Drupal\views\EntityViewsData",
  *     "list_builder" = "Drupal\commerce_recruiting\CampaignListBuilder",
- *     "views_data" = "Drupal\commerce_recruiting\CampaignViewsData",
  *     "translation" = "Drupal\content_translation\ContentTranslationHandler",
  *     "access" = "Drupal\entity\EntityAccessControlHandler",
  *     "permission_provider" = "Drupal\entity\EntityPermissionProvider",
  *     "form" = {
- *       "default" = "Drupal\commerce_recruiting\Form\CampaignForm",
- *       "add" = "Drupal\commerce_recruiting\Form\CampaignForm",
- *       "edit" = "Drupal\commerce_recruiting\Form\CampaignForm",
+ *       "default" = "Drupal\commerce_recruiting\Form\RecruitmentForm",
+ *       "add" = "Drupal\commerce_recruiting\Form\RecruitmentForm",
+ *       "edit" = "Drupal\commerce_recruiting\Form\RecruitmentForm",
  *       "delete" = "Drupal\Core\Entity\ContentEntityDeleteForm",
  *     },
  *     "local_task_provider" = {
  *       "default" = "Drupal\entity\Menu\DefaultEntityLocalTaskProvider",
  *     },
  *     "route_provider" = {
- *       "html" = "Drupal\commerce_recruiting\CampaignHtmlRouteProvider",
+ *       "html" = "Drupal\commerce_recruiting\RecruitmentHtmlRouteProvider",
  *     },
  *   },
  *   base_table = "commerce_recruitment_campaign",

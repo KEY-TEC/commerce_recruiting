@@ -9,6 +9,7 @@ use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\user\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -93,6 +94,12 @@ class RecruiterBlock extends BlockBase implements ContainerFactoryPluginInterfac
       return [];
     }
 
+    $recruiter_code = $this->getContextValue('user')->id();
+    $user = User::load($recruiter_code);
+    if ($user->hasField('code') && !empty($user->code->value)) {
+      $recruiter_code = $user->code->value;
+    }
+
     foreach ($campaigns as $campaign) {
       $build['#campaigns'][$campaign->id()]['entity'] = $campaign;
       $build['#campaigns'][$campaign->id()]['name'] = $campaign->getName();
@@ -100,7 +107,7 @@ class RecruiterBlock extends BlockBase implements ContainerFactoryPluginInterfac
       /* @var \Drupal\commerce_recruiting\Entity\CampaignOptionInterface $option */
       $options = $campaign->getOptions();
       foreach ($options as $option) {
-        $url = Code::create($option->getCode(), $this->getContextValue('user')->id())->url()->toString();
+        $url = Code::create($option->getCode(), $recruiter_code)->url()->toString();
         $build['#campaigns'][$campaign->id()]['options'][$option->id()]['entity'] = $option;
         $build['#campaigns'][$campaign->id()]['options'][$option->id()]['title'] = $option->getProduct()->getTitle();
         $build['#campaigns'][$campaign->id()]['options'][$option->id()]['url'] = $url;

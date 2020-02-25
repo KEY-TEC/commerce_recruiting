@@ -55,8 +55,15 @@ class CampaignManager implements CampaignManagerInterface {
   public function getRecruiterFromCode(Code $code) {
     $option = $this->findCampaignOptionFromCode($code);
     $campaign = $option->getCampaign();
-    if ($code->getRecruiterId() != NULL) {
-      $recruiter = $this->entityTypeManager->getStorage('user')->load($code->getRecruiterId());
+    if ($code->getRecruiterCode() != NULL) {
+      $user_storage = $this->entityTypeManager->getStorage('user');
+      $uid = $code->getRecruiterCode();
+      if (is_numeric($uid)) {
+        $recruiter = $user_storage->load($uid);
+      }
+      else {
+        $recruiter = current($user_storage->loadByProperties(['code' => $uid]));
+      }
     }
     elseif ($campaign->getRecruiter() != NULL) {
       $recruiter = $campaign->getRecruiter();

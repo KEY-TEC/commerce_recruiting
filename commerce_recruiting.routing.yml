@@ -1,4 +1,4 @@
-commerce_recruitment.collections:
+commerce_recruiting.collections:
   path: '/admin/commerce/recruitment'
   defaults:
     _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
@@ -6,7 +6,7 @@ commerce_recruitment.collections:
   requirements:
     _permission: 'administer recruitment entities'
 
-commerce_recruitment.recruitment_url:
+commerce_recruiting.recruitment_url:
   path: '/code/{campaign_code}'
   defaults:
     _controller: '\Drupal\commerce_recruiting\Controller\RecruitmentCodeController::code'
@@ -14,7 +14,7 @@ commerce_recruitment.recruitment_url:
   requirements:
     _permission: 'access content'
 
-commerce_recruitment.create_reward:
+commerce_recruiting.create_reward:
   path: '/user/rewards/collect/{campaign}'
   defaults:
     _controller: '\Drupal\commerce_recruiting\Controller\RewardController::createReward'
@@ -25,3 +25,11 @@ commerce_recruitment.create_reward:
     parameters:
       campaign:
         type: 'entity:commerce_recruitment_campaign'
+
+commerce_recruiting.configuration:
+  path: '/admin/commerce/config/recruiting'
+  defaults:
+    _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
+    _title: 'Recruiting'
+  requirements:
+    _permission: 'access commerce administration pages'

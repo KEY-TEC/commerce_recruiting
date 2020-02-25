@@ -19,7 +19,6 @@ class RecruitmentHtmlRouteProvider extends AdminHtmlRouteProvider {
    */
   public function getRoutes(EntityTypeInterface $entity_type) {
     $collection = parent::getRoutes($entity_type);
-
     $entity_type_id = $entity_type->id();
 
     if ($settings_form_route = $this->getSettingsFormRoute($entity_type)) {
@@ -40,7 +39,7 @@ class RecruitmentHtmlRouteProvider extends AdminHtmlRouteProvider {
    */
   protected function getSettingsFormRoute(EntityTypeInterface $entity_type) {
     if (!$entity_type->getBundleEntityType()) {
-      $route = new Route("/admin/structure/{$entity_type->id()}/settings");
+      $route = new Route("/admin/commerce/config/{$entity_type->id()}");
       $route
         ->setDefaults([
           '_form' => 'Drupal\commerce_recruiting\Form\RecruitmentSettingsForm',

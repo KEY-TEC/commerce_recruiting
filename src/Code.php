@@ -10,49 +10,58 @@ use Drupal\Core\Url;
 class Code {
 
   /**
-   * The code.
+   * The campaign option code.
    *
    * @var string
    */
   private $code;
 
   /**
-   * The recruiter.
+   * The recruiter code or id.
    *
    * @var string
    */
-  private $recruiterId;
+  private $recruiterCode;
 
   /**
    * Create code.
    *
-   * @param string $code
-   *   The Code.
-   * @param string $recruiter_id
-   *   Recruiter id.
+   * @param string $campaign_code
+   *   The campaign option code.
+   * @param string $recruiter_code
+   *   Recruiter code or id.
+   *
+   * @return \Drupal\commerce_recruiting\Code
    */
-  public static function create($code, $recruiter_id) {
-    return new Code($code, $recruiter_id);
+  public static function create($campaign_code, $recruiter_code) {
+    return new Code($campaign_code, $recruiter_code);
   }
 
   /**
-   * Create code including recruiter id.
+   * Create a new code instance from a code string.
+   * The string has a format X--Y where
+   * X = the campaign option code
+   * Y = the recruiter uid or the recruiter's personal code.
    *
    * @param string $code_string
-   *   Code in format XXXX--RUID.
+   *   Code in format X--Y.
    */
   public static function createFromCode($code_string) {
     $code_array = explode('--', $code_string);
-    $recruiter_id = isset($code_array[1]) ? $code_array[1] : NULL;
-    return new Code($code_array[0], $recruiter_id);
+    $recruiter_code = isset($code_array[1]) ? $code_array[1] : NULL;
+    return new Code($code_array[0], $recruiter_code);
   }
 
   /**
    * Code constructor.
+   *
+   * @param $code
+   *   The campaign option code.
+   * @param string|null $recruiter_code
    */
-  private function __construct($code, $recruiter_id = NULL) {
+  private function __construct($code, $recruiter_code = NULL) {
     $this->code = $code;
-    $this->recruiterId = $recruiter_id;
+    $this->recruiterCode = $recruiter_code;
   }
 
   /**
@@ -63,27 +72,27 @@ class Code {
    */
   public function url() {
     $code = $this->getCode();
-    if ($this->recruiterId != NULL) {
-      $code .= '--' . $this->recruiterId;
+    if ($this->recruiterCode != NULL) {
+      $code .= '--' . $this->recruiterCode;
     }
     return Url::fromRoute('commerce_recruitment.recruitment_url', ['campaign_code' => $code], ['absolute' => TRUE]);
   }
 
   /**
-   * The recruiter id.
+   * Returns the recruiter code or id.
    *
    * @return string
-   *   The recruiter id.
+   *   The recruiter code or id.
    */
-  public function getRecruiterId() {
-    return $this->recruiterId;
+  public function getRecruiterCode() {
+    return $this->recruiterCode;
   }
 
   /**
-   * The code.
+   * Returns the campaign option code.
    *
    * @return string
-   *   The code.
+   *   The campaign option code.
    */
   public function getCode() {
     return $this->code;

@@ -26,17 +26,16 @@ use http\Exception\InvalidArgumentException;
  *   label = @Translation("Campaign option"),
  *   handlers = {
  *     "view_builder" = "Drupal\Core\Entity\EntityViewBuilder",
- *     "views_data" =
- *     "Drupal\commerce_recruiting\Entity\CampaignOptionViewsData",
+ *     "views_data" = "Drupal\views\EntityViewsData",
+ *     "access" = "Drupal\commerce_recruiting\CampaignOptionAccessControlHandler",
  *     "form" = {
- *       "default" = "Drupal\commerce_recruiting\Form\CampaignForm",
- *       "add" = "Drupal\commerce_recruiting\Form\CampaignForm",
- *       "edit" = "Drupal\commerce_recruiting\Form\CampaignForm",
+ *       "default" = "Drupal\commerce_recruiting\Form\RecruitmentForm",
+ *       "add" = "Drupal\commerce_recruiting\Form\RecruitmentForm",
+ *       "edit" = "Drupal\commerce_recruiting\Form\RecruitmentForm",
  *       "delete" = "Drupal\Core\Entity\ContentEntityDeleteForm",
  *     },
- *     "access" = "Drupal\commerce_recruiting\CampaignOptionAccessControlHandler",
  *     "route_provider" = {
- *       "html" = "Drupal\commerce_recruiting\CampaignOptionHtmlRouteProvider",
+ *       "html" = "Drupal\commerce_recruiting\RecruitmentHtmlRouteProvider",
  *     },
  *   },
  *   base_table = "commerce_recruitment_camp_option",

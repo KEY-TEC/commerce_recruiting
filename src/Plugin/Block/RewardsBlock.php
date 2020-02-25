@@ -122,7 +122,7 @@ class RewardsBlock extends BlockBase implements ContainerFactoryPluginInterface 
    * @throws \Drupal\Component\Plugin\Exception\PluginException
    */
   private function findRewards() {
-    if (empty($this->rewards)) {
+    if (!empty($this->rewards)) {
       return $this->rewards;
     }
     else {
