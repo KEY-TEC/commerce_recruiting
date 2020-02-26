@@ -152,4 +152,18 @@ interface RewardInterface extends ContentEntityInterface, EntityChangedInterface
    */
   public function hasRecruitment(RecruitmentInterface $recruitment);
 
+  /**
+   * Returns the time period of the containing recruitings.
+   *
+   * Will return an array with the keys "from" and "to",
+   * containing the timestamp of each the earliest and latest
+   * recruitment of this reward.
+   *
+   * "From" equals "to" if the reward contains only one recruitment.
+   *
+   * @return array
+   *   Contains: "from", "to"
+   */
+  public function getTimePeriod();
+
 }

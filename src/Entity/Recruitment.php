@@ -166,10 +166,9 @@ class Recruitment extends ContentEntityBase implements RecruitmentInterface {
     // Add ownership fields.
     $fields += static::ownerBaseFieldDefinitions($entity_type);
 
-    $fields[$entity_type->getKey('owner')] = BaseFieldDefinition::create('entity_reference')
+    $fields[$entity_type->getKey('owner')]
       ->setLabel(t('Recruiter'))
       ->setDescription(t('The recruiter (owner).'))
-      ->setSetting('target_type', 'user')
       ->setSetting('handler', 'default')
       ->setDisplayOptions('view', [
         'label' => 'hidden',

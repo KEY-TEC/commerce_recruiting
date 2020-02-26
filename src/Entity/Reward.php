@@ -10,6 +10,7 @@ use Drupal\Core\Entity\EntityChangedTrait;
 use Drupal\Core\Entity\EntityPublishedTrait;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\user\EntityOwnerTrait;
 use Drupal\user\UserInterface;
 
 /**
@@ -37,13 +38,14 @@ use Drupal\user\UserInterface;
  *     },
  *   },
  *   base_table = "commerce_recruitment_reward",
+ *   data_table = "commerce_recruitment_reward_field_data",
  *   translatable = TRUE,
  *   admin_permission = "administer reward entities",
  *   entity_keys = {
  *     "id" = "id",
  *     "label" = "name",
  *     "uuid" = "uuid",
- *     "uid" = "user_id",
+ *     "owner" = "user_id",
  *     "langcode" = "langcode",
  *     "published" = "status",
  *   },
@@ -65,6 +67,7 @@ class Reward extends ContentEntityBase implements RewardInterface {
 
   use EntityChangedTrait;
   use EntityPublishedTrait;
+  use EntityOwnerTrait;
 
   /**
    * {@inheritdoc}
@@ -103,36 +106,6 @@ class Reward extends ContentEntityBase implements RewardInterface {
    */
   public function setCreatedTime($timestamp) {
     $this->set('created', $timestamp);
-    return $this;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getOwner() {
-    return $this->get('user_id')->entity;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getOwnerId() {
-    return $this->get('user_id')->target_id;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function setOwnerId($uid) {
-    $this->set('user_id', $uid);
-    return $this;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function setOwner(UserInterface $account) {
-    $this->set('user_id', $account->id());
     return $this;
   }
 
@@ -226,6 +199,29 @@ class Reward extends ContentEntityBase implements RewardInterface {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function getTimePeriod() {
+    $time_period = [
+      'from' => 0,
+      'to' => 0,
+    ];
+
+    foreach ($this->getRecruitments() as $recruitment) {
+      $created_timestamp = $recruitment->getCreatedTime();
+      if ($created_timestamp < $time_period['from'] || $time_period['from'] == 0) {
+        $time_period['from'] = $created_timestamp;
+      }
+
+      if ($created_timestamp < $time_period['to'] || $time_period['to'] == 0) {
+        $time_period['to'] = $created_timestamp;
+      }
+    }
+
+    return $time_period;
+  }
+
+  /**
    * Gets the index of the given order item.
    *
    * @param \Drupal\commerce_recruiting\Entity\RecruitmentInterface $recruitment
@@ -251,12 +247,13 @@ class Reward extends ContentEntityBase implements RewardInterface {
 
     // Add the published field.
     $fields += static::publishedBaseFieldDefinitions($entity_type);
+    // Add ownership fields.
+    $fields += static::ownerBaseFieldDefinitions($entity_type);
 
-    $fields['user_id'] = BaseFieldDefinition::create('entity_reference')
+    $fields[$entity_type->getKey('owner')]
       ->setLabel(t('Authored by'))
-      ->setDescription(t('The user ID of author of the reward entity.'))
+      ->setDescription(t('The user ID of the reward entity.'))
       ->setRevisionable(TRUE)
-      ->setSetting('target_type', 'user')
       ->setSetting('handler', 'default')
       ->setDisplayOptions('view', [
         'label' => 'hidden',
