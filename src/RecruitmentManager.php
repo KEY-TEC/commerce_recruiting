@@ -126,6 +126,11 @@ class RecruitmentManager implements RecruitmentManagerInterface {
     $option = $this->recruitmentSession->getCampaignOption();
     $recruiter = $this->recruitmentSession->getRecruiter();
 
+    if (empty($option) || empty($recruiter)) {
+      // No or invalid recruiting session.
+      return;
+    }
+
     // First check the matches for stored config.
     $matches = $this->sessionMatchByConfig($recruiter, $option, $order);
 
