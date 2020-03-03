@@ -155,4 +155,11 @@ class RewardsBlock extends BlockBase implements ContainerFactoryPluginInterface 
     return parent::blockAccess($account);
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheMaxAge() {
+    return 0;
+  }
+
 }

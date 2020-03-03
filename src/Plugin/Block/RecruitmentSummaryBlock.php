@@ -158,4 +158,11 @@ class RecruitmentSummaryBlock extends BlockBase implements ContainerFactoryPlugi
     return parent::blockAccess($account);
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheMaxAge() {
+    return 0;
+  }
+
 }

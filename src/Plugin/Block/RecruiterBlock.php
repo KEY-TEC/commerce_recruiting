@@ -155,4 +155,11 @@ class RecruiterBlock extends BlockBase implements ContainerFactoryPluginInterfac
     return parent::blockAccess($account);
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheMaxAge() {
+    return 0;
+  }
+
 }
