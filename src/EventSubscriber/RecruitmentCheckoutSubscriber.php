@@ -73,6 +73,11 @@ class RecruitmentCheckoutSubscriber implements EventSubscriberInterface {
     $order = $event->getEntity();
     $matches = $this->recruitmentManager->sessionMatch($order);
     $user = User::load($this->currentUser->id());
+    if (empty($matches)) {
+      // No session set.
+      return;
+    }
+
     foreach ($matches as $product_id => $match) {
       $recruitment = $this->recruitmentManager->createRecruitment($match['order_item'], $match['recruiter'], $user, $match['campaign_option'], $match['bonus']);
       $recruitment->save();
