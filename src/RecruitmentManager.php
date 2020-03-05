@@ -102,6 +102,11 @@ class RecruitmentManager implements RecruitmentManagerInterface {
   private function sessionMatchByConfig(AccountInterface $recruiter, CampaignOption $option, OrderInterface $order) {
     $product = $option->getProduct();
     $matches = [];
+    if (empty($product)) {
+      // Missing product.
+      return $matches;
+    }
+
     foreach ($order->getItems() as $item) {
       $purchased_product = $item->getPurchasedEntity();
       if ($purchased_product instanceof ProductVariation) {

@@ -305,6 +305,7 @@ class CampaignOption extends ContentEntityBase implements CampaignOptionInterfac
       ->setLabel(new TranslatableMarkup('Product'))
       ->setCardinality(1)
       ->setDescription(new TranslatableMarkup('The product or bundle for which someone will get the bonus after checkout.'))
+      ->setRequired(TRUE)
       ->setSettings([
         'exclude_entity_types' => FALSE,
         'entity_type_ids' => [

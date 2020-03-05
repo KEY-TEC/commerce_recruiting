@@ -6,6 +6,7 @@ use Drupal\commerce_recruiting\CampaignManagerInterface;
 use Drupal\commerce_recruiting\Code;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountInterface;
@@ -80,6 +81,35 @@ class RecruiterBlock extends BlockBase implements ContainerFactoryPluginInterfac
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function defaultConfiguration() {
+    return [
+      'include_unspecified_recruiter_campaigns' => 0,
+    ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function blockForm($form, FormStateInterface $form_state) {
+    $form['include_unspecified_recruiter_campaigns'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Include general campaigns (no recruiter specified)'),
+      '#description' => $this->t('This block shows recruiter specific campaigns for the current user. Activate this checkbox to also include campaigns that have no recruiter specified.'),
+      '#default_value' => $this->configuration['include_unspecified_recruiter_campaigns'],
+    ];
+    return $form;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function blockSubmit($form, FormStateInterface $form_state) {
+    $this->configuration['include_unspecified_recruiter_campaigns'] = $form_state->getValue('include_unspecified_recruiter_campaigns');
+  }
+
+  /**
    * Returns the block build array campaigns of the current user.
    *
    * @return array
@@ -107,6 +137,11 @@ class RecruiterBlock extends BlockBase implements ContainerFactoryPluginInterfac
       /* @var \Drupal\commerce_recruiting\Entity\CampaignOptionInterface $option */
       $options = $campaign->getOptions();
       foreach ($options as $option) {
+        if (empty($option->getProduct())) {
+          // Skip this option in case the product is missing (e.g. deleted).
+          continue;
+        }
+
         $url = Code::create($option->getCode(), $recruiter_code)->url()->toString();
         $build['#campaigns'][$campaign->id()]['options'][$option->id()]['entity'] = $option;
         $build['#campaigns'][$campaign->id()]['options'][$option->id()]['title'] = $option->getProduct()->getTitle();
@@ -130,6 +165,10 @@ class RecruiterBlock extends BlockBase implements ContainerFactoryPluginInterfac
       $user = $this->getContextValue('user');
       if (!empty($user)) {
         $this->campaigns = $this->campaignManager->findRecruiterCampaigns($user);
+      }
+
+      if ($this->configuration['include_unspecified_recruiter_campaigns']) {
+        $this->campaigns = array_merge($this->campaigns, $this->campaignManager->findRecruiterCampaigns());
       }
     }
     return $this->campaigns;
