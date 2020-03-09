@@ -98,10 +98,12 @@ class RecruitmentCampaignCondition extends ConditionBase implements ContainerFac
     $campaigns_ids = $this->getCampaignIds();
     $matches = $this->recruitmentManager->sessionMatch($order);
 
-    foreach ($matches as $match) {
-      /* @var \Drupal\commerce_recruiting\Entity\CampaignOptionInterface $foo */
-      if (!empty($match['campaign_option']) &&  in_array($match['campaign_option']->getCampaign()->id(), $campaigns_ids)) {
-        return TRUE;
+    if (!empty($matches)) {
+      foreach ($matches as $match) {
+        /* @var \Drupal\commerce_recruiting\Entity\CampaignOptionInterface $foo */
+        if (!empty($match['campaign_option']) &&  in_array($match['campaign_option']->getCampaign()->id(), $campaigns_ids)) {
+          return TRUE;
+        }
       }
     }
 
