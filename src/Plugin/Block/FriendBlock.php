@@ -121,6 +121,7 @@ class FriendBlock extends BlockBase implements ContainerFactoryPluginInterface {
         $url = Code::create($option->getCode(), $recruiter_code)->url()->toString();
         $build['#theme'] = 'friend_share_block';
         $build['#share_link'] = $url;
+        $build['#option'] = $option;
         return $build;
       }
     }

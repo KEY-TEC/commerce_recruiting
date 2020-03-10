@@ -21,6 +21,7 @@ function commerce_recruiting_theme($existing, $type, $theme, $path) {
       'share_link' => NULL,
       'block_headline' => NULL,
       'block_description' => NULL,
+      'option' => NULL,
     ],
   ];
   $theme['recruiter_campaigns'] = [
