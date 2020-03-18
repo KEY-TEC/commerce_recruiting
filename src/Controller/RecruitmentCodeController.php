@@ -4,10 +4,12 @@ namespace Drupal\commerce_recruiting\Controller;
 
 use Drupal\commerce_recruiting\CampaignManagerInterface;
 use Drupal\commerce_recruiting\Code;
+use Drupal\commerce_recruiting\Event\RecruitmentSessionEvent;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Session\AccountInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Class RecruitmentCodeController.
@@ -36,6 +38,13 @@ class RecruitmentCodeController extends ControllerBase {
   protected $messenger;
 
   /**
+   * The event dispatcher.
+   *
+   * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+   */
+  protected $eventDispatcher;
+
+  /**
    * Constructs a new RecruitmentCodeController object.
    *
    * @param \Drupal\Core\Session\AccountInterface $current_account
@@ -45,10 +54,11 @@ class RecruitmentCodeController extends ControllerBase {
    * @param \Drupal\Core\Messenger\MessengerInterface $messenger
    *   The messenger.
    */
-  public function __construct(AccountInterface $current_account, CampaignManagerInterface $campaign_manager, MessengerInterface $messenger) {
+  public function __construct(AccountInterface $current_account, CampaignManagerInterface $campaign_manager, MessengerInterface $messenger, EventDispatcherInterface $event_dispatcher) {
     $this->campaignManager = $campaign_manager;
     $this->messenger = $messenger;
     $this->currentAccount = $current_account;
+    $this->eventDispatcher = $event_dispatcher;
   }
 
   /**
@@ -58,7 +68,8 @@ class RecruitmentCodeController extends ControllerBase {
     return new static(
       $container->get('current_user'),
       $container->get('commerce_recruiting.campaign_manager'),
-      $container->get('messenger')
+      $container->get('messenger'),
+      $container->get('event_dispatcher')
     );
   }
 
@@ -81,6 +92,10 @@ class RecruitmentCodeController extends ControllerBase {
       }
       else {
         $recruitment_session = $this->campaignManager->saveRecruitmentSession($code);
+
+        // Create and dispatch RecruitmentSession event.
+        $event = new RecruitmentSessionEvent($recruitment_session);
+        $this->eventDispatcher->dispatch(RecruitmentSessionEvent::SESSION_SET_EVENT, $event);
       }
 
       $option = $this->campaignManager->findCampaignOptionFromCode($code);
