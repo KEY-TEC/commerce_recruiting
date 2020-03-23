@@ -83,6 +83,7 @@ class RecruitmentManager implements RecruitmentManagerInterface {
         $total_price = $total_price ? $total_price->add($bonus) : $bonus;
       }
     }
+
     return $total_price;
   }
 
@@ -112,6 +113,7 @@ class RecruitmentManager implements RecruitmentManagerInterface {
       if ($purchased_product instanceof ProductVariation) {
         $purchased_product = $purchased_product->getProduct();
       }
+
       if ($purchased_product->id() === $product->id()) {
         $matches[$purchased_product->id()] = [
           'campaign_option' => $option,
@@ -121,6 +123,7 @@ class RecruitmentManager implements RecruitmentManagerInterface {
         ];
       }
     }
+
     return $matches;
   }
 
@@ -130,7 +133,6 @@ class RecruitmentManager implements RecruitmentManagerInterface {
   public function sessionMatch(OrderInterface $order) {
     $option = $this->recruitmentSession->getCampaignOption();
     $recruiter = $this->recruitmentSession->getRecruiter();
-
     if (empty($option) || empty($recruiter)) {
       // No or invalid recruiting session.
       return;
@@ -173,8 +175,9 @@ class RecruitmentManager implements RecruitmentManagerInterface {
         'state' => 'created',
         'status' => 1,
       ]);
-    /** @var \Drupal\commerce_recruiting\Entity\RecruitmentInterface $recruitment */
+
     foreach ($recruitments as $recruitment) {
+      /** @var \Drupal\commerce_recruiting\Entity\RecruitmentInterface $recruitment */
       $recruitment->getState()->applyTransitionById($state);
       if ($recruitment->getState()->isValid()) {
         $recruitment->save();
@@ -221,18 +224,21 @@ class RecruitmentManager implements RecruitmentManagerInterface {
       else {
         $price = $price->add($recruitment->getBonus());
       }
+
       if (!isset($results[$unique_key])) {
         $results[$unique_key] = new RecruitmentResult($product->label(), $recruitment->getBonus());
       }
       else {
         $results[$unique_key]->addPrice($recruitment->getBonus());
+        $results[$unique_key]->counterIncrement();
       }
-
     }
+
     if ($price == NULL) {
       $price = new Price(0, "EUR");
     }
-    return new RecruitmentSummary($price, $campaign, $results);
+
+    return new RecruitmentSummary($price, $campaign, count($recruitments), $results);
   }
 
   /**
@@ -243,13 +249,16 @@ class RecruitmentManager implements RecruitmentManagerInterface {
     foreach ($campaign->getOptions() as $option) {
       $option_ids[] = $option->id();
     }
+
     $query = $this->entityTypeManager->getStorage('commerce_recruitment')
       ->getQuery();
     $query->condition('state', $state);
     $query->condition('campaign_option.entity.id', $option_ids, 'in');
+
     if ($recruiter != NULL) {
       $query->condition('recruiter', $recruiter->id());
     }
+
     $ids = $query->execute();
     if (count($ids) !== 0) {
       return $this->entityTypeManager->getStorage('commerce_recruitment')
