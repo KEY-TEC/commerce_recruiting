@@ -191,7 +191,7 @@ class RecruitmentManager implements RecruitmentManagerInterface {
   public function createRecruitment(OrderItemInterface $order_item, AccountInterface $recruiter, AccountInterface $recruited, CampaignOption $option, Price $bonus) {
     return Recruitment::create([
       'recruiter' => ['target_id' => $recruiter->id()],
-      'name' => ['value' => $recruited->getAccountName() . ' by: ' . $recruiter->getAccountName()],
+      'name' => ['value' => substr($recruited->getAccountName() . ' by: ' . $recruiter->getAccountName(),0,49)],
       'campaign_option' => ['target_id' => $option->id()],
       'recruited' => ['target_id' => $recruited->id()],
       'order_item' => ['target_id' => $order_item->id()],
