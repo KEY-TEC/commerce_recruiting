@@ -3,11 +3,10 @@
  * @file recruitment-summary.html.twig
  * Default theme implementation to present recruitment summary entity data.
  *
- * This template is used when viewing recruitment summary entity pages.
- *
  * Available variables:
- * - content: A list of content items. Use 'content' to print all content, or
- * - attributes: HTML attributes for the container element.
+ * - summaries: List of summaries grouped by campaign, each containing
+ *     - accepted: summary of accepted recruitments
+ *     - created: summary of pending recruitments
  *
  * @see template_preprocess_recruitment_summary()
  *
@@ -15,7 +14,15 @@
  */
 #}
 <div{{ attributes.addClass('recruitment-summary') }}>
-  {% if content %}
-    {{- content -}}
-  {% endif %}
+  {% for states in summaries %}
+    {% for summary in states %}
+      {% if loop.first %}
+        <h2>{{ summary.getCampaign().getName() }}:</h2>
+      {% endif %}
+
+      {% if summary.hasResults() %}
+        <div>{{ ":state recruitments"|t({":state": summary.getState()|capitalize}) }}: {{ summary.getCount() }} ({{ summary.totalPrice|commerce_price_format }})</div>
+      {% endif %}
+    {% endfor %}
+  {% endfor %}
 </div>

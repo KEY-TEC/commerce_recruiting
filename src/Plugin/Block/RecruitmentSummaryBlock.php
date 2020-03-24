@@ -113,10 +113,19 @@ class RecruitmentSummaryBlock extends BlockBase implements ContainerFactoryPlugi
     $user = $this->getContextValue('user');
     $summaries = [];
     foreach ($campaigns as $campaign) {
-      $summary = $this->recruitmentManager->getRecruitmentSummaryByCampaign($campaign, 'accepted', $user);
-      $summaries[] = $summary;
+      foreach (
+        [
+        'accepted' => 'accepted',
+         'created' => 'pending',
+        ] as $state => $key_name) {
+        /* @var \Drupal\commerce_recruiting\Entity\CampaignInterface $campaign */
+        $summary = $this->recruitmentManager->getRecruitmentSummaryByCampaign($campaign, $state, $user);
+        if ($summary->hasResults()) {
+          $summaries[$campaign->id()][$key_name] = $summary;
+        }
+      }
     }
-    return  ['#theme' => 'recruitment_summary', '#summaries' => $summaries];;
+    return  ['#theme' => 'recruitment_summary', '#summaries' => $summaries];
   }
 
   /**

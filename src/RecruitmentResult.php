@@ -24,14 +24,23 @@ class RecruitmentResult {
   private $price;
 
   /**
+   * The result counter.
+   *
+   * @var int
+   */
+  private $counter = 0;
+
+  /**
    * RecruitmentResult constructor.
    *
    * @param string $title
    *   The title.
    * @param \Drupal\commerce_price\Price $price
    *   The price.
+   * @param int $count
+   *   The result counter.
    */
-  public function __construct($title, Price $price) {
+  public function __construct($title, Price $price, $count = 1) {
     $this->title = $title;
     $this->price = $price;
   }
@@ -64,6 +73,20 @@ class RecruitmentResult {
    */
   public function addPrice(Price $price) {
     $this->price = $price->add($price);
+  }
+
+  /**
+   * Increments the counter.
+   */
+  public function counterIncrement() {
+    $this->counter++;
+  }
+
+  /**
+   * Returns the result count.
+   */
+  public function getCount() {
+    return $this->counter;
   }
 
 }
