@@ -43,6 +43,7 @@ class RecruitmentResult {
   public function __construct($title, Price $price, $count = 1) {
     $this->title = $title;
     $this->price = $price;
+    $this->counter = $count;
   }
 
   /**
