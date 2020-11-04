@@ -27,11 +27,11 @@ class RecruitmentCheckoutSubscriberTest extends CommerceRecruitingKernelTestBase
     $workflow_prophecy = $this->prophesize(WorkflowTransitionEvent::CLASS);
 
     $checkout_user = $this->setUpCurrentUser();
-
     $order = $this->createOrder([
       $recruited_product,
       $not_recruited_product,
     ]);
+
 
     $workflow_prophecy->getEntity()->willReturn($order);
     $session_prophecy = $this->prophesize(RecruitmentSession::CLASS);

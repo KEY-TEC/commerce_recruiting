@@ -10,6 +10,7 @@ use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Session\AccountInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Class RecruitmentCodeController.
@@ -45,6 +46,13 @@ class RecruitmentCodeController extends ControllerBase {
   protected $eventDispatcher;
 
   /**
+   * The request object.
+   *
+   * @var \Symfony\Component\HttpFoundation\Request
+   */
+  protected $request;
+
+  /**
    * Constructs a new RecruitmentCodeController object.
    *
    * @param \Drupal\Core\Session\AccountInterface $current_account
@@ -53,12 +61,15 @@ class RecruitmentCodeController extends ControllerBase {
    *   The campaign manager.
    * @param \Drupal\Core\Messenger\MessengerInterface $messenger
    *   The messenger.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request
+   *   The request object.
    */
-  public function __construct(AccountInterface $current_account, CampaignManagerInterface $campaign_manager, MessengerInterface $messenger, EventDispatcherInterface $event_dispatcher) {
+  public function __construct(AccountInterface $current_account, CampaignManagerInterface $campaign_manager, MessengerInterface $messenger, EventDispatcherInterface $event_dispatcher, RequestStack $request) {
     $this->campaignManager = $campaign_manager;
     $this->messenger = $messenger;
     $this->currentAccount = $current_account;
     $this->eventDispatcher = $event_dispatcher;
+    $this->request = $request->getCurrentRequest();
   }
 
   /**
@@ -69,7 +80,8 @@ class RecruitmentCodeController extends ControllerBase {
       $container->get('current_user'),
       $container->get('commerce_recruiting.campaign_manager'),
       $container->get('messenger'),
-      $container->get('event_dispatcher')
+      $container->get('event_dispatcher'),
+      $container->get('request_stack')
     );
   }
 
@@ -101,7 +113,14 @@ class RecruitmentCodeController extends ControllerBase {
       $option = $this->campaignManager->findCampaignOptionFromCode($code);
       $product = $option->getProduct();
       $route_name = 'entity.' . $product->getEntityTypeId() . '.canonical';
-      return $this->redirect($route_name, [$product->getEntityTypeId() => $product->id()]);
+      return $this->redirect($route_name,
+        [
+          $product->getEntityTypeId() => $product->id(),
+        ],
+        [
+          'query' => $this->request->query->all(),
+        ]
+      );
     }
     catch (\Throwable $e) {
       $this->getLogger('commerce_recruitment')->error($e->getMessage());
