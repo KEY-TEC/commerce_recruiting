@@ -84,7 +84,7 @@ function commerce_recruiting_entity_base_field_info(EntityTypeInterface $entity_
       ])
       ->setDisplayConfigurable('view', TRUE)
       ->setDisplayConfigurable('form', TRUE)
-      ->setDefaultValueCallback('Drupal\commerce_recruiting\Entity\CampaignOption::getDefaultCode')
+      // ->setDefaultValueCallback('Drupal\commerce_recruiting\Entity\CampaignOption::getDefaultCode')
       ->addConstraint('CodeUnique');
 
     return $fields;
