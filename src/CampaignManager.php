@@ -54,6 +54,9 @@ class CampaignManager implements CampaignManagerInterface {
    */
   public function getRecruiterFromCode(Code $code) {
     $option = $this->findCampaignOptionFromCode($code);
+    if ($option === NULL) {
+      throw new \Exception('No option found for ' . $code->getCode());
+    }
     $campaign = $option->getCampaign();
     if ($code->getRecruiterCode() != NULL) {
       $user_storage = $this->entityTypeManager->getStorage('user');
