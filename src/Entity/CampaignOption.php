@@ -395,6 +395,10 @@ class CampaignOption extends ContentEntityBase implements CampaignOptionInterfac
       return $this->getBonus();
     }
     elseif ($this->getBonusMethod() == CampaignOptionInterface::RECRUIT_BONUS_METHOD_PERCENT) {
+      if ($order_item->getTotalPrice() === NULL) {
+        // Re-set unit price to calculate the total price in case where the total price missing yet.
+        $order_item->setUnitPrice($order_item->getUnitPrice());
+      }
       $total_price = $order_item->getTotalPrice()->getNumber();
       $bonus = $total_price / 100 * $this->getBonusPercent();
       return new Price($bonus, $order_item->getTotalPrice()->getCurrencyCode());
