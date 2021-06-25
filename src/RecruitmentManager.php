@@ -10,6 +10,7 @@ use Drupal\commerce_recruiting\Entity\CampaignInterface;
 use Drupal\commerce_recruiting\Entity\Recruitment;
 use Drupal\commerce_recruiting\Entity\CampaignOption;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Session\AccountInterface;
 
@@ -47,6 +48,13 @@ class RecruitmentManager implements RecruitmentManagerInterface {
   private $recruitmentSession;
 
   /**
+   * The module handler to invoke the alter hook with.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  private $moduleHandler;
+
+  /**
    * RecruitmentManager constructor.
    *
    * @param \Drupal\Core\Session\AccountInterface $current_account
@@ -57,12 +65,15 @@ class RecruitmentManager implements RecruitmentManagerInterface {
    *   The entity type manager.
    * @param \Drupal\commerce_recruiting\RecruitmentSessionInterface $recruitment_session
    *   The recruitment session.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The module handler to invoke the alter hook with.
    */
-  public function __construct(AccountInterface $current_account, LanguageManagerInterface $language_manager, EntityTypeManagerInterface $entity_type_manager, RecruitmentSessionInterface $recruitment_session) {
+  public function __construct(AccountInterface $current_account, LanguageManagerInterface $language_manager, EntityTypeManagerInterface $entity_type_manager, RecruitmentSessionInterface $recruitment_session, ModuleHandlerInterface $module_handler) {
     $this->currentAccount = $current_account;
     $this->languageManager = $language_manager;
     $this->entityTypeManager = $entity_type_manager;
     $this->recruitmentSession = $recruitment_session;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -209,6 +220,9 @@ class RecruitmentManager implements RecruitmentManagerInterface {
    */
   public function getRecruitmentSummaryByCampaign(CampaignInterface $campaign, $state, AccountInterface $recruiter = NULL) {
     $recruitments = $this->findRecruitmentsByCampaign($campaign, $state, $recruiter);
+    // Allow modules to alter the set of recruitments used in this summary.
+    $this->moduleHandler->alter('recruitment_summary_recruitments', $recruitments, $campaign);
+
     $price = NULL;
     $results = [];
     foreach ($recruitments as $recruitment) {

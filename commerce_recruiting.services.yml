@@ -5,7 +5,7 @@ services:
 
   commerce_recruiting.recruitment_manager:
     class: Drupal\commerce_recruiting\RecruitmentManager
-    arguments: ['@current_user', '@language_manager', '@entity_type.manager','@commerce_recruiting.recruitment_session']
+    arguments: ['@current_user', '@language_manager', '@entity_type.manager','@commerce_recruiting.recruitment_session', '@module_handler']
 
   commerce_recruiting.campaign_manager:
     class: Drupal\commerce_recruiting\CampaignManager
@@ -32,4 +32,4 @@ services:
 
   commerce_recruiting.reward_manager:
     class: Drupal\commerce_recruiting\RewardManager
-    arguments: ['@entity_type.manager','@commerce_recruiting.recruitment_manager']
+    arguments: ['@entity_type.manager','@commerce_recruiting.recruitment_manager', '@module_handler']
