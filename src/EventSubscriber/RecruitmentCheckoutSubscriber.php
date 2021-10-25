@@ -33,7 +33,7 @@ class RecruitmentCheckoutSubscriber implements EventSubscriberInterface {
    *
    * @var \Drupal\commerce_recruiting\RecruitmentManagerInterface
    */
-  private $recruitmentManager;
+  protected $recruitmentManager;
 
   /**
    * Constructs a new RecruitmentCheckoutSubscriber object.
