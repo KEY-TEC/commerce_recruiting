@@ -5,17 +5,30 @@ services:
 
   commerce_recruiting.recruitment_manager:
     class: Drupal\commerce_recruiting\RecruitmentManager
-    arguments: ['@current_user', '@language_manager', '@entity_type.manager','@commerce_recruiting.recruitment_session', '@module_handler']
+    arguments:
+      - '@current_user'
+      - '@language_manager'
+      - '@entity_type.manager'
+      - '@commerce_recruiting.recruitment_session'
+      - '@module_handler'
+      - '@logger.factory'
 
   commerce_recruiting.campaign_manager:
     class: Drupal\commerce_recruiting\CampaignManager
-    arguments: ['@language_manager', '@entity_type.manager','@commerce_recruiting.recruitment_session']
+    arguments:
+      - '@language_manager'
+      - '@entity_type.manager'
+      - '@commerce_recruiting.recruitment_session'
 
   commerce_recruiting.recruitment_checkout_subscriber:
     class: Drupal\commerce_recruiting\EventSubscriber\RecruitmentCheckoutSubscriber
-    arguments: ['@current_user', '@messenger', '@commerce_recruiting.recruitment_manager']
+    arguments:
+      - '@current_user'
+      - '@messenger'
+      - '@commerce_recruiting.recruitment_manager'
     tags:
       - { name: event_subscriber }
+
   commerce_recruiting.recruitment_session:
     class: Drupal\commerce_recruiting\RecruitmentSession
     arguments: ['@session', '@entity_type.manager']
@@ -32,4 +45,7 @@ services:
 
   commerce_recruiting.reward_manager:
     class: Drupal\commerce_recruiting\RewardManager
-    arguments: ['@entity_type.manager','@commerce_recruiting.recruitment_manager', '@module_handler']
+    arguments:
+      - '@entity_type.manager'
+      - '@commerce_recruiting.recruitment_manager'
+      - '@module_handler'
