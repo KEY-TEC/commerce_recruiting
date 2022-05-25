@@ -12,6 +12,7 @@ use Drupal\commerce_recruiting\Entity\CampaignOption;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Session\AccountInterface;
 
 /**
@@ -55,6 +56,12 @@ class RecruitmentManager implements RecruitmentManagerInterface {
   private $moduleHandler;
 
   /**
+   * The logger channel.
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   */
+  protected $logger;
+
+  /**
    * RecruitmentManager constructor.
    *
    * @param \Drupal\Core\Session\AccountInterface $current_account
@@ -67,13 +74,16 @@ class RecruitmentManager implements RecruitmentManagerInterface {
    *   The recruitment session.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler to invoke the alter hook with.
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger
+   *   The logger factory.
    */
-  public function __construct(AccountInterface $current_account, LanguageManagerInterface $language_manager, EntityTypeManagerInterface $entity_type_manager, RecruitmentSessionInterface $recruitment_session, ModuleHandlerInterface $module_handler) {
+  public function __construct(AccountInterface $current_account, LanguageManagerInterface $language_manager, EntityTypeManagerInterface $entity_type_manager, RecruitmentSessionInterface $recruitment_session, ModuleHandlerInterface $module_handler, LoggerChannelFactoryInterface $logger) {
     $this->currentAccount = $current_account;
     $this->languageManager = $language_manager;
     $this->entityTypeManager = $entity_type_manager;
     $this->recruitmentSession = $recruitment_session;
     $this->moduleHandler = $module_handler;
+    $this->logger = $logger->get('commerce_recruiting');
   }
 
   /**
@@ -188,10 +198,16 @@ class RecruitmentManager implements RecruitmentManagerInterface {
       ]);
 
     foreach ($recruitments as $recruitment) {
-      /** @var \Drupal\commerce_recruiting\Entity\RecruitmentInterface $recruitment */
-      $recruitment->getState()->applyTransitionById($state);
-      if ($recruitment->getState()->isValid()) {
-        $recruitment->save();
+      try {
+        /** @var \Drupal\commerce_recruiting\Entity\RecruitmentInterface $recruitment */
+        $recruitment->getState()->applyTransitionById($state);
+        if ($recruitment->getState()->isValid()) {
+          $recruitment->save();
+        }
+      }
+      catch (\Exception $e) {
+        // Transition is not allowed. Skip recruitment.
+        $this->logger->debug('Recruitment ' . $recruitment->id() . ' transition skipped: ' . $e->getMessage());
       }
     }
   }

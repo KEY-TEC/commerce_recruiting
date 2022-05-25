@@ -124,7 +124,6 @@ class CommerceRecruitingKernelTestBase extends CommerceKernelTestBase {
    * Setup commerce shop and products.
    */
   protected function createProduct() {
-
     $store = $this->store;
     // Add currency...
     // Create some products...
@@ -147,7 +146,7 @@ class CommerceRecruitingKernelTestBase extends CommerceKernelTestBase {
   }
 
   /**
-   * Create an recruitment entity.
+   * Create a recruitment entity.
    *
    * @return \Drupal\commerce_recruiting\Entity\RecruitmentInterface
    *   The recruitment entity.
@@ -161,7 +160,7 @@ class CommerceRecruitingKernelTestBase extends CommerceKernelTestBase {
   }
 
   /**
-   * Create an campaign entity.
+   * Create a campaign entity.
    *
    * @return \Drupal\commerce_recruiting\Entity\CampaignInterface
    *   The campaign entity.

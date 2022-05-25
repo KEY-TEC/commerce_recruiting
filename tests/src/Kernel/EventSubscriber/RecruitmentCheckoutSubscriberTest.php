@@ -32,7 +32,6 @@ class RecruitmentCheckoutSubscriberTest extends CommerceRecruitingKernelTestBase
       $not_recruited_product,
     ]);
 
-
     $workflow_prophecy->getEntity()->willReturn($order);
     $session_prophecy = $this->prophesize(RecruitmentSession::CLASS);
     $session_prophecy->getCampaignOption()->willReturn($option);
