@@ -7,9 +7,11 @@ use Drupal\commerce_recruiting\Code;
 use Drupal\commerce_recruiting\Event\RecruitmentSessionEvent;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Messenger\MessengerInterface;
+use Drupal\Core\Routing\TrustedRedirectResponse;
 use Drupal\Core\Session\AccountInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
@@ -61,6 +63,8 @@ class RecruitmentCodeController extends ControllerBase {
    *   The campaign manager.
    * @param \Drupal\Core\Messenger\MessengerInterface $messenger
    *   The messenger.
+   * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $event_dispatcher
+   *   The event dispatcher.
    * @param \Symfony\Component\HttpFoundation\RequestStack $request
    *   The request object.
    */
@@ -111,6 +115,16 @@ class RecruitmentCodeController extends ControllerBase {
       }
 
       $option = $this->campaignManager->findCampaignOptionFromCode($code);
+      if ($option->hasField('redirect') && !empty($option->redirect->first()->uri)) {
+        /** @var \Drupal\Core\Url $url */
+        $url = $option->redirect->first()->getUrl();
+        $url->setOption('query', $this->request->query->all());
+        if ($url->isExternal()) {
+          return new TrustedRedirectResponse($url->toString());
+        }
+        return new RedirectResponse($url->toString());
+      }
+
       $product = $option->getProduct();
       $route_name = 'entity.' . $product->getEntityTypeId() . '.canonical';
       return $this->redirect($route_name,

@@ -13,6 +13,7 @@ use Drupal\Core\Entity\EntityChangedTrait;
 use Drupal\Core\Entity\EntityPublishedTrait;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\link\LinkItemInterface;
 use Drupal\user\UserInterface;
 use http\Exception\InvalidArgumentException;
 
@@ -353,6 +354,20 @@ class CampaignOption extends ContentEntityBase implements CampaignOptionInterfac
       ->setDisplayConfigurable('view', TRUE)
       ->setDisplayConfigurable('form', TRUE);
 
+    $fields['redirect'] = BaseFieldDefinition::create('link')
+      ->setLabel(t('Redirect'))
+      ->setDescription(t("Page to redirect to, when using this code's link. Leave empty to go to the product page."))
+      ->setTranslatable(TRUE)
+      ->setSettings([
+        'link_type' => LinkItemInterface::LINK_GENERIC,
+        'title' => DRUPAL_DISABLED,
+      ])
+      ->setDisplayOptions('form', [
+        'type' => 'link',
+        'weight' => 3,
+      ])
+      ->setDisplayConfigurable('form', TRUE);
+
     $fields['created'] = BaseFieldDefinition::create('created')
       ->setLabel(t('Created'))
       ->setDescription(t('The time that the entity was created.'));
@@ -381,8 +396,7 @@ class CampaignOption extends ContentEntityBase implements CampaignOptionInterfac
       $query->condition('status', 1);
       $query->condition('code', $code);
       $rcoids = $query->execute();
-    }
-    while (!empty($rcoids));
+    } while (!empty($rcoids));
 
     return $code;
   }
@@ -396,7 +410,8 @@ class CampaignOption extends ContentEntityBase implements CampaignOptionInterfac
     }
     elseif ($this->getBonusMethod() == CampaignOptionInterface::RECRUIT_BONUS_METHOD_PERCENT) {
       if ($order_item->getTotalPrice() === NULL) {
-        // Re-set unit price to calculate the total price in case where the total price missing yet.
+        // Re-set unit price to calculate the total price
+        // in case where the total price missing yet.
         $order_item->setUnitPrice($order_item->getUnitPrice());
       }
       $total_price = $order_item->getTotalPrice()->getNumber();

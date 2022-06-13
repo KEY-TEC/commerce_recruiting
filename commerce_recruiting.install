@@ -1,0 +1,31 @@
+<?php
+
+/**
+ * @file
+ * Contains update functions for Commerce Recruiting.
+ */
+
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\link\LinkItemInterface;
+
+/**
+ * Add the 'redirect' field to campaign option entities.
+ */
+function commerce_recruiting_update_8001() {
+  $link_field_definition = BaseFieldDefinition::create('link')
+    ->setLabel(t('Redirect'))
+    ->setDescription(t("Page to redirect to, when using this code's link. Leave empty to go to the product page."))
+    ->setTranslatable(TRUE)
+    ->setSettings([
+      'link_type' => LinkItemInterface::LINK_GENERIC,
+      'title' => DRUPAL_DISABLED,
+    ])
+    ->setDisplayOptions('form', [
+      'type' => 'link',
+      'weight' => 3,
+    ])
+    ->setDisplayConfigurable('form', TRUE);
+
+  $update_manager = \Drupal::entityDefinitionUpdateManager();
+  $update_manager->installFieldStorageDefinition('redirect', 'commerce_recruitment_camp_option', 'commerce_recruiting', $link_field_definition);
+}
