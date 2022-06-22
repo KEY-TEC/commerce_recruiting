@@ -20,29 +20,48 @@ class RecruitmentCheckoutSubscriberTest extends CommerceRecruitingKernelTestBase
     $recruited_product = $this->createProduct();
     $not_recruited_product = $this->createProduct();
     $recruiter = $this->createUser();
-
     $campaign = $this->createCampaign($recruiter, $recruited_product);
+    $recruitment_storage = $this->entityTypeManager->getStorage('commerce_recruitment');
 
-    $option = $campaign->getFirstOption();
-    $workflow_prophecy = $this->prophesize(WorkflowTransitionEvent::CLASS);
-
-    $checkout_user = $this->setUpCurrentUser();
+    $checkout_user = $this->createUser([], ['view commerce_product']);
+    \Drupal::currentUser()->setAccount($checkout_user);
     $order = $this->createOrder([
       $recruited_product,
       $not_recruited_product,
     ]);
 
+    $workflow_prophecy = $this->prophesize(WorkflowTransitionEvent::CLASS);
     $workflow_prophecy->getEntity()->willReturn($order);
+    $workflow_transition_event = $workflow_prophecy->reveal();
+
+    // No recruitment test.
+    /** @var \Drupal\commerce_recruiting\EventSubscriber\RecruitmentCheckoutSubscriber $checkout_subscriber */
+    $checkout_subscriber = \Drupal::service('commerce_recruiting.recruitment_checkout_subscriber');
+    $checkout_subscriber->onOrderPlace($workflow_transition_event);
+    $recruitments = $recruitment_storage->loadByProperties([]);
+    $this->assertEquals(0, count($recruitments));
+
+    // Adding recruitment session.
     $session_prophecy = $this->prophesize(RecruitmentSession::CLASS);
-    $session_prophecy->getCampaignOption()->willReturn($option);
+    $session_prophecy->getCampaignOption()->willReturn($campaign->getFirstOption());
     $session_prophecy->getRecruiter()->willReturn($recruiter);
     \Drupal::getContainer()->set('commerce_recruiting.recruitment_session', $session_prophecy->reveal());
 
-    /** @var \Drupal\commerce_recruiting\EventSubscriber\RecruitmentCheckoutSubscriber $checkout_subscriber */
-    $checkout_subscriber = \Drupal::service('commerce_recruiting.recruitment_checkout_subscriber');
-    $checkout_subscriber->onOrderPlace($workflow_prophecy->reveal());
-    $recruitments = $this->entityTypeManager->getStorage('commerce_recruitment')->loadByProperties([]);
-    $this->assertEqual(count($recruitments), 1);
+    $checkout_subscriber->onOrderPlace($workflow_transition_event);
+    $recruitments = $recruitment_storage->loadByProperties([]);
+    $this->assertEquals(1, count($recruitments));
+
+    // Reset recruitment session for subsequent order place test (re-recruit).
+    $session_prophecy->getCampaignOption()->willReturn(NULL);
+    $session_prophecy->getRecruiter()->willReturn(NULL);
+    \Drupal::getContainer()->set('commerce_recruiting.recruitment_session', $session_prophecy->reveal());
+    // Enable auto re-recruit option.
+    $campaign->set('auto_re_recruit', 1);
+    $campaign->save();
+
+    $checkout_subscriber->onOrderPlace($workflow_transition_event);
+    $recruitments = $recruitment_storage->loadByProperties([]);
+    $this->assertEquals(2, count($recruitments));
   }
 
 }

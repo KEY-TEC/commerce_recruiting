@@ -43,6 +43,7 @@ class CommerceRecruitingKernelTestBase extends CommerceKernelTestBase {
     'dynamic_entity_reference',
     'profile',
     'state_machine',
+    'link'
   ];
 
   /**
@@ -142,6 +143,8 @@ class CommerceRecruitingKernelTestBase extends CommerceKernelTestBase {
     $variation->save();
     $product->addVariation($variation);
     $product->save();
+    $default_variation = $product->getDefaultVariation();
+    $this->assertEquals($default_variation->id(), $variation->id());
     return $product;
   }
 

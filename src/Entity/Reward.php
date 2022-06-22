@@ -314,8 +314,8 @@ class Reward extends ContentEntityBase implements RewardInterface {
       ->setDisplayConfigurable('view', TRUE);
 
     $fields['price'] = BaseFieldDefinition::create('commerce_price')
-      ->setLabel(new TranslatableMarkup('Bonus'))
-      ->setDescription(new TranslatableMarkup('A fix bonus value for the recruiter if fix bonus method is selected.'))
+      ->setLabel(t('Bonus'))
+      ->setDescription(t('A fix bonus value for the recruiter if fix bonus method is selected.'))
       ->setDisplayOptions('view', [
         'label' => 'above',
         'type' => 'commerce_price_default',

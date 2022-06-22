@@ -212,8 +212,8 @@ class CampaignOption extends ContentEntityBase implements CampaignOptionInterfac
     $fields += static::publishedBaseFieldDefinitions($entity_type);
 
     $fields['code'] = BaseFieldDefinition::create('string')
-      ->setLabel(new TranslatableMarkup('Code'))
-      ->setDescription(new TranslatableMarkup('The campaign option code.'))
+      ->setLabel(t('Code'))
+      ->setDescription(t('The campaign option code.'))
       ->setRequired(TRUE)
       ->setTranslatable(FALSE)
       ->setSettings([
@@ -267,8 +267,8 @@ class CampaignOption extends ContentEntityBase implements CampaignOptionInterfac
       ]);
 
     $fields['bonus'] = BaseFieldDefinition::create('commerce_price')
-      ->setLabel(new TranslatableMarkup('Bonus'))
-      ->setDescription(new TranslatableMarkup('A fix bonus value for the recruiter if fix bonus method is selected.'))
+      ->setLabel(t('Bonus'))
+      ->setDescription(t('A fix bonus value for the recruiter if fix bonus method is selected.'))
       ->setDisplayOptions('view', [
         'label' => 'above',
         'type' => 'commerce_price_default',
@@ -283,8 +283,8 @@ class CampaignOption extends ContentEntityBase implements CampaignOptionInterfac
       ->setDisplayConfigurable('form', TRUE);
 
     $fields['bonus_percent'] = BaseFieldDefinition::create('integer')
-      ->setLabel(new TranslatableMarkup('Bonus (%)'))
-      ->setDescription(new TranslatableMarkup('Percentage bonus value of the product price for the recruiter if percentage bonus method is selected.'))
+      ->setLabel(t('Bonus (%)'))
+      ->setDescription(t('Percentage bonus value of the product price for the recruiter if percentage bonus method is selected.'))
       ->setSettings([
         'min' => 0,
         'suffix' => '%',
@@ -303,9 +303,9 @@ class CampaignOption extends ContentEntityBase implements CampaignOptionInterfac
       ->setDisplayConfigurable('form', TRUE);
 
     $fields['product'] = BaseFieldDefinition::create('dynamic_entity_reference')
-      ->setLabel(new TranslatableMarkup('Product'))
+      ->setLabel(t('Product'))
       ->setCardinality(1)
-      ->setDescription(new TranslatableMarkup('The product or bundle for which someone will get the bonus after checkout.'))
+      ->setDescription(t('The product or bundle for which someone will get the bonus after checkout.'))
       ->setRequired(TRUE)
       ->setSettings([
         'exclude_entity_types' => FALSE,
@@ -333,8 +333,8 @@ class CampaignOption extends ContentEntityBase implements CampaignOptionInterfac
       ->setDisplayConfigurable('view', TRUE);
 
     $fields['bonus_method'] = BaseFieldDefinition::create('list_string')
-      ->setLabel(new TranslatableMarkup('Bonus Method'))
-      ->setDescription(new TranslatableMarkup('Percentage bonus value of the product price for the recruiter.'))
+      ->setLabel(t('Bonus Method'))
+      ->setDescription(t('Percentage bonus value of the product price for the recruiter.'))
       ->setSetting('allowed_values', [
         self::RECRUIT_BONUS_METHOD_FIX => 'Fix bonus',
         self::RECRUIT_BONUS_METHOD_PERCENT => 'Percentage bonus of product',

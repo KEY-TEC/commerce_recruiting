@@ -6,10 +6,10 @@ services:
   commerce_recruiting.recruitment_manager:
     class: Drupal\commerce_recruiting\RecruitmentManager
     arguments:
+      - '@service_container'
       - '@current_user'
       - '@language_manager'
       - '@entity_type.manager'
-      - '@commerce_recruiting.recruitment_session'
       - '@module_handler'
       - '@logger.factory'
 
@@ -26,6 +26,7 @@ services:
       - '@current_user'
       - '@messenger'
       - '@commerce_recruiting.recruitment_manager'
+      - '@entity_type.manager'
     tags:
       - { name: event_subscriber }
 

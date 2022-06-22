@@ -2,7 +2,9 @@
 
 namespace Drupal\commerce_recruiting\EventSubscriber;
 
+use Drupal\commerce_product\Entity\ProductVariationInterface;
 use Drupal\commerce_recruiting\RecruitmentManagerInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Messenger\Messenger;
 use Drupal\Core\Session\AccountProxy;
 use Drupal\state_machine\Event\WorkflowTransitionEvent;
@@ -36,6 +38,13 @@ class RecruitmentCheckoutSubscriber implements EventSubscriberInterface {
   protected $recruitmentManager;
 
   /**
+   * The entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
    * Constructs a new RecruitmentCheckoutSubscriber object.
    *
    * @param \Drupal\Core\Session\AccountProxy $current_user
@@ -44,11 +53,14 @@ class RecruitmentCheckoutSubscriber implements EventSubscriberInterface {
    *   The messenger.
    * @param \Drupal\commerce_recruiting\RecruitmentManagerInterface $recruitment_manager
    *   The recruitment manager.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The entity type manager.
    */
-  public function __construct(AccountProxy $current_user, Messenger $messenger, RecruitmentManagerInterface $recruitment_manager) {
+  public function __construct(AccountProxy $current_user, Messenger $messenger, RecruitmentManagerInterface $recruitment_manager, EntityTypeManagerInterface $entity_type_manager) {
     $this->currentUser = $current_user;
     $this->messenger = $messenger;
     $this->recruitmentManager = $recruitment_manager;
+    $this->entityTypeManager = $entity_type_manager;
   }
 
   /**
@@ -72,16 +84,47 @@ class RecruitmentCheckoutSubscriber implements EventSubscriberInterface {
     /** @var \Drupal\commerce_order\Entity\Order $order */
     $order = $event->getEntity();
     $matches = $this->recruitmentManager->sessionMatch($order);
-    $user = User::load($this->currentUser->id());
-    if (empty($matches)) {
-      // No session set.
+    if (!empty($matches)) {
+      $user = User::load($this->currentUser->id());
+      foreach ($matches as $product_id => $match) {
+        $recruitment = $this->recruitmentManager->createRecruitment($match['order_item'], $match['recruiter'], $user, $match['campaign_option'], $match['bonus']);
+        $recruitment->save();
+      }
       return;
     }
 
-    foreach ($matches as $product_id => $match) {
-      $recruitment = $this->recruitmentManager->createRecruitment($match['order_item'], $match['recruiter'], $user, $match['campaign_option'], $match['bonus']);
-      $recruitment->save();
+    // No session set. Check if user was recruited before.
+    $recruitment_storage = $this->entityTypeManager->getStorage('commerce_recruitment');
+    $user_recruitments = $recruitment_storage->loadByProperties(['recruited' => $order->getCustomerId()]);
+    $user_campaigns = [];
+    /** @var \Drupal\commerce_recruiting\Entity\RecruitmentInterface $user_recruitment */
+    foreach ($user_recruitments as $user_recruitment) {
+      /** @var \Drupal\commerce_recruiting\Entity\CampaignInterface $campaign */
+      $campaign = $user_recruitment->campaign_option->entity->getCampaign();
+      if (!in_array($campaign->id(), $user_campaigns, TRUE) && $campaign->hasField('auto_re_recruit') && $campaign->auto_re_recruit->value) {
+        // Auto re recruit option is on, check for matching products.
+        $campaign_options = $campaign->getOptions();
+        foreach ($campaign_options as $campaign_option) {
+          foreach ($order->getItems() as $order_item) {
+            $purchased_entity = $order_item->getPurchasedEntity();
+            if ($purchased_entity instanceof ProductVariationInterface) {
+              $purchased_entity = $purchased_entity->getProduct();
+            }
+            $campaign_product = $campaign_option->getProduct();
+            if ($purchased_entity === $campaign_product) {
+              // Match found, create new recruitment from existing.
+              $recruitment = $this->recruitmentManager->createRecruitment($order_item, $user_recruitment->getOwner(), $order->getCustomer(), $campaign_option, $user_recruitment->getBonus());
+              $recruitment->save();
+              $user_campaigns[] = $campaign->id();
+              break;
+            }
+          }
+          if (in_array($campaign->id(), $user_campaigns, TRUE)) {
+            // Once per campaign.
+            break;
+          }
+        }
+      }
     }
   }
-
 }

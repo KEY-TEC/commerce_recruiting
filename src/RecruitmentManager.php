@@ -14,11 +14,19 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Session\AccountInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class RecruitmentManager.
  */
 class RecruitmentManager implements RecruitmentManagerInterface {
+
+  /**
+   * The service container.
+   *
+   * @var \Symfony\Component\DependencyInjection\ContainerInterface
+   */
+  private $container;
 
   /**
    * The current account.
@@ -42,13 +50,6 @@ class RecruitmentManager implements RecruitmentManagerInterface {
   protected $entityTypeManager;
 
   /**
-   * The recruitment session.
-   *
-   * @var \Drupal\commerce_recruiting\RecruitmentSessionInterface
-   */
-  private $recruitmentSession;
-
-  /**
    * The module handler to invoke the alter hook with.
    *
    * @var \Drupal\Core\Extension\ModuleHandlerInterface
@@ -70,18 +71,16 @@ class RecruitmentManager implements RecruitmentManagerInterface {
    *   The language manager.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
-   * @param \Drupal\commerce_recruiting\RecruitmentSessionInterface $recruitment_session
-   *   The recruitment session.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler to invoke the alter hook with.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger
    *   The logger factory.
    */
-  public function __construct(AccountInterface $current_account, LanguageManagerInterface $language_manager, EntityTypeManagerInterface $entity_type_manager, RecruitmentSessionInterface $recruitment_session, ModuleHandlerInterface $module_handler, LoggerChannelFactoryInterface $logger) {
+  public function __construct(ContainerInterface $container, AccountInterface $current_account, LanguageManagerInterface $language_manager, EntityTypeManagerInterface $entity_type_manager, ModuleHandlerInterface $module_handler, LoggerChannelFactoryInterface $logger) {
+    $this->container = $container;
     $this->currentAccount = $current_account;
     $this->languageManager = $language_manager;
     $this->entityTypeManager = $entity_type_manager;
-    $this->recruitmentSession = $recruitment_session;
     $this->moduleHandler = $module_handler;
     $this->logger = $logger->get('commerce_recruiting');
   }
@@ -152,8 +151,9 @@ class RecruitmentManager implements RecruitmentManagerInterface {
    * {@inheritDoc}
    */
   public function sessionMatch(OrderInterface $order) {
-    $option = $this->recruitmentSession->getCampaignOption();
-    $recruiter = $this->recruitmentSession->getRecruiter();
+    $session = $this->getRecruitmentSession();
+    $option = $session->getCampaignOption();
+    $recruiter = $session->getRecruiter();
     if (empty($option) || empty($recruiter)) {
       // No or invalid recruiting session.
       return;
@@ -297,6 +297,10 @@ class RecruitmentManager implements RecruitmentManagerInterface {
     else {
       return [];
     }
+  }
+
+  private function getRecruitmentSession() {
+    return $this->container->get('commerce_recruiting.recruitment_session');
   }
 
 }

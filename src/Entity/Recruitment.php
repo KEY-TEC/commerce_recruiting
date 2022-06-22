@@ -210,7 +210,7 @@ class Recruitment extends ContentEntityBase implements RecruitmentInterface {
       ->setRequired(TRUE);
 
     $fields['campaign_option'] = BaseFieldDefinition::create('entity_reference')
-      ->setLabel(new TranslatableMarkup('Campaign option'))
+      ->setLabel(t('Campaign option'))
       ->setDescription(t('The campaign option.'))
       ->setSetting('target_type', 'commerce_recruitment_camp_option')
       ->setSetting('handler', 'default')
@@ -233,7 +233,7 @@ class Recruitment extends ContentEntityBase implements RecruitmentInterface {
       ->setDisplayConfigurable('view', TRUE);
 
     $fields['recruited'] = BaseFieldDefinition::create('entity_reference')
-      ->setLabel(new TranslatableMarkup('Recruited user'))
+      ->setLabel(t('Recruited user'))
       ->setDescription(t('The recruited user.'))
       ->setSetting('target_type', 'user')
       ->setSetting('handler', 'default')
@@ -289,8 +289,8 @@ class Recruitment extends ContentEntityBase implements RecruitmentInterface {
       ->setDisplayConfigurable('form', TRUE);
 
     $fields['product'] = BaseFieldDefinition::create('dynamic_entity_reference')
-      ->setLabel(new TranslatableMarkup('Product'))
-      ->setDescription(new TranslatableMarkup('The product or bundle for which someone will get the bonus after checkout.'))
+      ->setLabel(t('Product'))
+      ->setDescription(t('The product or bundle for which someone will get the bonus after checkout.'))
       ->setSettings([
         'exclude_entity_types' => FALSE,
         'entity_type_ids' => [

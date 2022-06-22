@@ -29,3 +29,21 @@ function commerce_recruiting_update_8001() {
   $update_manager = \Drupal::entityDefinitionUpdateManager();
   $update_manager->installFieldStorageDefinition('redirect', 'commerce_recruitment_camp_option', 'commerce_recruiting', $link_field_definition);
 }
+
+/**
+ * Add the 'auto_re_recruit' field to campaign entities.
+ */
+function commerce_recruiting_update_8002() {
+  $field_definition = BaseFieldDefinition::create('link')
+    ->setName('auto_re_recruit')
+    ->setLabel(t('Auto re-recruit'))
+    ->setDescription(t('This will create subsequent recruitments each time the customer orders one of the products below, if they have been recruited once before.'))
+    ->setDisplayConfigurable('form', TRUE)
+    ->setDisplayOptions('form', [
+      'type' => 'boolean_checkbox',
+      'weight' => 2,
+    ]);
+
+  $update_manager = \Drupal::entityDefinitionUpdateManager();
+  $update_manager->installFieldStorageDefinition('auto_re_recruit', 'commerce_recruitment_campaign', 'commerce_recruiting', $field_definition);
+}

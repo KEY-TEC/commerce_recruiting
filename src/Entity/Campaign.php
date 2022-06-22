@@ -9,7 +9,6 @@ use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
-use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\datetime\Plugin\Field\FieldType\DateTimeItem;
 use Drupal\user\EntityOwnerTrait;
 use Drupal\user\UserInterface;
@@ -210,8 +209,8 @@ class Campaign extends CommerceContentEntityBase implements CampaignInterface {
     $fields += static::ownerBaseFieldDefinitions($entity_type);
 
     $fields['name'] = BaseFieldDefinition::create('string')
-      ->setLabel(new TranslatableMarkup('Name'))
-      ->setDescription(new TranslatableMarkup('The campaign name.'))
+      ->setLabel(t('Name'))
+      ->setDescription(t('The campaign name.'))
       ->setRequired(TRUE)
       ->setTranslatable(TRUE)
       ->setSettings([
@@ -226,8 +225,8 @@ class Campaign extends CommerceContentEntityBase implements CampaignInterface {
       ->setDisplayConfigurable('form', TRUE);
 
     $fields['description'] = BaseFieldDefinition::create('string_long')
-      ->setLabel(new TranslatableMarkup('Description'))
-      ->setDescription(new TranslatableMarkup('Additional information about the campaign.'))
+      ->setLabel(t('Description'))
+      ->setDescription(t('Additional information about the campaign.'))
       ->setTranslatable(TRUE)
       ->setDisplayOptions('form', [
         'type' => 'string_textarea',
@@ -239,9 +238,19 @@ class Campaign extends CommerceContentEntityBase implements CampaignInterface {
       ->setDisplayConfigurable('view', TRUE)
       ->setDisplayConfigurable('form', TRUE);
 
+    $fields['auto_re_recruit'] = BaseFieldDefinition::create('boolean')
+      ->setName('auto_re_recruit')
+      ->setLabel(t('Auto re-recruit'))
+      ->setDescription(t('This will create subsequent recruitments each time the customer orders one of the products below, if they have been recruited once before.'))
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayOptions('form', [
+        'type' => 'boolean_checkbox',
+        'weight' => 2,
+      ]);
+
     $fields['start_date'] = BaseFieldDefinition::create('datetime')
-      ->setLabel(new TranslatableMarkup('Start date'))
-      ->setDescription(new TranslatableMarkup('The date the campaign becomes available.'))
+      ->setLabel(t('Start date'))
+      ->setDescription(t('The date the campaign becomes available.'))
       ->setSetting('datetime_type', 'datetime')
       ->setDefaultValueCallback('Drupal\commerce_recruiting\Entity\Campaign::getDefaultStartDate')
       ->setDisplayOptions('form', [
@@ -252,8 +261,8 @@ class Campaign extends CommerceContentEntityBase implements CampaignInterface {
 
 
     $fields['end_date'] = BaseFieldDefinition::create('datetime')
-      ->setLabel(new TranslatableMarkup('End date'))
-      ->setDescription(new TranslatableMarkup('The date after which the campaign is unavailable.'))
+      ->setLabel(t('End date'))
+      ->setDescription(t('The date after which the campaign is unavailable.'))
       ->setRequired(FALSE)
       ->setSetting('datetime_type', 'datetime')
       ->setSetting('datetime_optional_label', t('Provide an end date'))
@@ -264,14 +273,14 @@ class Campaign extends CommerceContentEntityBase implements CampaignInterface {
       ->setDisplayConfigurable('form', TRUE);
 
     $fields['status'] = BaseFieldDefinition::create('boolean')
-      ->setLabel(new TranslatableMarkup('Status'))
-      ->setDescription(new TranslatableMarkup('Whether the campaign is enabled.'))
+      ->setLabel(t('Status'))
+      ->setDescription(t('Whether the campaign is enabled.'))
       ->setDefaultValue(TRUE)
       ->setRequired(TRUE);
 
     $fields['recruiter'] = BaseFieldDefinition::create('entity_reference')
-      ->setLabel(new TranslatableMarkup('Recruiter'))
-      ->setDescription(new TranslatableMarkup('The recruiter.'))
+      ->setLabel(t('Recruiter'))
+      ->setDescription(t('The recruiter.'))
       ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
       ->setSetting('target_type', 'user')
       ->setTranslatable($entity_type->isTranslatable())
@@ -313,13 +322,13 @@ class Campaign extends CommerceContentEntityBase implements CampaignInterface {
       ->setDisplayConfigurable('view', TRUE);
 
     $fields['changed'] = BaseFieldDefinition::create('changed')
-      ->setLabel(new TranslatableMarkup('Changed'))
-      ->setDescription(new TranslatableMarkup('The time that this entity was last edited.'))
+      ->setLabel(t('Changed'))
+      ->setDescription(t('The time that this entity was last edited.'))
       ->setRevisionable(TRUE);
 
     $fields['created'] = BaseFieldDefinition::create('created')
-      ->setLabel(new TranslatableMarkup('Created'))
-      ->setDescription(new TranslatableMarkup('The time that this entity was created.'));
+      ->setLabel(t('Created'))
+      ->setDescription(t('The time that this entity was created.'));
 
     return $fields;
   }

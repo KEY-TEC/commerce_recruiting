@@ -19,6 +19,10 @@ class RecruitmentForm extends ContentEntityForm {
     /* @var \Drupal\commerce_recruiting\Entity\Recruitment $entity */
     $form = parent::buildForm($form, $form_state);
 
+    if (isset($form['auto_re_recruit'])) {
+      $form['auto_re_recruit']['widget']['value']['#description'] = $this->t('This will create subsequent recruitments each time the customer orders one of the products below, if they have been recruited once before.');
+    }
+
     return $form;
   }
 
