@@ -13,7 +13,7 @@ entity.commerce_recruitment.edit_form:
 entity.commerce_recruitment.delete_form:
   route_name:  entity.commerce_recruitment.delete_form
   base_route:  entity.commerce_recruitment.canonical
-  title: Delete
+  title: 'Delete'
   weight: 10
 
 commerce_recruitment_campaign.settings_tab:
@@ -49,5 +49,11 @@ entity.commerce_recruitment_reward.edit_form:
 entity.commerce_recruitment_reward.delete_form:
   route_name:  entity.commerce_recruitment_reward.delete_form
   base_route:  entity.commerce_recruitment_reward.canonical
-  title: Delete
+  title: 'Delete'
   weight: 10
+
+commerce_recruiting.campaign.recruiters_list:
+  route_name:  commerce_recruiting.campaign.recruiters_list
+  base_route:  entity.commerce_recruitment_campaign.canonical
+  title: 'Recruiters of this campaign'
+  weight: 20

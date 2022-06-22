@@ -33,3 +33,15 @@ commerce_recruiting.configuration:
     _title: 'Recruiting'
   requirements:
     _permission: 'access commerce administration pages'
+
+commerce_recruiting.campaign.recruiters_list:
+  path: '/admin/commerce/recruitment/campaigns/{commerce_recruitment_campaign}/recruiters'
+  defaults:
+    _controller: '\Drupal\commerce_recruiting\Controller\CampaignController::recruitersListPage'
+    _title: 'Recruiters of this campaign'
+  requirements:
+    _permission: 'access commerce administration pages'
+  options:
+    parameters:
+      commerce_recruitment_campaign:
+        type: 'entity:commerce_recruitment_campaign'
