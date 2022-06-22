@@ -6,9 +6,9 @@ use Drupal\commerce_product\Entity\ProductVariationInterface;
 use Drupal\commerce_recruiting\RecruitmentManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Messenger\Messenger;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Session\AccountProxy;
 use Drupal\state_machine\Event\WorkflowTransitionEvent;
-use Drupal\user\Entity\User;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -85,10 +85,8 @@ class RecruitmentCheckoutSubscriber implements EventSubscriberInterface {
     $order = $event->getEntity();
     $matches = $this->recruitmentManager->sessionMatch($order);
     if (!empty($matches)) {
-      $user = User::load($this->currentUser->id());
-      foreach ($matches as $product_id => $match) {
-        $recruitment = $this->recruitmentManager->createRecruitment($match['order_item'], $match['recruiter'], $user, $match['campaign_option'], $match['bonus']);
-        $recruitment->save();
+      foreach ($matches as $match) {
+        $this->processMatch($match, $this->currentUser);
       }
       return;
     }
@@ -126,5 +124,20 @@ class RecruitmentCheckoutSubscriber implements EventSubscriberInterface {
         }
       }
     }
+  }
+
+  /**
+   * Helper function to create recruitments from session match.
+   *
+   * @param array $match
+   *   The session match array.
+   * @param \Drupal\Core\Session\AccountInterface $user
+   *   The recruited user account.
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   */
+  protected function processMatch(array $match, AccountInterface $user) {
+    $recruitment = $this->recruitmentManager->createRecruitment($match['order_item'], $match['recruiter'], $user, $match['campaign_option'], $match['bonus']);
+    $recruitment->save();
   }
 }

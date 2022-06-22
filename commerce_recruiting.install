@@ -34,7 +34,7 @@ function commerce_recruiting_update_8001() {
  * Add the 'auto_re_recruit' field to campaign entities.
  */
 function commerce_recruiting_update_8002() {
-  $field_definition = BaseFieldDefinition::create('link')
+  $field_definition = BaseFieldDefinition::create('boolean')
     ->setName('auto_re_recruit')
     ->setLabel(t('Auto re-recruit'))
     ->setDescription(t('This will create subsequent recruitments each time the customer orders one of the products below, if they have been recruited once before.'))
