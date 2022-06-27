@@ -259,7 +259,15 @@ class Recruitment extends ContentEntityBase implements RecruitmentInterface {
       ->setLabel(t('Order item'))
       ->setDescription(t('The source order item.'))
       ->setSetting('target_type', 'commerce_order_item')
-      ->setSetting('handler', 'default')
+      ->setSettings([
+        'handler' => 'views',
+        'handler_settings' => [
+          'view' => [
+            'view_name' => 'recruitment_order_item_filter',
+            'display_name' => 'recruitment_order_item_reference_filter',
+          ],
+        ],
+      ])
       ->setSetting('display_description', TRUE)
       ->setDisplayOptions('form', [
         'type' => 'entity_reference_autocomplete',

@@ -8,3 +8,4 @@ dependencies:
   - commerce:commerce_promotion
   - dynamic_entity_reference:dynamic_entity_reference
   - state_machine:state_machine
+  - drupal:views
