@@ -167,7 +167,7 @@ class RecruitmentManager implements RecruitmentManagerInterface {
    */
   public function resolveRecruitmentBonus(CampaignOptionInterface $option, OrderItemInterface $order_item) {
     $campaign = $option->getCampaign();
-    if ($campaign->hasField('recruitment_bonus_resolver')) {
+    if ($campaign->hasField('recruitment_bonus_resolver') && $campaign->getBonusResolver()) {
       return $campaign->getBonusResolver()->resolveBonus($option, $order_item);
     }
     else {
