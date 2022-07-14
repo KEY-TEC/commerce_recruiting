@@ -81,7 +81,7 @@ class CampaignOption extends ContentEntityBase implements CampaignOptionInterfac
     $formatter = \Drupal::service('commerce_price.currency_formatter');
     $label = 'Code: ' . $this->getCode() . ' ';
     $label .= $this->getProduct() != NULL ? '(Product: ' . $this->getProduct()
-      ->label() . ')' : '';
+      ->label() . ') ' : ' ';
 
     if ($this->getBonusMethod() == CampaignOptionInterface::RECRUIT_BONUS_METHOD_FIX) {
       $bonus = $this->getBonus() != NULL ? $formatter->format($this->getBonus()->getNumber(), $this->getBonus()->getCurrencyCode()) : '0';

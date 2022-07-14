@@ -55,38 +55,26 @@ class RecruitmentCodeController extends ControllerBase {
   protected $request;
 
   /**
-   * Constructs a new RecruitmentCodeController object.
+   * The page cache kill switch.
    *
-   * @param \Drupal\Core\Session\AccountInterface $current_account
-   *   The current account.
-   * @param \Drupal\commerce_recruiting\CampaignManagerInterface $campaign_manager
-   *   The campaign manager.
-   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
-   *   The messenger.
-   * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $event_dispatcher
-   *   The event dispatcher.
-   * @param \Symfony\Component\HttpFoundation\RequestStack $request
-   *   The request object.
+   * @var \Drupal\Core\PageCache\ResponsePolicy\KillSwitch
    */
-  public function __construct(AccountInterface $current_account, CampaignManagerInterface $campaign_manager, MessengerInterface $messenger, EventDispatcherInterface $event_dispatcher, RequestStack $request) {
-    $this->campaignManager = $campaign_manager;
-    $this->messenger = $messenger;
-    $this->currentAccount = $current_account;
-    $this->eventDispatcher = $event_dispatcher;
-    $this->request = $request->getCurrentRequest();
-  }
+  protected $pageCacheKillSwitch;
 
   /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('current_user'),
-      $container->get('commerce_recruiting.campaign_manager'),
-      $container->get('messenger'),
-      $container->get('event_dispatcher'),
-      $container->get('request_stack')
-    );
+    $instance = new static();
+
+    $instance->currentAccount = $container->get('current_user');
+    $instance->campaignManager = $container->get('commerce_recruiting.campaign_manager');
+    $instance->messenger = $container->get('messenger');
+    $instance->eventDispatcher = $container->get('event_dispatcher');
+    $instance->request = $container->get('request_stack')->getCurrentRequest();
+    $instance->pageCacheKillSwitch = $container->get('page_cache_kill_switch');
+
+    return $instance;
   }
 
   /**
@@ -99,6 +87,8 @@ class RecruitmentCodeController extends ControllerBase {
    *   Redirect to product.
    */
   public function code($campaign_code) {
+    // Never cache me.
+    $this->pageCacheKillSwitch->trigger();
     $code = Code::createFromCode($campaign_code);
 
     try {

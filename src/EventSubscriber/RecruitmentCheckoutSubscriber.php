@@ -111,7 +111,7 @@ class RecruitmentCheckoutSubscriber implements EventSubscriberInterface {
             $campaign_product = $campaign_option->getProduct();
             if ($purchased_entity === $campaign_product) {
               // Match found, create new recruitment from existing.
-              $recruitment = $this->recruitmentManager->createRecruitment($order_item, $user_recruitment->getOwner(), $order->getCustomer(), $campaign_option, $user_recruitment->getBonus());
+              $recruitment = $this->recruitmentManager->createRecruitment($order_item, $user_recruitment->getOwner(), $order->getCustomer(), $campaign_option, $this->recruitmentManager->resolveRecruitmentBonus($campaign_option, $order_item));
               $recruitment->save();
               $user_campaigns[] = $campaign->id();
               break;

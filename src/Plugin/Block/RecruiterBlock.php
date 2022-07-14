@@ -20,7 +20,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *  id = "commerce_recruiting_recruiter",
  *  admin_label = @Translation("Recruiter campaigns sharing link block"),
  *  context = {
- *    "user" = @ContextDefinition("entity:user", required = FALSE)
+ *    "user" = @ContextDefinition("entity:user", required = TRUE)
  *  }
  * )
  */

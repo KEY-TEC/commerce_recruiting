@@ -14,9 +14,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @Block(
  *  id = "commerce_recruiting_session_info",
  *  admin_label = @Translation("Recruitment Session Info"),
- *  context = {
- *    "user" = @ContextDefinition("entity:user", required = FALSE)
- *  }
  * )
  */
 class RecruitmentSessionBlock extends BlockBase implements ContainerFactoryPluginInterface {
