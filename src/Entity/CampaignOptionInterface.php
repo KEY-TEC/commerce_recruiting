@@ -77,13 +77,24 @@ interface CampaignOptionInterface extends ContentEntityInterface, EntityChangedI
   public function setBonus(Price $price);
 
   /**
-   * Gets the bonus proc.
+   * Gets the bonus percent.
    *
    * @return int
    *   The bonus in percent.
    */
   public function getBonusPercent();
 
+  /**
+   * Sets the bonus percent.
+   *
+   * @param int $percent
+   *   The bonus in percent.
+   *
+   * @return $this
+   */
+  public function setBonusPercent(int $percent);
+
+  // @codingStandardsIgnoreStart
   /**
    * Calculates the bonus.
    *
@@ -92,8 +103,11 @@ interface CampaignOptionInterface extends ContentEntityInterface, EntityChangedI
    *
    * @return \Drupal\commerce_price\Price
    *   The calculated bonus.
+   *
+   * @deprecated Use DefaultBonusResolver instead.
    */
   public function calculateBonus(OrderItemInterface $order_item);
+  // @codingStandardsIgnoreEnd
 
   /**
    * Returns the product or product bundle.

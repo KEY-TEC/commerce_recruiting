@@ -57,6 +57,14 @@ function commerce_recruiting_theme($existing, $type, $theme, $path) {
     'variables' => ['content' => NULL],
     'file' => 'commerce_recruiting.page.inc',
   ];
+  $theme['recruitment_session_info'] = [
+    'path' => $path . '/templates',
+    'template'  => 'recruitment-session-info',
+    'variables' => [
+      'recruiter' => NULL,
+      'option' => NULL,
+    ],
+  ];
   return $theme;
 }
 

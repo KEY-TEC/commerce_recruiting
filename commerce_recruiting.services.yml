@@ -50,3 +50,12 @@ services:
       - '@entity_type.manager'
       - '@commerce_recruiting.recruitment_manager'
       - '@module_handler'
+
+  commerce_recruiting.plugin_item_deriver_subscriber:
+    class: Drupal\commerce_recruiting\EventSubscriber\PluginItemDeriverSubscriber
+    tags:
+      - { name: event_subscriber }
+
+  plugin.manager.commerce_recruiting_bonus_resolver:
+    class: Drupal\commerce_recruiting\Plugin\Commerce\RecruitmentBonusResolver\RecruitmentBonusResolverPluginManager
+    parent: default_plugin_manager

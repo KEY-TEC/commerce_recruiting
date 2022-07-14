@@ -12,7 +12,6 @@ use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\EntityChangedTrait;
 use Drupal\Core\Entity\EntityPublishedTrait;
 use Drupal\Core\Entity\EntityTypeInterface;
-use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\link\LinkItemInterface;
 use Drupal\user\UserInterface;
 use http\Exception\InvalidArgumentException;
@@ -174,6 +173,14 @@ class CampaignOption extends ContentEntityBase implements CampaignOptionInterfac
   /**
    * {@inheritdoc}
    */
+  public function setBonusPercent(int $percent) {
+    $this->set('bonus_percent', $percent);
+    return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getBonus() {
     if (!$this->get('bonus')->isEmpty()) {
       return $this->get('bonus')->first()->toPrice();
@@ -184,7 +191,8 @@ class CampaignOption extends ContentEntityBase implements CampaignOptionInterfac
    * {@inheritdoc}
    */
   public function setBonus(Price $price) {
-    return $this->set('bonus', $price);
+    $this->set('bonus', $price);
+    return $this;
   }
 
   /**
@@ -229,7 +237,7 @@ class CampaignOption extends ContentEntityBase implements CampaignOptionInterfac
       ->setDefaultValueCallback('Drupal\commerce_recruiting\Entity\CampaignOption::getDefaultCode')
       ->addConstraint('CodeUnique');
 
-    // The order backreference, populated by Order::postSave().
+    // The order backreference, populated by Campaign::postSave().
     $fields['campaign_id'] = BaseFieldDefinition::create('entity_reference')
       ->setLabel(t('Campaign'))
       ->setDescription(t('The parent campaign.'))

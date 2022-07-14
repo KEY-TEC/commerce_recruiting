@@ -3,6 +3,7 @@
 namespace Drupal\commerce_recruiting\Entity;
 
 use Drupal\commerce\Entity\CommerceContentEntityBase;
+use Drupal\commerce_recruiting\Plugin\Commerce\RecruitmentBonusResolver\RecruitmentBonusResolverInterface;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Entity\EntityChangedTrait;
 use Drupal\Core\Entity\EntityStorageInterface;
@@ -238,6 +239,36 @@ class Campaign extends CommerceContentEntityBase implements CampaignInterface {
       ->setDisplayConfigurable('view', TRUE)
       ->setDisplayConfigurable('form', TRUE);
 
+    $fields['recruitment_bonus_resolver'] = BaseFieldDefinition::create('commerce_plugin_item:commerce_recruiting_bonus_resolver')
+      ->setLabel(t('Recruitment bonus resolver'))
+      ->setCardinality(1)
+      ->setRequired(TRUE)
+      ->setSetting('allowed_values_function', [static::class, 'getBonusResolverOptions'])
+      ->setDisplayOptions('form', [
+        'type' => 'commerce_plugin_select',
+        'weight' => 1,
+      ]);
+
+    $fields['bonus_any_option'] = BaseFieldDefinition::create('boolean')
+      ->setName('bonus_any_option')
+      ->setLabel(t('Apply bonus from any matching option'))
+      ->setDescription(t('The recruiter can receive the bonus from any option of this campaign if bought by the customer. If this option is off, the recruiter can only receive the bonus of the product from the recruitment link.'))
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayOptions('form', [
+        'type' => 'boolean_checkbox',
+        'weight' => 2,
+      ]);
+
+    $fields['bonus_quantity_multiplication'] = BaseFieldDefinition::create('boolean')
+      ->setName('bonus_quantity_multiplication')
+      ->setLabel(t('Multiply the bonus by quantity in order'))
+      ->setDescription(t('The bonus will be multiplied by the quantity of the product in the order. If this option is off, the bonus will be applied only once.'))
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayOptions('form', [
+        'type' => 'boolean_checkbox',
+        'weight' => 2,
+      ]);
+
     $fields['auto_re_recruit'] = BaseFieldDefinition::create('boolean')
       ->setName('auto_re_recruit')
       ->setLabel(t('Auto re-recruit'))
@@ -258,7 +289,6 @@ class Campaign extends CommerceContentEntityBase implements CampaignInterface {
         'weight' => 3,
       ])
       ->setDisplayConfigurable('form', TRUE);
-
 
     $fields['end_date'] = BaseFieldDefinition::create('datetime')
       ->setLabel(t('End date'))
@@ -404,6 +434,26 @@ class Campaign extends CommerceContentEntityBase implements CampaignInterface {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function getBonusResolver() {
+    if (!$this->get('recruitment_bonus_resolver')->isEmpty()) {
+      return $this->get('recruitment_bonus_resolver')->first()->getTargetInstance();
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setBonusResolver(RecruitmentBonusResolverInterface $bonus_resolver) {
+    $this->set('recruitment_bonus_resolver', [
+      'target_plugin_id' => $bonus_resolver->getPluginId(),
+      'target_plugin_configuration' => $bonus_resolver->getConfiguration(),
+    ]);
+    return $this;
+  }
+
+  /**
    * Gets the index of the given order item.
    *
    * @param \Drupal\commerce_recruiting\Entity\CampaignOptionInterface $option
@@ -419,6 +469,23 @@ class Campaign extends CommerceContentEntityBase implements CampaignInterface {
     }, $values);
 
     return array_search($option->id(), $option_ids);
+  }
+
+  /**
+   * Gets the allowed values for the 'reward_resolver' base field.
+   *
+   * @return array
+   *   The allowed values.
+   */
+  public static function getBonusResolverOptions() {
+    /** @var \Drupal\commerce_recruiting\Plugin\Commerce\RecruitmentBonusResolver\RecruitmentBonusResolverPluginManager $recruitment_bonus_resolver_manager */
+    $recruitment_bonus_resolver_manager = \Drupal::getContainer()->get('plugin.manager.commerce_recruiting_bonus_resolver');
+    $plugins = array_map(static function ($definition) {
+      return $definition['label'];
+    }, $recruitment_bonus_resolver_manager->getDefinitions());
+    asort($plugins);
+
+    return $plugins;
   }
 
 }

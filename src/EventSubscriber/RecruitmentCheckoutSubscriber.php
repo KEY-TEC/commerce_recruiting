@@ -86,7 +86,7 @@ class RecruitmentCheckoutSubscriber implements EventSubscriberInterface {
     $matches = $this->recruitmentManager->sessionMatch($order);
     if (!empty($matches)) {
       foreach ($matches as $match) {
-        $this->processMatch($match, $this->currentUser);
+        $this->createRecruitmentFromMatch($match, $this->currentUser);
       }
       return;
     }
@@ -136,8 +136,9 @@ class RecruitmentCheckoutSubscriber implements EventSubscriberInterface {
    *
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
-  protected function processMatch(array $match, AccountInterface $user) {
+  protected function createRecruitmentFromMatch(array $match, AccountInterface $user) {
     $recruitment = $this->recruitmentManager->createRecruitment($match['order_item'], $match['recruiter'], $user, $match['campaign_option'], $match['bonus']);
     $recruitment->save();
   }
+
 }

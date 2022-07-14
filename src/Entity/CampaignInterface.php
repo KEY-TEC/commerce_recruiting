@@ -2,6 +2,7 @@
 
 namespace Drupal\commerce_recruiting\Entity;
 
+use Drupal\commerce_recruiting\Plugin\Commerce\RecruitmentBonusResolver\RecruitmentBonusResolverInterface;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityChangedInterface;
@@ -215,5 +216,23 @@ interface CampaignInterface extends ContentEntityInterface, EntityChangedInterfa
    *   TRUE if the option was found, FALSE otherwise.
    */
   public function hasOption(CampaignOptionInterface $option);
+
+  /**
+   * Gets the bonus resolver plugin.
+   *
+   * @return \Drupal\commerce_recruiting\Plugin\Commerce\RecruitmentBonusResolver\RecruitmentBonusResolverInterface
+   *   The bonus resolver plugin.
+   */
+  public function getBonusResolver();
+
+  /**
+   * Sets the bonus resolver plugin.
+   *
+   * @param \Drupal\commerce_recruiting\Plugin\Commerce\RecruitmentBonusResolver\RecruitmentBonusResolverInterface $bonus_resolver
+   *   The bonus resolver plugin.
+   *
+   * @return $this
+   */
+  public function setBonusResolver(RecruitmentBonusResolverInterface $bonus_resolver);
 
 }

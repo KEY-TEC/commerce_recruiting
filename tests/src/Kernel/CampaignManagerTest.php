@@ -18,7 +18,7 @@ class CampaignManagerTest extends CommerceRecruitingKernelTestBase {
    * Test testFindNoRecruiterCampaigns.
    */
   public function testFindNoRecruiterCampaigns() {
-    $unspecific_config = $this->createCampaign(NULL, NULL);
+    $unspecific_config = $this->createCampaign();
 
     $expected_product = $this->createProduct();
     $product_specific_config = $this->createCampaign(NULL, $expected_product);
@@ -40,7 +40,7 @@ class CampaignManagerTest extends CommerceRecruitingKernelTestBase {
    */
   public function testFindRecruiterCampaigns() {
     $user = $this->drupalCreateUser();
-    $recruiter_config = $this->createCampaign($user, NULL);
+    $recruiter_config = $this->createCampaign($user);
 
     $differnt_product = $this->createProduct();
     $recruiter_product_config = $this->createCampaign($user, $differnt_product);

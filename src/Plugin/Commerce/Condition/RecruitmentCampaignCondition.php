@@ -4,7 +4,6 @@ namespace Drupal\commerce_recruiting\Plugin\Commerce\Condition;
 
 use Drupal\commerce\EntityUuidMapperInterface;
 use Drupal\commerce\Plugin\Commerce\Condition\ConditionBase;
-use Drupal\commerce_recruiting\Entity\Campaign;
 use Drupal\commerce_recruiting\RecruitmentManagerInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -100,7 +99,6 @@ class RecruitmentCampaignCondition extends ConditionBase implements ContainerFac
 
     if (!empty($matches)) {
       foreach ($matches as $match) {
-        /* @var \Drupal\commerce_recruiting\Entity\CampaignOptionInterface $foo */
         if (!empty($match['campaign_option']) &&  in_array($match['campaign_option']->getCampaign()->id(), $campaigns_ids)) {
           return TRUE;
         }

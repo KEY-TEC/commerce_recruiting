@@ -39,7 +39,7 @@ class RecruitmentCheckoutSubscriberTest extends CommerceRecruitingKernelTestBase
     $checkout_subscriber = \Drupal::service('commerce_recruiting.recruitment_checkout_subscriber');
     $checkout_subscriber->onOrderPlace($workflow_transition_event);
     $recruitments = $recruitment_storage->loadByProperties([]);
-    $this->assertEquals(0, count($recruitments));
+    $this->assertCount(0, $recruitments);
 
     // Adding recruitment session.
     $session_prophecy = $this->prophesize(RecruitmentSession::CLASS);
@@ -49,19 +49,27 @@ class RecruitmentCheckoutSubscriberTest extends CommerceRecruitingKernelTestBase
 
     $checkout_subscriber->onOrderPlace($workflow_transition_event);
     $recruitments = $recruitment_storage->loadByProperties([]);
-    $this->assertEquals(1, count($recruitments));
+    $this->assertCount(1, $recruitments);
+
+    // Test with auto re recruit option.
+    // Note: campaign->set auto re recruit + save doesn't apply for some reason,
+    // so create a new campaign with this option on
+    // and replace the campaign option of existing recruitment.
+    $campaign = $this->createCampaign($recruiter, $recruited_product, TRUE, FALSE, FALSE, TRUE);
+
+    /** @var \Drupal\commerce_recruiting\Entity\RecruitmentInterface $recruitment */
+    $recruitment = current($recruitments);
+    $recruitment->set('campaign_option', $campaign->getFirstOption());
+    $recruitment->save();
 
     // Reset recruitment session for subsequent order place test (re-recruit).
     $session_prophecy->getCampaignOption()->willReturn(NULL);
     $session_prophecy->getRecruiter()->willReturn(NULL);
     \Drupal::getContainer()->set('commerce_recruiting.recruitment_session', $session_prophecy->reveal());
-    // Enable auto re-recruit option.
-    $campaign->set('auto_re_recruit', 1);
-    $campaign->save();
 
     $checkout_subscriber->onOrderPlace($workflow_transition_event);
     $recruitments = $recruitment_storage->loadByProperties([]);
-    $this->assertEquals(2, count($recruitments));
+    $this->assertCount(2, $recruitments);
   }
 
 }

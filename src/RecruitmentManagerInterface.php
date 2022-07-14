@@ -7,25 +7,13 @@ use Drupal\commerce_order\Entity\OrderItemInterface;
 use Drupal\commerce_price\Price;
 use Drupal\commerce_recruiting\Entity\CampaignInterface;
 use Drupal\commerce_recruiting\Entity\CampaignOption;
+use Drupal\commerce_recruiting\Entity\CampaignOptionInterface;
 use Drupal\Core\Session\AccountInterface;
 
 /**
  * Interface RecruitmentManagerInterface.
  */
 interface RecruitmentManagerInterface {
-
-  /**
-   * Calculates the sum of all recruitment bonus of an user.
-   *
-   * @param int $uid
-   *   User ID.
-   * @param bool $include_paid_out
-   *   Set true to include already paid out recruitments.
-   *
-   * @return int
-   *   The total bonus.
-   */
-  public function getTotalBonusPerUser($uid, $include_paid_out = FALSE);
 
   /**
    * Create a recruitment entity.
@@ -77,7 +65,7 @@ interface RecruitmentManagerInterface {
   public function getRecruitmentSummaryByCampaign(CampaignInterface $campaign, $state, AccountInterface $recruiter = NULL);
 
   /**
-   * Checks the order for recommend products in RecruitmentSession.
+   * Checks the order for matching products from RecruitmentSession.
    *
    * @param \Drupal\commerce_order\Entity\OrderInterface $order
    *   The order.
@@ -90,6 +78,32 @@ interface RecruitmentManagerInterface {
    *    etc.
    */
   public function sessionMatch(OrderInterface $order);
+
+  /**
+   * Resolves the recruitment bonus for a single order item.
+   *
+   * @param \Drupal\commerce_recruiting\Entity\CampaignOptionInterface $option
+   *   The applied campaign option.
+   * @param \Drupal\commerce_order\Entity\OrderItemInterface $order_item
+   *   The order item.
+   *
+   * @return \Drupal\commerce_price\Price
+   *   The resolved recruitment bonus.
+   */
+  public function resolveRecruitmentBonus(CampaignOptionInterface $option, OrderItemInterface $order_item);
+
+  /**
+   * Calculates the sum of all recruitment bonus of an user.
+   *
+   * @param int $uid
+   *   User ID.
+   * @param bool $include_paid_out
+   *   Set true to include already paid out recruitments.
+   *
+   * @return int
+   *   The total bonus.
+   */
+  public function getTotalBonusPerUser($uid, $include_paid_out = FALSE);
 
   /**
    * Manages the recruitment state transition.

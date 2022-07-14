@@ -1,0 +1,26 @@
+{#
+/**
+ * @file recruitment-session-info.html.twig
+ * Default theme implementation to show current recruitment session information.
+ * Its main purpose is for debugging.
+ *
+ * Available variables:
+ * - recruiter: The recruiter user account object
+ * - option: The recruitment option object
+ *
+ * @see template_preprocess_recruitment_session_info()
+ *
+ * @ingroup themeable
+ */
+#}
+<ul>
+  {% if recruiter is not empty %}
+    <li>Recruiter: {{ recruiter.getAccountName() }} ({{ recruiter.id() }})</li>
+  {% endif %}
+  {% if option is not empty %}
+    <li>Active option: {{ option.label() }}</li>
+  {% endif %}
+  {% if recruiter is empty and option is empty %}
+    <li>Currently no recruitment session.</li>
+  {% endif %}
+</ul>
