@@ -4,12 +4,25 @@ namespace Drupal\commerce_recruiting\Plugin\Commerce\RecruitmentBonusResolver;
 
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Plugin\PluginBase;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Base class for commerce_recruiting_bonus_resolver plugins.
  */
-abstract class RecruitmentBonusResolverPluginBase extends PluginBase implements RecruitmentBonusResolverInterface {
+abstract class RecruitmentBonusResolverPluginBase extends PluginBase implements RecruitmentBonusResolverInterface, ContainerFactoryPluginInterface {
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    return new static(
+      $configuration,
+      $plugin_id,
+      $plugin_definition
+    );
+  }
 
   /**
    * {@inheritdoc}
