@@ -37,8 +37,8 @@ interface RecruitmentBonusResolverInterface extends ConfigurableInterface, Plugi
    * @param \Drupal\commerce_order\Entity\OrderItemInterface $order_item
    *   The order item.
    *
-   * @return \Drupal\commerce_price\Price
-   *   The bonus.
+   * @return \Drupal\commerce_price\Price|null
+   *   The bonus or null if bonus cannot be calculated.
    */
   public function resolveBonus(CampaignOptionInterface $option, OrderItemInterface $order_item);
 

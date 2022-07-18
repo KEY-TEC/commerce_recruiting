@@ -3,7 +3,6 @@
 namespace Drupal\commerce_recruiting\Plugin\Commerce\RecruitmentBonusResolver;
 
 use Drupal\commerce_order\Entity\OrderItemInterface;
-use Drupal\commerce_price\Calculator;
 use Drupal\commerce_price\Price;
 use Drupal\commerce_recruiting\Entity\CampaignOptionInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -73,8 +72,14 @@ class DefaultBonusResolver extends RecruitmentBonusResolverPluginBase {
         break;
 
       case CampaignOptionInterface::RECRUIT_BONUS_METHOD_PERCENT:
-        $unit_price = $order_item->getUnitPrice()->getNumber() / 100 * $option->getBonusPercent();
-        $bonus = new Price($unit_price, $order_item->getUnitPrice()->getCurrencyCode());
+        if (!empty($order_item->getUnitPrice()) && !empty($option->getBonusPercent())) {
+          $unit_price = $order_item->getUnitPrice()->getNumber() / 100 * $option->getBonusPercent();
+          $bonus = new Price($unit_price, $order_item->getUnitPrice()->getCurrencyCode());
+        }
+        else {
+          // Cannot calculate percent because order item misses unit price.
+          return null;
+        }
         break;
 
       default:

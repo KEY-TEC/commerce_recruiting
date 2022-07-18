@@ -149,12 +149,15 @@ class RecruitmentManager implements RecruitmentManagerInterface {
         }
 
         if ($purchased_product->id() === $product->id()) {
-          $matches[$purchased_product->id()] = [
-            'campaign_option' => $option,
-            'order_item' => $order_item,
-            'bonus' => $this->resolveRecruitmentBonus($option, $order_item),
-            'recruiter' => $recruiter,
-          ];
+          $bonus = $this->resolveRecruitmentBonus($option, $order_item);
+          if ($bonus instanceof Price) {
+            $matches[$purchased_product->id()] = [
+              'campaign_option' => $option,
+              'order_item' => $order_item,
+              'bonus' => $bonus,
+              'recruiter' => $recruiter,
+            ];
+          }
         }
       }
     }
