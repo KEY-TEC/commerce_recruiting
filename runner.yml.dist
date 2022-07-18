@@ -1,6 +1,6 @@
 drupal:
   root: "build"
-  base_url: "http://commerce-recruiting.docksal"
+  base_url: "http://commerce-recruiting.docksal.site"
   database:
     host: "db"
     port: "3306"

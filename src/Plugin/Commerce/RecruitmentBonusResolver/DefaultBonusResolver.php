@@ -3,6 +3,7 @@
 namespace Drupal\commerce_recruiting\Plugin\Commerce\RecruitmentBonusResolver;
 
 use Drupal\commerce_order\Entity\OrderItemInterface;
+use Drupal\commerce_price\Calculator;
 use Drupal\commerce_price\Price;
 use Drupal\commerce_recruiting\Entity\CampaignOptionInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -29,17 +30,43 @@ class DefaultBonusResolver extends RecruitmentBonusResolverPluginBase {
   /**
    * {@inheritdoc}
    */
+  public function defaultConfiguration() {
+    return [
+        'bonus_quantity_multiplication' => FALSE,
+      ] + parent::defaultConfiguration();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
-    // No config required here.
-    $form['#markup'] = '<p>' . $this->description() . '</p>';
+    $form = parent::buildConfigurationForm($form, $form_state);
+
+    $form['bonus_quantity_multiplication'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Multiply the bonus by quantity in order'),
+      '#description' => $this->t('The bonus will be multiplied by the quantity of the product in the order. If this is disabled, the bonus will be applied only once.'),
+      '#default_value' => $this->configuration['bonus_quantity_multiplication'],
+    ];
     return $form;
   }
 
   /**
    * {@inheritdoc}
    */
+  public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
+    parent::submitConfigurationForm($form, $form_state);
+
+    if (!$form_state->getErrors()) {
+      $values = $form_state->getValue($form['#parents']);
+      $this->configuration['bonus_quantity_multiplication'] = $values['bonus_quantity_multiplication'];
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function resolveBonus(CampaignOptionInterface $option, OrderItemInterface $order_item) {
-    $campaign = $option->getCampaign();
     switch ($option->getBonusMethod()) {
       case CampaignOptionInterface::RECRUIT_BONUS_METHOD_FIX:
         $bonus = $option->getBonus();
@@ -54,7 +81,7 @@ class DefaultBonusResolver extends RecruitmentBonusResolverPluginBase {
         throw new InvalidArgumentException("No valid bonus method selected. Method: '" . $this->getBonusMethod() . "'");
     }
 
-    if ($campaign->hasField('bonus_quantity_multiplication') && $campaign->bonus_quantity_multiplication->value) {
+    if ($this->configuration['bonus_quantity_multiplication']) {
       $bonus = $bonus->multiply($order_item->getQuantity());
     }
 

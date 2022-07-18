@@ -54,23 +54,12 @@ function commerce_recruiting_update_8002() {
  *
  * - recruitment_bonus_resolver
  * - bonus_any_option
- * - bonus_quantity_multiplication.
  */
 function commerce_recruiting_update_8003() {
   $bonus_any_option = BaseFieldDefinition::create('boolean')
     ->setName('bonus_any_option')
     ->setLabel(t('Apply bonus from any matching option'))
-    ->setDescription(t('The recruiter can receive the bonus from any option of this campaign if bought by the customer. If this option is off, the recruiter can only receive the bonus of the product from the recruitment link.'))
-    ->setDisplayConfigurable('form', TRUE)
-    ->setDisplayOptions('form', [
-      'type' => 'boolean_checkbox',
-      'weight' => 2,
-    ]);
-
-  $bonus_quantity_multiplication = BaseFieldDefinition::create('boolean')
-    ->setName('bonus_quantity_multiplication')
-    ->setLabel(t('Multiply the bonus by quantity in order'))
-    ->setDescription(t('The bonus will be multiplied by the quantity of the product in the order. If this option is off, the bonus will be applied only once.'))
+    ->setDescription(t('The recruiter receives the bonus from any option of this campaign, if bought by the customer. If this is disabled, the recruiter will receive the bonus of the product from the recruitment link only.'))
     ->setDisplayConfigurable('form', TRUE)
     ->setDisplayOptions('form', [
       'type' => 'boolean_checkbox',
@@ -89,6 +78,5 @@ function commerce_recruiting_update_8003() {
 
   $update_manager = \Drupal::entityDefinitionUpdateManager();
   $update_manager->installFieldStorageDefinition('bonus_any_option', 'commerce_recruitment_campaign', 'commerce_recruiting', $bonus_any_option);
-  $update_manager->installFieldStorageDefinition('bonus_quantity_multiplication', 'commerce_recruitment_campaign', 'commerce_recruiting', $bonus_quantity_multiplication);
   $update_manager->installFieldStorageDefinition('recruitment_bonus_resolver', 'commerce_recruitment_campaign', 'commerce_recruiting', $recruitment_bonus_resolver);
 }

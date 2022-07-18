@@ -25,9 +25,6 @@ class RecruitmentForm extends ContentEntityForm {
     if (isset($form['bonus_any_option'])) {
       $form['bonus_any_option']['widget']['value']['#description'] = $this->t('The recruiter can receive the bonus from any option of this campaign if bought by the customer. If this option is off, the recruiter can only receive the bonus of the product from the recruitment link.');
     }
-    if (isset($form['bonus_quantity_multiplication'])) {
-      $form['bonus_quantity_multiplication']['widget']['value']['#description'] = $this->t('The bonus will be multiplied by the quantity of the product in the order. If this option is off, the bonus will be applied only once.');
-    }
     if (isset($form['auto_re_recruit'])) {
       $form['auto_re_recruit']['widget']['value']['#description'] = $this->t('This will create subsequent recruitments each time the customer orders one of the products below, if they have been recruited once before.');
     }

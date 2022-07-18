@@ -221,7 +221,6 @@ class CommerceRecruitingKernelTestBase extends CommerceKernelTestBase {
       'name' => 'test',
       'status' => 1,
       'bonus_any_option' => $bonus_any_option,
-      'bonus_quantity_multiplication' => $bonus_quantity_multiplication,
       'auto_re_recruit' => $auto_re_recruit,
     ];
 
@@ -231,7 +230,9 @@ class CommerceRecruitingKernelTestBase extends CommerceKernelTestBase {
     if (empty($recruitment_bonus_resolver)) {
       $recruitment_bonus_resolver = [
         'target_plugin_id' => 'default_bonus_resolver',
-        'target_plugin_configuration' => [],
+        'target_plugin_configuration' => [
+          'bonus_quantity_multiplication' => $bonus_quantity_multiplication,
+        ],
       ];
     }
     $options['recruitment_bonus_resolver'] = $recruitment_bonus_resolver;
