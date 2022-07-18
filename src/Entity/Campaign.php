@@ -264,6 +264,7 @@ class Campaign extends CommerceContentEntityBase implements CampaignInterface {
       ->setCardinality(1)
       ->setRequired(TRUE)
       ->setSetting('allowed_values_function', [static::class, 'getBonusResolverOptions'])
+      ->setDisplayConfigurable('form', TRUE)
       ->setDisplayOptions('form', [
         'type' => 'commerce_plugin_select',
         'weight' => 2,

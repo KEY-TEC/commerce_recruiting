@@ -71,6 +71,7 @@ function commerce_recruiting_update_8003() {
     ->setCardinality(1)
     ->setRequired(TRUE)
     ->setSetting('allowed_values_function', [Campaign::class, 'getBonusResolverOptions'])
+    ->setDisplayConfigurable('form', TRUE)
     ->setDisplayOptions('form', [
       'type' => 'commerce_plugin_select',
       'weight' => 1,
