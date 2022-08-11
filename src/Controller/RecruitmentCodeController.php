@@ -93,7 +93,9 @@ class RecruitmentCodeController extends ControllerBase {
 
     try {
       $recruiter = $this->campaignManager->getRecruiterFromCode($code);
-      if ($recruiter->id() == $this->currentAccount->id()) {
+      $option = $this->campaignManager->findCampaignOptionFromCode($code);
+
+      if ($recruiter->id() == $this->currentAccount->id() && (!$option->getCampaign()->hasField('allow_self_recruit') || !$option->getCampaign()->allow_self_recruit->value)) {
         \Drupal::messenger()->addMessage(t('You can not use your own recommendation url.'));
       }
       else {
@@ -104,7 +106,6 @@ class RecruitmentCodeController extends ControllerBase {
         $this->eventDispatcher->dispatch(RecruitmentSessionEvent::SESSION_SET_EVENT, $event);
       }
 
-      $option = $this->campaignManager->findCampaignOptionFromCode($code);
       if ($option->hasField('redirect') && !empty($option->redirect->first()->uri)) {
         /** @var \Drupal\Core\Url $url */
         $url = $option->redirect->first()->getUrl();

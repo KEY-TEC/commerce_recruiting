@@ -81,3 +81,21 @@ function commerce_recruiting_update_8003() {
   $update_manager->installFieldStorageDefinition('bonus_any_option', 'commerce_recruitment_campaign', 'commerce_recruiting', $bonus_any_option);
   $update_manager->installFieldStorageDefinition('recruitment_bonus_resolver', 'commerce_recruitment_campaign', 'commerce_recruiting', $recruitment_bonus_resolver);
 }
+
+/**
+ * Add the 'allow_self_recruit' field to campaign entities.
+ */
+function commerce_recruiting_update_8004() {
+  $allow_self_recruit = BaseFieldDefinition::create('boolean')
+    ->setName('allow_self_recruit')
+    ->setLabel(t('Allow self recruit'))
+    ->setDescription(t('Allows the recruiter to use their own recommendation link.'))
+    ->setDisplayConfigurable('form', TRUE)
+    ->setDisplayOptions('form', [
+      'type' => 'boolean_checkbox',
+      'weight' => 1,
+    ]);
+
+  $update_manager = \Drupal::entityDefinitionUpdateManager();
+  $update_manager->installFieldStorageDefinition('allow_self_recruit', 'commerce_recruitment_campaign', 'commerce_recruiting', $allow_self_recruit);
+}

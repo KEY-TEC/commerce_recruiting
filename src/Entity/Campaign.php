@@ -259,6 +259,16 @@ class Campaign extends CommerceContentEntityBase implements CampaignInterface {
         'weight' => 1,
       ]);
 
+    $fields['allow_self_recruit'] = BaseFieldDefinition::create('boolean')
+      ->setName('allow_self_recruit')
+      ->setLabel(t('Allow self recruit'))
+      ->setDescription(t('Allows the recruiter to use their own recommendation link.'))
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayOptions('form', [
+        'type' => 'boolean_checkbox',
+        'weight' => 1,
+      ]);
+
     $fields['recruitment_bonus_resolver'] = BaseFieldDefinition::create('commerce_plugin_item:commerce_recruiting_bonus_resolver')
       ->setLabel(t('Recruitment bonus resolver'))
       ->setCardinality(1)

@@ -28,6 +28,9 @@ class RecruitmentForm extends ContentEntityForm {
     if (isset($form['auto_re_recruit'])) {
       $form['auto_re_recruit']['widget']['value']['#description'] = $this->t('This will create subsequent recruitments each time the customer orders one of the products below, if they have been recruited once before.');
     }
+    if (isset($form['allow_self_recruit'])) {
+      $form['allow_self_recruit']['widget']['value']['#description'] = $this->t('Allows the recruiter to use their own recommendation link.');
+    }
 
     return $form;
   }
