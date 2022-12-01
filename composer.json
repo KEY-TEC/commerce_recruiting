@@ -25,7 +25,6 @@
     "drupal/commerce": "^2.16",
     "drupal/commerce_product_bundle": "1.x-dev",
     "drupal/config_devel": "~1",
-    "drupal/config_installer": "~1",
     "drupal/console": "~1",
     "drupal/ctools": "^3.2",
     "drupal/devel_entity_updates": "^1.0@RC",
@@ -64,13 +63,23 @@
       "build/modules/contrib/{$name}": ["type:drupal-module"],
       "build/profiles/contrib/{$name}": ["type:drupal-profile"],
       "build/themes/contrib/{$name}": ["type:drupal-theme"]
+    },
+    "patches": {
+      "drupal/address": {
+        "commerceguys/addressing 1.4 compatibility [#3302484]": "https://www.drupal.org/files/issues/2022-11-09/3302484-28-for-8.x-1.9.patch"
+      }
     }
   },
   "config": {
-    "sort-packages": true
+    "sort-packages": true,
+    "allow-plugins": {
+      "composer/installers": true,
+      "cweagans/composer-patches": true,
+      "drupal/core-composer-scaffold": true,
+      "phpro/grumphp": true
+    }
   },
   "require": {
-    "crisu83/shortid": "*",
     "drupal/dynamic_entity_reference": "^1.8"
   }
 }

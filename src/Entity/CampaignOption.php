@@ -2,7 +2,6 @@
 
 namespace Drupal\commerce_recruiting\Entity;
 
-use Crisu83\ShortId\ShortId;
 use Drupal\commerce_order\Entity\OrderItemInterface;
 use Drupal\commerce_price\Price;
 use Drupal\Core\Entity\EntityInterface;
@@ -396,9 +395,17 @@ class CampaignOption extends ContentEntityBase implements CampaignOptionInterfac
    * @see https://github.com/crisu83/php-shortid
    */
   public static function getDefaultCode() {
-    $shortid = ShortId::create();
     do {
-      $code = $shortid->generate();
+      // https://stackoverflow.com/questions/4570980/generating-a-random-code-in-php#comment107472646_4571013
+      $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      $i = 0;
+      $code = '';
+      while ($i <= 6) {
+        $num = \random_int(0, strlen($chars) - 1);
+        $code .= $chars[$num];
+        $i++;
+      }
+
       $query = \Drupal::entityTypeManager()->getStorage('commerce_recruitment_camp_option')
         ->getQuery();
       $query->condition('status', 1);
