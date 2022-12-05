@@ -312,7 +312,7 @@ class CommerceRecruitingKernelTestBase extends CommerceKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->installCommerceRecruiting();

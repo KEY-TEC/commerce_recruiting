@@ -80,6 +80,30 @@ interface RecruitmentManagerInterface {
   public function sessionMatch(OrderInterface $order);
 
   /**
+   * Serializes a session match array.
+   *
+   * Useful e.g. for storing the recruitment info in order data for later use.
+   *
+   * @param array $match
+   *   The session match.
+   *
+   * @return array
+   *   The serialized session match.
+   */
+  public function serializeMatch(array $match);
+
+  /**
+   * Deserialize an array back into a session match.
+   *
+   * @param array $serialized_match
+   *   The serialized session match.
+   *
+   * @return array
+   *   The session match.
+   */
+  public function deserializeMatch(array $serialized_match);
+
+  /**
    * Resolves the recruitment bonus for a single order item.
    *
    * @param \Drupal\commerce_recruiting\Entity\CampaignOptionInterface $option

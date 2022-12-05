@@ -42,7 +42,7 @@ class RecruitmentSessionTest extends CommerceRecruitingKernelTestBase {
   /**
    * Test setUp.
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     /** @var \Drupal\commerce_recruiting\RecruitmentSessionInterface recruitingSession */
     $this->recruitmentSession = \Drupal::service('commerce_recruiting.recruitment_session');
