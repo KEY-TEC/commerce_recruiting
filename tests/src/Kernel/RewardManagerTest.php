@@ -23,7 +23,7 @@ class RewardManagerTest extends CommerceRecruitingKernelTestBase {
     $products = [];
     $products[] = $this->createProduct();
     $products[] = $this->createProduct();
-    $recruitments = $this->createRecruitings($campaign, $recruiter, $recruited, $products);
+    $recruitments = $this->createRecruitings($campaign, $recruiter, $recruited, $this->createOrder($products));
     $this->assertEqual(count($recruitments), 2);
     $this->recruitmentManager->applyTransitions('accept');
     $reward = $this->rewardManager->createReward($campaign, $recruiter);

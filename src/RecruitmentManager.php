@@ -9,7 +9,6 @@ use Drupal\commerce_product\Entity\ProductVariation;
 use Drupal\commerce_recruiting\Entity\CampaignInterface;
 use Drupal\commerce_recruiting\Entity\CampaignOptionInterface;
 use Drupal\commerce_recruiting\Entity\Recruitment;
-use Drupal\commerce_recruiting\Entity\CampaignOption;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
@@ -92,7 +91,7 @@ class RecruitmentManager implements RecruitmentManagerInterface {
   /**
    * {@inheritDoc}
    */
-  public function createRecruitment(OrderItemInterface $order_item, AccountInterface $recruiter, AccountInterface $recruited, CampaignOption $option, Price $bonus) {
+  public function createRecruitment(OrderItemInterface $order_item, AccountInterface $recruiter, AccountInterface $recruited, CampaignOptionInterface $option, Price $bonus) {
     return Recruitment::create([
       'recruiter' => ['target_id' => $recruiter->id()],
       'name' => [
@@ -245,6 +244,21 @@ class RecruitmentManager implements RecruitmentManagerInterface {
         $this->logger->debug('Recruitment ' . $recruitment->id() . ' transition skipped: ' . $e->getMessage());
       }
     }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public function getRecruitmentsByOrder(OrderInterface $order) {
+    $recruitments = [];
+
+    foreach ($order->getItems() as $order_item) {
+      $recruitments = array_merge($recruitments, $this->entityTypeManager->getStorage('commerce_recruitment')->loadByProperties([
+        'order_item' => $order_item->id(),
+      ]));
+    }
+
+    return $recruitments;
   }
 
   /**

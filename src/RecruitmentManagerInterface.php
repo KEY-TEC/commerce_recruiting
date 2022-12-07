@@ -24,7 +24,7 @@ interface RecruitmentManagerInterface {
    *   The recruiter user.
    * @param \Drupal\Core\Session\AccountInterface $recruited
    *   The recruited user.
-   * @param \Drupal\commerce_recruiting\Entity\CampaignOption $option
+   * @param \Drupal\commerce_recruiting\Entity\CampaignOptionInterface $option
    *   The campaign option.
    * @param \Drupal\commerce_price\Price $bonus
    *   The bonus.
@@ -32,7 +32,7 @@ interface RecruitmentManagerInterface {
    * @return \Drupal\commerce_recruiting\Entity\Recruitment
    *   The recruitment entity
    */
-  public function createRecruitment(OrderItemInterface $order_item, AccountInterface $recruiter, AccountInterface $recruited, CampaignOption $option, Price $bonus);
+  public function createRecruitment(OrderItemInterface $order_item, AccountInterface $recruiter, AccountInterface $recruited, CampaignOptionInterface $option, Price $bonus);
 
   /**
    * Finds recruitments by given campaign and state.
@@ -63,6 +63,16 @@ interface RecruitmentManagerInterface {
    *   The recruitment summary.
    */
   public function getRecruitmentSummaryByCampaign(CampaignInterface $campaign, $state, AccountInterface $recruiter = NULL);
+
+  /**
+   * Try to load recruitments via an order.
+   *
+   * @param \Drupal\commerce_order\Entity\OrderInterface $order
+   *   The commerce order.
+   *
+   * @return \Drupal\commerce_recruiting\Entity\RecruitmentInterface[]|null
+   */
+  public function getRecruitmentsByOrder(OrderInterface $order);
 
   /**
    * Checks the order for matching products from RecruitmentSession.

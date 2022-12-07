@@ -3,6 +3,7 @@
 namespace Drupal\Tests\commerce_recruiting\Kernel;
 
 use Drupal\commerce_order\Entity\Order;
+use Drupal\commerce_order\Entity\OrderInterface;
 use Drupal\commerce_order\Entity\OrderItem;
 use Drupal\commerce_order\Entity\OrderItemType;
 use Drupal\commerce_order\Entity\OrderType;
@@ -83,11 +84,13 @@ class CommerceRecruitingKernelTestBase extends CommerceKernelTestBase {
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
   protected function createOrder(array $products = [], $state = 'completed') {
-    $order = Order::create([
+    $options = [
       'type' => 'default',
       'state' => $state,
       'store_id' => $this->store->id(),
-    ]);
+    ];
+
+    $order = Order::create($options);
     $order->save();
 
     $items = [];
@@ -293,13 +296,14 @@ class CommerceRecruitingKernelTestBase extends CommerceKernelTestBase {
   /**
    * Create test recruitments.
    */
-  protected function createRecruitings(CampaignInterface $campaign, User $recruiter, User $recruited, $products, $order_state = 'completed') {
-    $order = $this->createOrder($products, $order_state);
+  protected function createRecruitings(CampaignInterface $campaign, User $recruiter, User $recruited, OrderInterface $order) {
     foreach ($order->getItems() as $item) {
       $this->assertNotEqual($item->getOrder(), NULL);
       $this->assertTrue($item->getPurchasedEntity() instanceof ProductVariation);
       $recruitment = $this->recruitmentManager->createRecruitment($item, $recruiter, $recruited, $campaign->getFirstOption(), new Price("10", "USD"));
       $recruitment->save();
+      // Reload.
+      $recruitment = $this->entityTypeManager->getStorage('commerce_recruitment')->load($recruitment->id());
       $this->assertNotEqual($recruitment->getOrder(), NULL);
       $this->assertNotEqual($recruitment->getProduct(), NULL);
       $this->assertNotNull($recruitment->getProduct());

@@ -121,8 +121,9 @@ class RecruitmentManagerTest extends CommerceRecruitingKernelTestBase {
     $products = [];
     $products[] = $this->createProduct();
     $products[] = $this->createProduct();
+    $order = $this->createOrder($products, 'draft');
 
-    $recruitments = $this->createRecruitings($campaign, $recruiter, $recruited, $products, 'draft');
+    $recruitments = $this->createRecruitings($campaign, $recruiter, $recruited, $order);
 
     $this->assertCount(2, $recruitments);
     $this->recruitmentManager->applyTransitions("accept");
@@ -189,6 +190,27 @@ class RecruitmentManagerTest extends CommerceRecruitingKernelTestBase {
   }
 
   /**
+   * Test getRecruitmentsByOrder.
+   */
+  public function testGetRecruitmentsByOrder() {
+    $recruiter = $this->createUser();
+    $recruited = $this->createUser();
+    $product1 = $this->createProduct();
+    $product2 = $this->createProduct();
+    $campaign = $this->createCampaign($recruiter, $product1);
+    $option2 = $this->createCampaignOption($product2);
+    $campaign->addOption($option2);
+    $campaign->save();
+
+    $order = $this->createOrder([$product1]);
+    $recruitments = $this->createRecruitings($campaign, $recruiter, $recruited, $order);
+    $this->assertCount(1, $recruitments);
+    $found_recruitment = $this->recruitmentManager->getRecruitmentsByOrder($order);
+    $this->assertCount(1, $found_recruitment, 'Count of loaded recruitments by order.');
+    $this->assertEquals(current($recruitments)->uuid(), current($found_recruitment)->uuid(), 'Recruitments match');
+  }
+
+  /**
    * Test recruitmentSummaryByCampaign.
    */
   public function testRecruitmentSummaryByCampaign() {
@@ -203,12 +225,8 @@ class RecruitmentManagerTest extends CommerceRecruitingKernelTestBase {
     $productc22 = $this->createProduct();
     $productc23 = $this->createProduct();
 
-    $this->createRecruitings($campaign, $recruiter, $recruited,
-      [$product1, $product2, $product3]
-    );
-    $recruitments2 = $this->createRecruitings($campaign2, $recruiter, $recruited,
-      [$productc21, $productc22, $productc23]
-    );
+    $this->createRecruitings($campaign, $recruiter, $recruited, $this->createOrder([$product1, $product2, $product3]));
+    $recruitments2 = $this->createRecruitings($campaign2, $recruiter, $recruited, $this->createOrder([$productc21, $productc22, $productc23]));
     $this->assertCount(3, $recruitments2);
     $this->recruitmentManager->applyTransitions("accept");
     $summary = $this->recruitmentManager->getRecruitmentSummaryByCampaign($campaign,'accepted', $recruiter);
@@ -231,12 +249,8 @@ class RecruitmentManagerTest extends CommerceRecruitingKernelTestBase {
     $productc22 = $this->createProduct();
     $productc23 = $this->createProduct();
 
-    $recruitments = $this->createRecruitings($campaign, $recruiter, $recruited,
-      [$product1, $product2, $product3]
-    );
-    $recruitments2 = $this->createRecruitings($campaign2, $recruiter, $recruited,
-      [$productc21, $productc22, $productc23]
-    );
+    $recruitments = $this->createRecruitings($campaign, $recruiter, $recruited, $this->createOrder([$product1, $product2, $product3]));
+    $recruitments2 = $this->createRecruitings($campaign2, $recruiter, $recruited, $this->createOrder([$productc21, $productc22, $productc23]));
     $this->assertCount(3, $recruitments);
     $found_recruitments = $this->recruitmentManager->findRecruitmentsByCampaign($campaign, 'created', $recruiter);
     $this->assertCount(3, $found_recruitments);
