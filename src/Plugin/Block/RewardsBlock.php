@@ -110,7 +110,7 @@ class RewardsBlock extends BlockBase implements ContainerFactoryPluginInterface 
    */
   public function build() {
     $rewards = $this->findRewards();
-    return  ['#theme' => 'recruitment_rewards', '#rewards' => $rewards];;
+    return  ['#theme' => 'recruitment_rewards', '#rewards' => $rewards];
   }
 
   /**

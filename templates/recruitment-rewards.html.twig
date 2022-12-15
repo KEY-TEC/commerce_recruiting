@@ -4,8 +4,7 @@
  * Default theme implementation to present reward entity data.
  *
  * Available variables:
- * - content: A list of content items. Use 'content' to print all content, or
- * - attributes: HTML attributes for the container element.
+ * - rewards: A list of reward entities
  *
  * @see template_preprocess_recruitment_reward()
  *
@@ -13,7 +12,14 @@
  */
 #}
 <div{{ attributes.addClass('recruitment-reward') }}>
-  {% if content %}
-    {{- content -}}
-  {% endif %}
+  <ul>
+    {% for reward in rewards %}
+      <li>
+        <a href="{{ path("entity.commerce_recruitment_reward.canonical", {"commerce_recruitment_reward": reward.id() }) }}">
+          {{ reward.getName() }}: {{ reward.getPrice() }} ({{ reward.getState().id() }})
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
 </div>
+

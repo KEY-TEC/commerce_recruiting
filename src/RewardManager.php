@@ -60,6 +60,11 @@ class RewardManager implements RewardManagerInterface {
     // Allow modules to alter the set of recruitments added to this reward.
     $this->moduleHandler->alter('recruitment_reward_recruitments', $recruitments, $campaign);
 
+    if (empty($recruitments)) {
+      // Cannot create a reward without recruitments to add.
+      return;
+    }
+
     /** @var \Drupal\commerce_recruiting\Entity\RecruitmentInterface $recruitment */
     foreach ($recruitments as $recruitment) {
       $reward->addRecruitment($recruitment);

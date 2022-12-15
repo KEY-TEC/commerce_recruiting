@@ -96,6 +96,11 @@ class RewardController extends ControllerBase {
         }
       }
 
+      if (empty($reward)) {
+        // No reward was created to redirect to.
+        return $this->redirect('<front>');
+      }
+
       return new RedirectResponse($reward->toUrl('canonical', ['language' => $this->languageManager->getCurrentLanguage()])->toString(), 302);;
     }
     catch (\Throwable $e) {

@@ -18,8 +18,8 @@ interface RewardManagerInterface {
    * @param \Drupal\Core\Session\AccountInterface $recruiter
    *   The recruiter.
    *
-   * @return \Drupal\commerce_recruiting\Entity\RewardInterface
-   *   The created reward.
+   * @return \Drupal\commerce_recruiting\Entity\RewardInterface|null
+   *   The created reward or null if there are no recruitments.
    */
   public function createReward(CampaignInterface $campaign, AccountInterface $recruiter);
 
