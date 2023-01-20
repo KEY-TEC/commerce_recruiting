@@ -8,7 +8,7 @@ use Drupal\Core\Session\AccountInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
- * Default implementation of the cart session.
+ * Default implementation of the recruitment session.
  */
 class RecruitmentSession implements RecruitmentSessionInterface {
 

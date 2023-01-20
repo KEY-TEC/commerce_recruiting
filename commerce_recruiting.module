@@ -99,6 +99,17 @@ function commerce_recruiting_entity_base_field_info(EntityTypeInterface $entity_
 
     return $fields;
   }
+
+  if ($entity_type->id() == 'commerce_order_item') {
+    $fields['recruitment_info'] = BaseFieldDefinition::create('recruitment_info')
+      ->setLabel(new TranslatableMarkup('Recruitment Info'))
+      ->setDescription(new TranslatableMarkup('The recruitment information.'))
+      ->setTranslatable(FALSE)
+      ->setDisplayConfigurable('view', FALSE)
+      ->setDisplayConfigurable('form', FALSE);
+
+    return $fields;
+  }
 }
 
 /**

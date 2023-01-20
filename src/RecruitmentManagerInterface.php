@@ -6,12 +6,11 @@ use Drupal\commerce_order\Entity\OrderInterface;
 use Drupal\commerce_order\Entity\OrderItemInterface;
 use Drupal\commerce_price\Price;
 use Drupal\commerce_recruiting\Entity\CampaignInterface;
-use Drupal\commerce_recruiting\Entity\CampaignOption;
 use Drupal\commerce_recruiting\Entity\CampaignOptionInterface;
 use Drupal\Core\Session\AccountInterface;
 
 /**
- * Interface RecruitmentManagerInterface.
+ * Interface for recruitment manager services.
  */
 interface RecruitmentManagerInterface {
 
@@ -71,11 +70,22 @@ interface RecruitmentManagerInterface {
    *   The commerce order.
    *
    * @return \Drupal\commerce_recruiting\Entity\RecruitmentInterface[]|null
+   *   Loaded recruitments from order.
    */
   public function getRecruitmentsByOrder(OrderInterface $order);
 
   /**
    * Checks the order for matching products from RecruitmentSession.
+   *
+   * Will check the recruiting session against the given order for matching
+   * products in campaign options and calculates a provisionally bonus.
+   * The bonus is re-evaluated on checkout complete.
+   *
+   * Since the session only exists in short-term, the information returned here
+   * should be saved in an entity, using the recruiting info field, to make it
+   * persist. This is done in RecruitmentCheckoutSubscriber::onOrderItemAdd().
+   * With this recruitments can be created anytime when the user decides to
+   * complete the checkout later after starting a new session.
    *
    * @param \Drupal\commerce_order\Entity\OrderInterface $order
    *   The order.
@@ -88,30 +98,6 @@ interface RecruitmentManagerInterface {
    *    etc.
    */
   public function sessionMatch(OrderInterface $order);
-
-  /**
-   * Serializes a session match array.
-   *
-   * Useful e.g. for storing the recruitment info in order data for later use.
-   *
-   * @param array $match
-   *   The session match.
-   *
-   * @return array
-   *   The serialized session match.
-   */
-  public function serializeMatch(array $match);
-
-  /**
-   * Deserialize an array back into a session match.
-   *
-   * @param array $serialized_match
-   *   The serialized session match.
-   *
-   * @return array
-   *   The session match.
-   */
-  public function deserializeMatch(array $serialized_match);
 
   /**
    * Resolves the recruitment bonus for a single order item.
@@ -127,7 +113,7 @@ interface RecruitmentManagerInterface {
   public function resolveRecruitmentBonus(CampaignOptionInterface $option, OrderItemInterface $order_item);
 
   /**
-   * Calculates the sum of all recruitment bonus of an user.
+   * Calculates the sum of all recruitment bonus of a user.
    *
    * @param int $uid
    *   User ID.

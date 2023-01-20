@@ -63,55 +63,6 @@ class RecruitmentManagerTest extends CommerceRecruitingKernelTestBase {
   }
 
   /**
-   * Test serializeMatch / deserializeMatch.
-   */
-  public function testSerializeMatch() {
-    $recruiter = $this->createUser();
-    $product_a = $this->createProduct();
-    $order_a = $this->createOrder([$product_a]);
-    $campaign = $this->createCampaign($recruiter, NULL, FALSE, FALSE);
-    $option_a = $this->createCampaignOption($product_a);
-    $campaign->addOption($option_a);
-    $campaign->save();
-
-    $prophecy = $this->prophesize(RecruitmentSession::CLASS);
-    $prophecy->getCampaignOption()->willReturn($campaign->getFirstOption());
-    // Reload user for later assert match down below.
-    $recruiter = $this->entityTypeManager->getStorage('user')->load($recruiter->id());
-    $prophecy->getRecruiter()->willReturn($recruiter);
-    \Drupal::getContainer()->set('commerce_recruiting.recruitment_session', $prophecy->reveal());
-
-    $this->recruitmentManager = $this->container->get('commerce_recruiting.recruitment_manager');
-    $session_match = $this->recruitmentManager->sessionMatch($order_a);
-    $this->assertCount(1, $session_match);
-
-    // Serialize.
-    $session_match = current($session_match);
-    $serialized = $this->recruitmentManager->serializeMatch($session_match);
-    foreach ($serialized as $key => $value) {
-      switch ($key) {
-        case 'bonus':
-          $this->assertIsObject($value, 'Bonus stays as object');
-          break;
-
-        case 'recruiter':
-          $this->assertEquals($recruiter->id(), $value, $key .' converted value to id');
-          break;
-
-        default:
-          $this->assertEquals('1', $value, $key .' converted value to id');
-          break;
-      }
-    }
-
-    // Deserialize.
-    $deserialized = $this->recruitmentManager->deserializeMatch($serialized);
-    foreach ($session_match as $key => $value) {
-      $this->assertEquals($value, $deserialized[$key], 'Deserialized ' . $key);
-    }
-  }
-
-  /**
    * Test applyTransitions.
    */
   public function testApplyTransitions() {
@@ -211,9 +162,9 @@ class RecruitmentManagerTest extends CommerceRecruitingKernelTestBase {
   }
 
   /**
-   * Test recruitmentSummaryByCampaign.
+   * Test getRecruitmentSummaryByCampaign.
    */
-  public function testRecruitmentSummaryByCampaign() {
+  public function testGetRecruitmentSummaryByCampaign() {
     $recruiter = $this->createUser();
     $product1 = $this->createProduct();
     $product2 = $this->createProduct();
@@ -235,9 +186,9 @@ class RecruitmentManagerTest extends CommerceRecruitingKernelTestBase {
   }
 
   /**
-   * Test findRecruitmentByCampaign.
+   * Test findRecruitmentsByCampaign.
    */
-  public function testFindRecruitmentByCampaign() {
+  public function testFindRecruitmentsByCampaign() {
     $recruiter = $this->createUser();
     $product1 = $this->createProduct();
     $product2 = $this->createProduct();

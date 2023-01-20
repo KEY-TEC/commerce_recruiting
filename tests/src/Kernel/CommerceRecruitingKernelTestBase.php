@@ -39,6 +39,7 @@ class CommerceRecruitingKernelTestBase extends CommerceKernelTestBase {
    * @var array
    */
   public static $modules = [
+    'commerce_cart',
     'commerce_order',
     'commerce_product',
     'commerce_promotion',
@@ -77,21 +78,22 @@ class CommerceRecruitingKernelTestBase extends CommerceKernelTestBase {
    *   Each product one product item.
    * @param string $state
    *   The order state.
+   * @param bool $is_cart
+   *   Set true if this is a cart.
    *
    * @return \Drupal\commerce_order\Entity\Order
    *   The order.
    *
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
-  protected function createOrder(array $products = [], $state = 'completed') {
+  protected function createOrder(array $products = [], $state = 'completed', $is_cart = FALSE) {
     $options = [
       'type' => 'default',
       'state' => $state,
       'store_id' => $this->store->id(),
+      'cart' => $is_cart,
     ];
-
     $order = Order::create($options);
-    $order->save();
 
     $items = [];
     foreach ($products as $product) {

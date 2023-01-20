@@ -19,6 +19,7 @@ services:
       - '@language_manager'
       - '@entity_type.manager'
       - '@commerce_recruiting.recruitment_session'
+      - '@event_dispatcher'
 
   commerce_recruiting.recruitment_checkout_subscriber:
     class: Drupal\commerce_recruiting\EventSubscriber\RecruitmentCheckoutSubscriber
@@ -27,6 +28,7 @@ services:
       - '@messenger'
       - '@commerce_recruiting.recruitment_manager'
       - '@entity_type.manager'
+      - '@commerce_cart.cart_provider'
     tags:
       - { name: event_subscriber }
 

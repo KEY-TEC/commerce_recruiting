@@ -2,13 +2,15 @@
 
 namespace Drupal\commerce_recruiting;
 
+use Drupal\commerce_recruiting\Event\RecruitmentSessionEvent;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Session\AccountInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Class CampaignManager.
+ * Manager service class for recruitment campaigns.
  */
 class CampaignManager implements CampaignManagerInterface {
 
@@ -34,6 +36,13 @@ class CampaignManager implements CampaignManagerInterface {
   private $recruitmentSession;
 
   /**
+   * The event dispatcher.
+   *
+   * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+   */
+  protected $eventDispatcher;
+
+  /**
    * CampaignManager constructor.
    *
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
@@ -42,11 +51,14 @@ class CampaignManager implements CampaignManagerInterface {
    *   The entity type manager.
    * @param \Drupal\commerce_recruiting\RecruitmentSessionInterface $recruitment_session
    *   The recruitment session.
+   * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $event_dispatcher
+   *   The event dispatcher.
    */
-  public function __construct(LanguageManagerInterface $language_manager, EntityTypeManagerInterface $entity_type_manager, RecruitmentSessionInterface $recruitment_session) {
+  public function __construct(LanguageManagerInterface $language_manager, EntityTypeManagerInterface $entity_type_manager, RecruitmentSessionInterface $recruitment_session, EventDispatcherInterface $event_dispatcher) {
     $this->languageManager = $language_manager;
     $this->entityTypeManager = $entity_type_manager;
     $this->recruitmentSession = $recruitment_session;
+    $this->eventDispatcher = $event_dispatcher;
   }
 
   /**
@@ -88,6 +100,10 @@ class CampaignManager implements CampaignManagerInterface {
 
     $this->recruitmentSession->setRecruiter($recruiter);
     $this->recruitmentSession->setCampaignOption($option);
+
+    // Create and dispatch RecruitmentSession event.
+    $event = new RecruitmentSessionEvent($this->recruitmentSession);
+    $this->eventDispatcher->dispatch(RecruitmentSessionEvent::SESSION_SET_EVENT, $event);
 
     return $this->recruitmentSession;
   }

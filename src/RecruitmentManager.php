@@ -17,7 +17,7 @@ use Drupal\Core\Session\AccountInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class RecruitmentManager.
+ * Manager service class for recruitments.
  */
 class RecruitmentManager implements RecruitmentManagerInterface {
 
@@ -150,7 +150,6 @@ class RecruitmentManager implements RecruitmentManagerInterface {
         if ($purchased_product->id() === $product->id()) {
           $bonus = $this->resolveRecruitmentBonus($option, $order_item);
           if ($bonus instanceof Price) {
-            // @todo: evaluate to turn this into an object.
             $matches[$purchased_product->id()] = [
               'campaign_option' => $option,
               'order_item' => $order_item,
@@ -163,48 +162,6 @@ class RecruitmentManager implements RecruitmentManagerInterface {
     }
 
     return $matches;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public function serializeMatch(array $match) {
-    foreach ($match as $key => $value) {
-      if (is_object($value) && method_exists($value, 'id')) {
-        // Does have an id to store.
-        $match[$key] = $value->id();
-      }
-    }
-
-    return $match;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public function deserializeMatch(array $serialized_match) {
-    foreach ($serialized_match as $name => $data) {
-      $entity_type = NULL;
-      switch ($name) {
-        case 'campaign_option':
-          $entity_type = 'commerce_recruitment_camp_option';
-          break;
-
-        case 'order_item':
-          $entity_type = 'commerce_order_item';
-          break;
-
-        case 'recruiter':
-          $entity_type = 'user';
-          break;
-      }
-
-      if ($entity_type && $entity = $this->entityTypeManager->getStorage($entity_type)->load($data)) {
-        $serialized_match[$name] = $entity;
-      }
-    }
-
-    return $serialized_match;
   }
 
   /**
@@ -342,7 +299,7 @@ class RecruitmentManager implements RecruitmentManagerInterface {
     $recruitments = Recruitment::loadMultiple($recruitment_ids);
     $total_price = NULL;
     foreach ($recruitments as $recruitment) {
-      /* @var \Drupal\commerce_recruiting\Entity\RecruitmentInterface $recruitment */
+      /** @var \Drupal\commerce_recruiting\Entity\RecruitmentInterface $recruitment */
       if ($bonus = $recruitment->getBonus()->toPrice()) {
         $total_price = $total_price ? $total_price->add($bonus) : $bonus;
       }

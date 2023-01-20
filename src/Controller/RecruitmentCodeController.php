@@ -2,20 +2,14 @@
 
 namespace Drupal\commerce_recruiting\Controller;
 
-use Drupal\commerce_recruiting\CampaignManagerInterface;
 use Drupal\commerce_recruiting\Code;
-use Drupal\commerce_recruiting\Event\RecruitmentSessionEvent;
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Routing\TrustedRedirectResponse;
-use Drupal\Core\Session\AccountInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Class RecruitmentCodeController.
+ * Controller for handling recruiting urls.
  */
 class RecruitmentCodeController extends ControllerBase {
 
@@ -41,13 +35,6 @@ class RecruitmentCodeController extends ControllerBase {
   protected $messenger;
 
   /**
-   * The event dispatcher.
-   *
-   * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
-   */
-  protected $eventDispatcher;
-
-  /**
    * The request object.
    *
    * @var \Symfony\Component\HttpFoundation\Request
@@ -70,7 +57,6 @@ class RecruitmentCodeController extends ControllerBase {
     $instance->currentAccount = $container->get('current_user');
     $instance->campaignManager = $container->get('commerce_recruiting.campaign_manager');
     $instance->messenger = $container->get('messenger');
-    $instance->eventDispatcher = $container->get('event_dispatcher');
     $instance->request = $container->get('request_stack')->getCurrentRequest();
     $instance->pageCacheKillSwitch = $container->get('page_cache_kill_switch');
 
@@ -99,11 +85,7 @@ class RecruitmentCodeController extends ControllerBase {
         \Drupal::messenger()->addMessage(t('You can not use your own recommendation url.'));
       }
       else {
-        $recruitment_session = $this->campaignManager->saveRecruitmentSession($code);
-
-        // Create and dispatch RecruitmentSession event.
-        $event = new RecruitmentSessionEvent($recruitment_session);
-        $this->eventDispatcher->dispatch(RecruitmentSessionEvent::SESSION_SET_EVENT, $event);
+        $this->campaignManager->saveRecruitmentSession($code);
       }
 
       if ($option->hasField('redirect') && !empty($option->redirect->first()->uri)) {
