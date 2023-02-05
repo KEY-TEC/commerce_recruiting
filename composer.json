@@ -63,11 +63,6 @@
       "build/modules/contrib/{$name}": ["type:drupal-module"],
       "build/profiles/contrib/{$name}": ["type:drupal-profile"],
       "build/themes/contrib/{$name}": ["type:drupal-theme"]
-    },
-    "patches": {
-      "drupal/address": {
-        "commerceguys/addressing 1.4 compatibility [#3302484]": "https://www.drupal.org/files/issues/2022-11-09/3302484-28-for-8.x-1.9.patch"
-      }
     }
   },
   "config": {
